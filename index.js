@@ -27,21 +27,36 @@ app.post('/createAdmin', async (req, res) => {
 })
 
 app.patch('/updateAdmin', async (req, res) => {
-    const { name, email, password, id } = req.body
+    const { name, email, id } = req.body
+    let password
+    if (req.body.password)
+        password = hashed(req.body.password)
+
+
+    const DbAdmin = await Admin.findOne({ where: { name: name } })
+
     try {
-        const admin = await Admin.update({ name, email, password }, { where: { id } })
+        const admin = await Admin.update({ name: name || DbAdmin.name, email: email || DbAdmin.name, password: password || DbAdmin.password }, { where: { id: id || DbAdmin.id } })
 
         return res.json(admin).status(200)
     } catch (err) {
         return res.status(500).json(err)
     }
 })
-// app.get('/adminLogin', async (req, res) => {
-//      const {name,password} = req.body;
-//     const admin = await Admin.find({where:{name:name}})
-//     console.log(admin);
-//     res.end()
-// })
+app.get('/adminLogin', async (req, res) => {
+    try {
+        const { name, password } = req.body;
+        const admin = await Admin.findOne({ where: { name: name } })
+        if (checkpass(password, admin.password))
+            res.end(JSON.stringify("true"));
+        else
+            res.end(JSON.stringify("false"));
+
+    }
+    catch (err) {
+        res.status(500).send(JSON.stringify({ message: "No admin fount" }));
+    }
+})
 
 app.listen(8000, async (req, res) => {
     console.log("server http://localhost:8000");
