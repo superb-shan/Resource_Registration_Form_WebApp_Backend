@@ -1,11 +1,11 @@
 {
   "name": "resource_registration_form_webapp_backend",
   "version": "1.0.0",
-  "description": "Resource Registration Backend ",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "G2-Sree-Shan",
+  "author": "G2-sree-shan",
   "license": "ISC"
 }
