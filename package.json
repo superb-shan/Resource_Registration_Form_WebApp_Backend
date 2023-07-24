@@ -1,0 +1,19 @@
+{
+  "name": "resource_registration_form_webapp_backend",
+  "version": "1.0.0",
+  "description": "Resource  Registration Backend ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/superb-shan/Resource_Registration_Form_WebApp_Backend.git"
+  },
+  "author": "G2-Sree-Shan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/superb-shan/Resource_Registration_Form_WebApp_Backend/issues"
+  },
+  "homepage": "https://github.com/superb-shan/Resource_Registration_Form_WebApp_Backend#readme"
+}
