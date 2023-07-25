@@ -72,15 +72,26 @@ app.get('/adminLogin', async (req, res) => {
 /*user function */
 app.post('/createUser', async (req, res) => {
     try {
+        const { name, email, password } = req.body;
 
-        const { name, email, password } = req.body
-        let password1 = hashed(password)
-        const user = await User.create({ name, email, password: password1 });
-        return res.json(user.toJSON()).status(200)
+        // Find the user with the given name, or create a new user if it doesn't exist
+        const [user, created] = await User.findOrCreate({
+            where: { name },
+            defaults: { email, password: hashed(password) }
+        });
+
+        if (created) {
+            // New user was created
+            return res.status(200).json(user.toJSON());
+        } else {
+            // User with the same name already exists
+            return res.status(200).json({ error: 'User already exists with the same name.' });
+        }
     } catch (err) {
-        return res.status(200).json(err.message)
+        return res.status(200).json({ error: err.message });
     }
-})
+});
+
 
 app.patch('/updateUser', async (req, res) => {
     const { name, email, id } = req.body

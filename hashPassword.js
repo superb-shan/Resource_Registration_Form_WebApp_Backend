@@ -1,16 +1,17 @@
 const bcrypt = require('bcrypt');
-const saltRounds = 8;
 
 // Generate the salt
-const salt = bcrypt.genSaltSync(saltRounds);
+
 
 const hashed = (pass) => {
+    const saltRounds = Math.floor(Math.random() * (10 - 1 + 1)) + 1;;
 
 
+    const salt = bcrypt.genSaltSync(saltRounds);
 
     // Hash the original password with the generated salt
     const hashedPassword = bcrypt.hashSync(pass, salt);
-    //console.log(hashedPassword);
+    console.log(hashedPassword);
     return hashedPassword.toString()
 }
 
