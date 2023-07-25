@@ -10,7 +10,7 @@ const hashed = (pass) => {
 
     // Hash the original password with the generated salt
     const hashedPassword = bcrypt.hashSync(pass, salt);
-    console.log(hashedPassword);
+    //console.log(hashedPassword);
     return hashedPassword.toString()
 }
 

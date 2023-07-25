@@ -16,6 +16,10 @@ app.use(bodyparser.json())
 app.get('', (req, res) => {
     res.send("bye")
 })
+
+
+
+/*Admin function */
 app.post('/createAdmin', async (req, res) => {
     try {
 
@@ -50,13 +54,60 @@ app.get('/adminLogin', async (req, res) => {
         const { name, password } = req.body;
         const admin = await Admin.findOne({ where: { name: name } })
         if (checkpass(password, admin.password))
-            res.end(JSON.stringify("true"));
+            res.end(JSON.stringify({ "message": true }));
         else
-            res.end(JSON.stringify("false"));
+            res.end(JSON.stringify({ "message": false }));
 
     }
     catch (err) {
         res.status(500).send(JSON.stringify({ message: "No admin fount" }));
+    }
+})
+
+
+
+/*user function */
+app.post('/createUser', async (req, res) => {
+    try {
+
+        const { name, email, password } = req.body
+        let password1 = hashed(password)
+        const user = await User.create({ name, email, password: password1 });
+        return res.json(user.toJSON()).status(200)
+    } catch (err) {
+        return res.status(500).json(err.message)
+    }
+})
+
+app.patch('/updateUser', async (req, res) => {
+    const { name, email, id } = req.body
+    let password
+    if (req.body.password)
+        password = hashed(req.body.password)
+
+
+    const DbUser = await User.findOne({ where: { name: name } })
+
+    try {
+        const user = await User.update({ name: name || DbUser.name, email: email || DbUser.name, password: password || DbUser.password }, { where: { id: id || DbUser.id } })
+
+        return res.json(user).status(200)
+    } catch (err) {
+        return res.status(500).json(err.message)
+    }
+})
+app.get('/userLogin', async (req, res) => {
+    try {
+        const { name, password } = req.body;
+        const user = await User.findOne({ where: { name: name } })
+        if (checkpass(password, user.password))
+            res.end(JSON.stringify({ "message": true }));
+        else
+            res.end(JSON.stringify({ "message": false }));
+
+    }
+    catch (err) {
+        res.status(500).send(JSON.stringify({ message: "No admin found" }));
     }
 })
 
