@@ -31,7 +31,7 @@ app.post('/createAdmin', async (req, res) => {
         const admin = await Admin.create({ name, email, password: password1 });
         return res.json(admin.toJSON()).status(200)
     } catch (err) {
-        return res.status(400).json(err.message)
+        return res.status(200).json(err.message)
     }
 })
 
@@ -49,7 +49,7 @@ app.patch('/updateAdmin', async (req, res) => {
 
         return res.json(admin).status(200)
     } catch (err) {
-        return res.status(400).json(err)
+        return res.status(200).json(err)
     }
 })
 app.get('/adminLogin', async (req, res) => {
@@ -63,7 +63,7 @@ app.get('/adminLogin', async (req, res) => {
 
     }
     catch (err) {
-        res.status(400).send(JSON.stringify({ message: "No admin fount" }));
+        res.status(200).send(JSON.stringify({ message: "No admin fount" }));
     }
 })
 
@@ -78,7 +78,7 @@ app.post('/createUser', async (req, res) => {
         const user = await User.create({ name, email, password: password1 });
         return res.json(user.toJSON()).status(200)
     } catch (err) {
-        return res.status(400).json(err.message)
+        return res.status(200).json(err.message)
     }
 })
 
@@ -96,7 +96,7 @@ app.patch('/updateUser', async (req, res) => {
 
         return res.json(user).status(200)
     } catch (err) {
-        return res.status(400).json(err.message)
+        return res.status(200).json(err.message)
     }
 })
 app.get('/userLogin', async (req, res) => {
@@ -112,7 +112,7 @@ app.get('/userLogin', async (req, res) => {
 
     }
     catch (err) {
-        res.status(400).send(JSON.stringify({ message: "No user found" }));
+        res.status(200).send(JSON.stringify({ "message": "No user found" }));
     }
 })
 
@@ -124,18 +124,21 @@ app.get('/userLogin', async (req, res) => {
 app.post('/createTransport', async (req, res) => {
 
     try {
-        let { name, purpose, Date, Time, pickUp, drop, passengerCount, specialRequirements } = req.body;
+        let { name, purpose, date, pickUp, drop, passengerCount, specialRequirements } = req.body;
         const user = User.findOne({ where: { name: name } })
         if (!user) {
-            res.sendStatus(400).send(JSON.stringify({ "message": "user not found" }))
+            res.sendStatus(200).send(JSON.stringify({ "message": "user not found" }))
         }
-        const transport = Transport.create({ id: uuidv4(), name, purpose, Date, Time, pickUp, drop, passengerCount, specialRequirements })
+
+        date = new Date(date).toISOString().slice(0, 10)
+        let time = new Date(date).toLocaleTimeString();
+        const transport = Transport.create({ id: uuidv4(), name, purpose, date, time, pickUp, drop, passengerCount, specialRequirements })
         res.sendStatus(200).send({ "message": true })
 
 
 
     } catch (error) {
-        res.sendStatus(500).send(JSON.stringify({ "message": "error" }))
+        res.sendStatus(200).send(JSON.stringify({ "message": "error" }))
 
     }
 })

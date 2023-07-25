@@ -21,12 +21,12 @@ const Transport = sequelize.define("transport", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    Date: {
+    date: {
         //date of travel
         type: DataTypes.DATEONLY,
         allowNull: false
     },
-    Time: {
+    time: {
         type: DataTypes.TIME,
         allowNull: false
     },
