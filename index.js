@@ -85,10 +85,10 @@ app.post('/createUser', async (req, res) => {
             return res.status(200).json(user.toJSON());
         } else {
             // User with the same name already exists
-            return res.status(200).json({ error: 'User already exists with the same name.' });
+            return res.status(200).json({ message: 'User already exists with the same name.' });
         }
     } catch (err) {
-        return res.status(200).json({ error: err.message });
+        return res.status(200).json({ message: err.message });
     }
 });
 
