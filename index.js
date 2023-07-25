@@ -6,7 +6,10 @@ const bodyparser = require('body-parser')
 const express = require('express')
 const app = express()
 const cors = require('cors');
+const { v4: uuidv4 } = require('uuid');
 
+//to import thetransport table
+const Transport = require('./models/transport')
 
 
 app.use(cors());
@@ -28,7 +31,7 @@ app.post('/createAdmin', async (req, res) => {
         const admin = await Admin.create({ name, email, password: password1 });
         return res.json(admin.toJSON()).status(200)
     } catch (err) {
-        return res.status(500).json(err.message)
+        return res.status(400).json(err.message)
     }
 })
 
@@ -46,12 +49,12 @@ app.patch('/updateAdmin', async (req, res) => {
 
         return res.json(admin).status(200)
     } catch (err) {
-        return res.status(500).json(err)
+        return res.status(400).json(err)
     }
 })
 app.get('/adminLogin', async (req, res) => {
     try {
-        const { name, password } = req.body;
+        const { name, password } = req.query;
         const admin = await Admin.findOne({ where: { name: name } })
         if (checkpass(password, admin.password))
             res.end(JSON.stringify({ "message": true }));
@@ -60,7 +63,7 @@ app.get('/adminLogin', async (req, res) => {
 
     }
     catch (err) {
-        res.status(500).send(JSON.stringify({ message: "No admin fount" }));
+        res.status(400).send(JSON.stringify({ message: "No admin fount" }));
     }
 })
 
@@ -75,7 +78,7 @@ app.post('/createUser', async (req, res) => {
         const user = await User.create({ name, email, password: password1 });
         return res.json(user.toJSON()).status(200)
     } catch (err) {
-        return res.status(500).json(err.message)
+        return res.status(400).json(err.message)
     }
 })
 
@@ -93,12 +96,14 @@ app.patch('/updateUser', async (req, res) => {
 
         return res.json(user).status(200)
     } catch (err) {
-        return res.status(500).json(err.message)
+        return res.status(400).json(err.message)
     }
 })
 app.get('/userLogin', async (req, res) => {
     try {
-        const { name, password } = req.body;
+
+        const { name, password } = req.query;
+        console.log(req.params);
         const user = await User.findOne({ where: { name: name } })
         if (checkpass(password, user.password))
             res.end(JSON.stringify({ "message": true }));
@@ -107,7 +112,31 @@ app.get('/userLogin', async (req, res) => {
 
     }
     catch (err) {
-        res.status(500).send(JSON.stringify({ message: "No admin found" }));
+        res.status(400).send(JSON.stringify({ message: "No user found" }));
+    }
+})
+
+
+
+/*transport */
+
+//to create for transport for user 
+app.post('/createTransport', async (req, res) => {
+
+    try {
+        let { name, purpose, Date, Time, pickUp, drop, passengerCount, specialRequirements } = req.body;
+        const user = User.findOne({ where: { name: name } })
+        if (!user) {
+            res.sendStatus(400).send(JSON.stringify({ "message": "user not found" }))
+        }
+        const transport = Transport.create({ id: uuidv4(), name, purpose, Date, Time, pickUp, drop, passengerCount, specialRequirements })
+        res.sendStatus(200).send({ "message": true })
+
+
+
+    } catch (error) {
+        res.sendStatus(500).send(JSON.stringify({ "message": "error" }))
+
     }
 })
 
