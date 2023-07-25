@@ -3,10 +3,13 @@ const Admin = require('./models/admin')
 const User = require('./models/user')
 const { checkpass, hashed } = require('./hashPassword')
 const bodyparser = require('body-parser')
-
 const express = require('express')
 const app = express()
+const cors = require('cors');
 
+
+
+app.use(cors());
 app.use(bodyparser.urlencoded({ extended: true }))
 app.use(bodyparser.json())
 
@@ -18,11 +21,10 @@ app.post('/createAdmin', async (req, res) => {
 
         const { name, email, password } = req.body
         let password1 = hashed(password)
-        console.log(password1);
         const admin = await Admin.create({ name, email, password: password1 });
-        return res.json(admin).status(200)
+        return res.json(admin.toJSON()).status(200)
     } catch (err) {
-        return res.status(500).json(err)
+        return res.status(500).json(err.message)
     }
 })
 

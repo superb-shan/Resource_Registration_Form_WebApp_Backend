@@ -10,6 +10,7 @@ const Admin = sequelize.define("Admin", {
     name: {
         type: Sequlize.STRING,
         allowNull: false,
+        unique: true,
     },
     email: {
         type: Sequlize.STRING,
