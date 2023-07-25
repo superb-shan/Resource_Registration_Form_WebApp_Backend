@@ -1,4 +1,6 @@
 const Sequlize = require('sequelize');
+const { checkpass, hashed } = require('../hashPassword')
+
 const sequelize = require('../database');
 const User = sequelize.define("User", {
     id: {
@@ -23,6 +25,9 @@ const User = sequelize.define("User", {
     password: {
         type: Sequlize.STRING,
         allowNull: false,
+        set(pass) {
+            this.setDataValue('password', hashed(pass));
+        }
     }
 })
 

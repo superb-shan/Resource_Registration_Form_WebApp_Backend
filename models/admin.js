@@ -1,5 +1,6 @@
 const Sequlize = require('sequelize');
 const sequelize = require('../database');
+const { checkpass, hashed } = require('../hashPassword')
 const Admin = sequelize.define("Admin", {
     id: {
         type: Sequlize.INTEGER,
@@ -22,6 +23,9 @@ const Admin = sequelize.define("Admin", {
     password: {
         type: Sequlize.STRING,
         allowNull: false,
+        set(pass) {
+            this.setDataValue('password', hashed(pass));
+        }
     }
 })
 module.exports = Admin;

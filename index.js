@@ -27,8 +27,7 @@ app.post('/createAdmin', async (req, res) => {
     try {
 
         const { name, email, password } = req.body
-        let password1 = hashed(password)
-        const admin = await Admin.create({ name, email, password: password1 });
+        const admin = await Admin.create({ name, email, password: password });
         return res.json(admin.toJSON()).status(200)
     } catch (err) {
         return res.status(200).json(err.message)
@@ -77,7 +76,7 @@ app.post('/createUser', async (req, res) => {
         // Find the user with the given name, or create a new user if it doesn't exist
         const [user, created] = await User.findOrCreate({
             where: { name },
-            defaults: { email, password: hashed(password) }
+            defaults: { name, email, password: password }
         });
 
         if (created) {
