@@ -48,7 +48,7 @@ const Transport = sequelize.define("transport", {
     },
     isapproved: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
+
     },
     remarks: {
         type: DataTypes.TEXT,

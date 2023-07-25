@@ -7,7 +7,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
-
+const { Op } = require('sequelize');
 //to import thetransport table
 const Transport = require('./models/transport')
 
@@ -121,27 +121,112 @@ app.get('/userLogin', async (req, res) => {
 /*transport */
 
 //to create for transport for user 
-app.post('/createTransport', async (req, res) => {
-
+app.post('/createTransportForm', async (req, res) => {
     try {
         let { name, purpose, date, pickUp, drop, passengerCount, specialRequirements } = req.body;
-        const user = User.findOne({ where: { name: name } })
+        const user = await User.findOne({ where: { name: name } });
+
         if (!user) {
-            res.sendStatus(200).send(JSON.stringify({ "message": "user not found" }))
+            res.status(404).send({ "message": "User not found" });
+            return;
+        }
+        console.log(user.name);
+        const options = { hour12: false, hour: '2-digit', minute: '2-digit' };
+        date = new Date(date).toISOString().slice(0, 10);
+        let time = new Date(date).toLocaleTimeString([], options);
+
+        const transport = await Transport.create({
+            id: uuidv4(),
+            name,
+            purpose,
+            date,
+            time,
+            pickUp,
+            drop,
+            passengerCount,
+            specialRequirements,
+            UserId: user.id,
+        });
+
+        res.send({ "message": true, "data": transport.toJSON() });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(200).send({ "message": "Error creating transport" });
+    }
+});
+
+
+//to get transport form
+
+
+app.get('/getTransportForm', async (req, res) => {
+    const { UserId, id } = req.query;
+
+    try {
+        const whereClause = {};
+
+        if (id) {
+            whereClause.id = id;
+        }
+        if (UserId) {
+            whereClause.UserId = UserId;
+        }
+        // if (name) {
+        //   whereClause.name = name;
+        // }
+
+        // if (purpose) {
+        //   whereClause.purpose = purpose;
+        // }
+        // if (date) {
+        //   whereClause.date = date;
+        // }
+        // if (pickUp) {
+        //   whereClause.pickUp = pickUp;
+        // }
+        // if (drop) {
+        //   whereClause.drop = drop;
+        // }
+        // if (passengerCount) {
+        //   whereClause.passengerCount = passengerCount;
+        // }
+        const result = await Transport.findAll({
+            where: whereClause,
+        });
+
+        if (!result || result.length === 0) {
+            res.send({ "message": "No forms found" });
+        } else {
+            res.send({ "message": "Forms found", "data": result });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(200).send({ "message": "Error retrieving forms" });
+    }
+});
+
+//to update the Transportform
+app.patch('/updateTransportForm', async (req, res) => {
+    try {
+        const { isapproved, id, remarks } = req.body;
+        const whereClause = {}; // Move the whereClause here
+
+        if (isapproved) {
+            whereClause.isapproved = isapproved === 'true' ? 1 : 0;
+        }
+        if (remarks) {
+            whereClause.remarks = remarks;
         }
 
-        date = new Date(date).toISOString().slice(0, 10)
-        let time = new Date(date).toLocaleTimeString();
-        const transport = Transport.create({ id: uuidv4(), name, purpose, date, time, pickUp, drop, passengerCount, specialRequirements })
-        res.sendStatus(200).send({ "message": true })
+        // Correct the syntax for the update method
+        const form = await Transport.update(whereClause, { where: { id } });
 
-
-
-    } catch (error) {
-        res.sendStatus(200).send(JSON.stringify({ "message": "error" }))
-
+        res.send(JSON.stringify({ "message": "success" }));
+    } catch (err) {
+        res.send(err.message);
     }
-})
+});
+
 
 app.listen(8000, async (req, res) => {
     console.log("server http://localhost:8000");
