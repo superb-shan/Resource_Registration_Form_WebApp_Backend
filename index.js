@@ -236,6 +236,8 @@ app.patch('/updateTransportForm', async (req, res) => {
         res.send(err.message);
     }
 });
+
+//delete a form with id
 app.delete('/deleteTransportForm', async (req, res) => {
     try {
         const { id } = req.body;
@@ -246,6 +248,17 @@ app.delete('/deleteTransportForm', async (req, res) => {
         res.send(err.message)
     }
 
+})
+//to get all username for form
+app.get('/alluser', async (req,res)=>{
+    try{
+        const allUser = await User.findAll( {attributes:['name']})
+        res.send(allUser).status(200)
+}
+catch(err){
+    res.send(err.message)
+}
+    
 })
 
 app.listen(8000, async (req, res) => {
