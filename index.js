@@ -189,21 +189,7 @@ app.get('/getTransportForm', async (req, res) => {
            whereClause.name = name;
          }
  console.log(whereClause);
-        // if (purpose) {
-        //   whereClause.purpose = purpose;
-        // }
-        // if (date) {
-        //   whereClause.date = date;
-        // }
-        // if (pickUp) {
-        //   whereClause.pickUp = pickUp;
-        // }
-        // if (drop) {
-        //   whereClause.drop = drop;
-        // }
-        // if (passengerCount) {
-        //   whereClause.passengerCount = passengerCount;
-        // }
+        
         const result = await Transport.findAll({
             where: whereClause,
         });
