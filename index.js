@@ -8,6 +8,8 @@ const app = express()
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 const { Op } = require('sequelize');
+
+const moment = require('moment');
 //to import thetransport table
 const Transport = require('./models/transport')
 
@@ -133,7 +135,7 @@ app.get('/userLogin', async (req, res) => {
 //to create for transport for user 
 app.post('/createTransportForm', async (req, res) => {
     try {
-        let { name, purpose, date, pickUp, drop, passengerCount, specialRequirements } = req.body;
+        let { name, purpose, date, pickUp,time, drop, passengerCount, specialRequirements,number } = req.body;
         const user = await User.findOne({ where: { name: name } });
 
         if (!user) {
@@ -141,18 +143,20 @@ app.post('/createTransportForm', async (req, res) => {
             return;
         }
         console.log(user.name);
-        const options = { hour12: false, hour: '2-digit', minute: '2-digit' };
-        date = new Date(date).toISOString().slice(0, 10);
-        let time = new Date(date).toLocaleTimeString([], options);
+        const dateObject = moment(date);
+        const formattedDate = dateObject.format('YYYY-MM-DD');
+        const formattedTime = dateObject.format('HH:mm:ss');
+        console.log(formattedDate,formattedTime);
 
         const transport = await Transport.create({
             id: uuidv4(),
             name,
             purpose,
-            date,
-            time,
+            "date":formattedDate,
+            "time":formattedTime,
             pickUp,
             drop,
+            number,
             passengerCount,
             specialRequirements,
             UserId: user.id,
@@ -161,7 +165,7 @@ app.post('/createTransportForm', async (req, res) => {
         res.send({ "message": true, "data": transport.toJSON() });
     } catch (error) {
         console.error('Error:', error);
-        res.status(200).send({ "message": "Error creating transport" });
+        res.status(200).send(error.message);
     }
 });
 
@@ -170,7 +174,7 @@ app.post('/createTransportForm', async (req, res) => {
 
 
 app.get('/getTransportForm', async (req, res) => {
-    const { UserId, id } = req.query;
+    const { UserId, id,name } = req.query;
 
     try {
         const whereClause = {};
@@ -181,10 +185,10 @@ app.get('/getTransportForm', async (req, res) => {
         if (UserId) {
             whereClause.UserId = UserId;
         }
-        // if (name) {
-        //   whereClause.name = name;
-        // }
-
+         if (name) {
+           whereClause.name = name;
+         }
+ console.log(whereClause);
         // if (purpose) {
         //   whereClause.purpose = purpose;
         // }
@@ -253,7 +257,9 @@ app.delete('/deleteTransportForm', async (req, res) => {
 app.get('/alluser', async (req,res)=>{
     try{
         const allUser = await User.findAll( {attributes:['name']})
-        res.send(allUser).status(200)
+       // const name = alluser.map((e)=>e['name'])
+       
+        res.send(JSON.stringify(allUser)).status(200)
 }
 catch(err){
     res.send(err.message)
