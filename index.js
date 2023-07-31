@@ -236,7 +236,17 @@ app.patch('/updateTransportForm', async (req, res) => {
         res.send(err.message);
     }
 });
+app.delete('/deleteTransportForm', async (req, res) => {
+    try {
+        const { id } = req.body;
+        const del = await Transport.destroy({ where: { id: id } })
+        res.send(JSON.stringify({ "message": "success" }))
+        return;
+    } catch (err) {
+        res.send(err.message)
+    }
 
+})
 
 app.listen(8000, async (req, res) => {
     console.log("server http://localhost:8000");
