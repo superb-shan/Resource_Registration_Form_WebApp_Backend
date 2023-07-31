@@ -240,7 +240,7 @@ app.delete('/deleteTransportForm', async (req, res) => {
     try {
         const { id } = req.body;
         const del = await Transport.destroy({ where: { id: id } })
-        res.send(JSON.stringify({ "message": "success" }))
+        res.send(JSON.stringify({ "message": "success", "data": del }))
         return;
     } catch (err) {
         res.send(err.message)
