@@ -4,23 +4,23 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const sequelize = require('./database');
 
-
 const adminRoutes = require('./routers/Admin');
 const userRoutes = require('./routers/User');
 const transportRoutes = require('./routers/Transport');
-
+const seminarRoutes = require('./routers/Seminar')
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('', (req, res) => {
-    res.send("bye");
+    res.send("trail");
 });
 
 // Use your routes
 app.use('/admin', adminRoutes);
 app.use('/user', userRoutes);
 app.use('/transport', transportRoutes);
+app.use('/seminar', seminarRoutes);
 
 // ... (other configurations)
 

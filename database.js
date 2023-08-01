@@ -3,7 +3,6 @@ require('dotenv').config();
 
 
 
-console.log(process.env.DB_USERNAME, process.env.DB_PASSWORD);
 
 un = process.env.DB_USERNAME;
 pwd = process.env.DB_PASSWORD;

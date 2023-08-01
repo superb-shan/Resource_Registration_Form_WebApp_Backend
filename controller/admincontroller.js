@@ -33,9 +33,9 @@ const AdminLogin = async(req, res) => {
 
         const { name, password } = req.query;
 
-        const user = await Admin.findOne({ where: { name: name } })
-        console.log(user.password);
-        if (checkpass(password, user.password))
+        const admin = await User.findOne({ where: { name: name } })
+        console.log(admin.password);
+        if (checkpass(password, admin.password))
             res.end(JSON.stringify({ "message": true }));
         else
             res.end(JSON.stringify({ "message": false }));

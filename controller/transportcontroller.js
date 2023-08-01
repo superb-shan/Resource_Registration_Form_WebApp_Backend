@@ -1,4 +1,5 @@
 const Transport = require('../models/transport')
+const User = require('../models/user')
 const moment  = require('moment')
 const { v4: uuidv4 } = require('uuid');
 const createTransport = async (req, res) => {
@@ -7,12 +8,12 @@ const createTransport = async (req, res) => {
         const user = await User.findOne({ where: { name: name } });
 
         if (!user) {
-            res.status(404).send({ "message": "User not found" });
+            res.status(200).send({ "message": "User not found" });
             return;
         }
         console.log(user.name);
         const dateObject = moment(date);
-        const formattedDate = dateObject.format('YYYY-MM-DD');
+        const formattedDate = dateObject.format('DD-MM-YYYY');
         const formattedTime = dateObject.format('HH:mm:ss');
         console.log(formattedDate,formattedTime);
 
@@ -39,7 +40,7 @@ const createTransport = async (req, res) => {
 
 
 const getTransport = async (req, res) => {
-    const { UserId, id } = req.query;
+    const { UserId, id,name } = req.query;
 
     try {
         const whereClause = {};
@@ -50,9 +51,9 @@ const getTransport = async (req, res) => {
         if (UserId) {
             whereClause.UserId = UserId;
         }
-        // if (name) {
-        //   whereClause.name = name;
-        // }
+         if (name) {
+          whereClause.name = name;
+        }
 
         // if (purpose) {
         //   whereClause.purpose = purpose;
