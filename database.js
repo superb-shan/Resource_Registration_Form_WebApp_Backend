@@ -1,7 +1,15 @@
-const Sequlize = require('sequelize')
+const Sequlize = require('sequelize');
+require('dotenv').config();
 
 
-const sequelize = new Sequlize("resource", "root", "1001", {
+
+console.log(process.env.DB_USERNAME, process.env.DB_PASSWORD);
+
+un = process.env.DB_USERNAME;
+pwd = process.env.DB_PASSWORD;
+
+
+const sequelize = new Sequlize("resource", un, pwd, {
     dialect: "mysql",
     logging: false,
 })
