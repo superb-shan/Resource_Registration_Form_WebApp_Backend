@@ -2,9 +2,9 @@ const express = require('express');
 const adminRoutes = express.Router();
 const admincontroller = require('../controller/admincontroller')
 
-adminRoutes.post('/createAdmin', admincontroller.CreateAdmin)
+adminRoutes.post('/create', admincontroller.CreateAdmin)
 
-adminRoutes.patch('/updateAdmin', admincontroller.updateAdmin)
-adminRoutes.get('/adminLogin', admincontroller.AdminLogin)
+adminRoutes.patch('/update', admincontroller.updateAdmin)
+adminRoutes.get('/Login', admincontroller.AdminLogin)
 
 module.exports = adminRoutes

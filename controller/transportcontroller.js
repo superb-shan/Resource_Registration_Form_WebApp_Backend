@@ -1,9 +1,9 @@
 const Transport = require('../models/transport')
-
+const moment  = require('moment')
 const { v4: uuidv4 } = require('uuid');
 const createTransport = async (req, res) => {
     try {
-        let { name, purpose, date, pickUp, drop, passengerCount, specialRequirements } = req.body;
+        let { name, purpose, date, pickUp,time, drop, passengerCount, specialRequirements,number } = req.body;
         const user = await User.findOne({ where: { name: name } });
 
         if (!user) {
@@ -11,18 +11,20 @@ const createTransport = async (req, res) => {
             return;
         }
         console.log(user.name);
-        const options = { hour12: false, hour: '2-digit', minute: '2-digit' };
-        date = new Date(date).toISOString().slice(0, 10);
-        let time = new Date(date).toLocaleTimeString([], options);
+        const dateObject = moment(date);
+        const formattedDate = dateObject.format('YYYY-MM-DD');
+        const formattedTime = dateObject.format('HH:mm:ss');
+        console.log(formattedDate,formattedTime);
 
         const transport = await Transport.create({
             id: uuidv4(),
             name,
             purpose,
-            date,
-            time,
+            "date":formattedDate,
+            "time":formattedTime,
             pickUp,
             drop,
+            number,
             passengerCount,
             specialRequirements,
             UserId: user.id,
@@ -31,7 +33,7 @@ const createTransport = async (req, res) => {
         res.send({ "message": true, "data": transport.toJSON() });
     } catch (error) {
         console.error('Error:', error);
-        res.status(200).send({ "message": "Error creating transport" });
+        res.status(200).send(error.message);
     }
 }
 

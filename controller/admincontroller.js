@@ -30,15 +30,18 @@ const updateAdmin = async(req, res) => {
 
 const AdminLogin = async(req, res) => {
     try {
+
         const { name, password } = req.query;
-        const admin = await Admin.findOne({ where: { name: name } })
-        if (admin.password(password))
+
+        const user = await Admin.findOne({ where: { name: name } })
+        console.log(user.password);
+        if (checkpass(password, user.password))
             res.end(JSON.stringify({ "message": true }));
         else
             res.end(JSON.stringify({ "message": false }));
 
     } catch (err) {
-        res.status(200).send(JSON.stringify({ message: "No admin fount" }));
+        res.status(200).send(JSON.stringify({ "message": "No user found" }));
     }
 }
 

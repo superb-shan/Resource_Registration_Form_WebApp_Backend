@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const sequelize = require('./database');
 
-// Import your routes
+
 const adminRoutes = require('./routers/Admin');
 const userRoutes = require('./routers/User');
 const transportRoutes = require('./routers/Transport');
