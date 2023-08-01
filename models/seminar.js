@@ -2,7 +2,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../database');
 const User = require('./user')
 const { v4: uuidv4 } = require('uuid');
-
+const moment = require('moment')
 
 
 const Seminar = sequelize.define("transport", {
@@ -10,14 +10,14 @@ const Seminar = sequelize.define("transport", {
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
-        
+
     },
-    number:{
+    number: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate:{
+        validate: {
             isNumeric: true,
-            len: [10,10]
+            len: [10, 10]
         }
     },
     name: {
@@ -34,6 +34,14 @@ const Seminar = sequelize.define("transport", {
         //date of travel
         type: DataTypes.DATEONLY,
         allowNull: false,
+        get() {
+            return moment(this.getDataValue('date')).format('DD-MM-YYYY');
+        },
+        validate: {
+            isDate: true,
+            isAfter: moment().format('YYYY-MM-DD'),
+
+        }
     },
     startTime: {
         type: DataTypes.TIME,
@@ -43,21 +51,21 @@ const Seminar = sequelize.define("transport", {
         type: DataTypes.TIME,
         allowNull: false
     },
-   no_of_Attendees:{
-    type: DataTypes.INTEGER,
+    no_of_Attendees: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        validate:{
-            notIn:[[0]]
+        validate: {
+            notIn: [[0]]
         }
-   },
-   seating_capacity:{
-    type: DataTypes.INTEGER,
+    },
+    seating_capacity: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        validate:{
-            notIn:[[0]]
+        validate: {
+            notIn: [[0]]
         }
-   },
-  
+    },
+
     EquipmentRequired: {
         type: DataTypes.TEXT,
         allowNull: true
@@ -78,7 +86,8 @@ const Seminar = sequelize.define("transport", {
 
 }, {
     // Options object to define the table name
-    tableName: 'Seminar',
+    tableName: 'seminar',
+
 })
 
 User.hasMany(Seminar)

@@ -1,10 +1,10 @@
 const Transport = require('../models/transport')
 const User = require('../models/user')
-const moment  = require('moment')
+const moment = require('moment')
 const { v4: uuidv4 } = require('uuid');
 const createTransport = async (req, res) => {
     try {
-        let { name, purpose, date, pickUp,time, drop, passengerCount, specialRequirements,number } = req.body;
+        let { name, purpose, date, pickUp, time, drop, passengerCount, specialRequirements, number } = req.body;
         const user = await User.findOne({ where: { name: name } });
 
         if (!user) {
@@ -13,22 +13,22 @@ const createTransport = async (req, res) => {
         }
         console.log(user.name);
         const dateObject = moment(date);
-        const formattedDate = dateObject.format('DD-MM-YYYY');
+        const formattedDate = dateObject.format('YYYY-MM-DD');
         const formattedTime = dateObject.format('HH:mm:ss');
-        console.log(formattedDate,formattedTime);
+        console.log(formattedDate, formattedTime);
 
         const transport = await Transport.create({
             id: uuidv4(),
             name,
             purpose,
-            "date":formattedDate,
-            "time":formattedTime,
+            "date": formattedDate,
+            "time": formattedTime,
             pickUp,
             drop,
             number,
             passengerCount,
             specialRequirements,
-            UserId: user.id,
+            "UserId": user.id,
         });
 
         res.send({ "message": true, "data": transport.toJSON() });
@@ -40,7 +40,7 @@ const createTransport = async (req, res) => {
 
 
 const getTransport = async (req, res) => {
-    const { UserId, id,name } = req.query;
+    const { UserId, id, name } = req.query;
 
     try {
         const whereClause = {};
@@ -51,8 +51,8 @@ const getTransport = async (req, res) => {
         if (UserId) {
             whereClause.UserId = UserId;
         }
-         if (name) {
-          whereClause.name = name;
+        if (name) {
+            whereClause.name = name;
         }
 
         // if (purpose) {
