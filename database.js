@@ -1,7 +1,7 @@
 const Sequlize = require('sequelize')
 
 
-const sequelize = new Sequlize("resource", "root", "Sece@2021", {
+const sequelize = new Sequlize("resource", "root", "1001", {
     dialect: "mysql",
     logging: false,
 })

@@ -11,6 +11,14 @@ const Transport = sequelize.define("transport", {
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
     },
+    number:{
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate:{
+            isNumeric: true,
+            len: [10,10]
+        }
+    },
     name: {
         type: DataTypes.STRING,
         allowNull: false
@@ -24,7 +32,10 @@ const Transport = sequelize.define("transport", {
     date: {
         //date of travel
         type: DataTypes.DATEONLY,
-        allowNull: false
+        allowNull: false,
+        validate:{
+            isDate: true,
+        }
     },
     time: {
         type: DataTypes.TIME,
