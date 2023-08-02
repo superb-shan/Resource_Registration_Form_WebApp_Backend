@@ -12,6 +12,10 @@ const Transport = sequelize.define("Transport", {
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
     },
+    type:{
+        type: DataTypes.STRING,
+        defaultValue: "Transport"
+    },
     number: {
         type: DataTypes.STRING,
         allowNull: false,
