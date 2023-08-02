@@ -4,7 +4,7 @@ const moment = require('moment')
 const { v4: uuidv4 } = require('uuid');
 const createTransport = async (req, res) => {
     try {
-        let { name, purposeOfTravel:purpose, formattedDateTime:date, pickupLocation:pickUp, dropLocation:drop, noOfPassangers:passengerCount, specialRequirement:specialRequirements, phoneNumber:number,userName } = req.body;
+        let { name, purposeOfTravel:purpose, formattedDateTime:date, pickupLocation:pickUp, dropLocation:drop, noOfPassengers:passengerCount, specialRequirement:specialRequirements, phoneNumber:number,userName } = req.body;
         const user = await User.findOne({ where: { name: userName } });
 
         if (!user) {
