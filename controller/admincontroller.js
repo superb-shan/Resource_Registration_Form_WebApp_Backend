@@ -1,6 +1,6 @@
 const Admin = require('../models/admin')
 const { hashed, checkpass } = require('../hashPassword')
-const CreateAdmin = async (req, res) => {
+const CreateAdmin = async(req, res) => {
     try {
 
         const { name, email, password } = req.body
@@ -10,7 +10,7 @@ const CreateAdmin = async (req, res) => {
         return res.status(200).json(err.message)
     }
 }
-const updateAdmin = async (req, res) => {
+const updateAdmin = async(req, res) => {
     const { name, email, id } = req.body
     let password
     if (req.body.password)
@@ -28,12 +28,12 @@ const updateAdmin = async (req, res) => {
     }
 }
 
-const AdminLogin = async (req, res) => {
+const AdminLogin = async(req, res) => {
     try {
 
         const { name, password } = req.query;
 
-        const admin = await Admin.findOne({ where: { name: name } })
+        const admin = await User.findOne({ where: { name: name } })
         console.log(admin.password);
         if (checkpass(password, admin.password))
             res.end(JSON.stringify({ "message": true }));
