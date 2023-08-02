@@ -2,21 +2,22 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../database');
 const User = require('./user')
 const { v4: uuidv4 } = require('uuid');
+const moment = require('moment')
 
 
 
-const Transport = sequelize.define("transport", {
+const Transport = sequelize.define("Transport", {
     id: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
     },
-    number:{
+    number: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate:{
+        validate: {
             isNumeric: true,
-            len: [10,10]
+            len: [10, 10]
         }
     },
     name: {
@@ -33,7 +34,7 @@ const Transport = sequelize.define("transport", {
         //date of travel
         type: DataTypes.DATEONLY,
         allowNull: false,
-        validate:{
+        validate: {
             isDate: true,
         }
     },
@@ -68,9 +69,11 @@ const Transport = sequelize.define("transport", {
     }
 
 }, {
-    // Options object to define the table name
-    tableName: 'Transport',
+    tableName: "Transport"
 })
 
 User.hasMany(Transport)
+// Assuming your sequelize object is correctly initialized and connected to the database
+
+
 module.exports = Transport;
