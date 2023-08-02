@@ -4,14 +4,14 @@ const moment = require('moment')
 const { v4: uuidv4 } = require('uuid');
 const createTransport = async (req, res) => {
     try {
-        let { name, purposeOfTravel:purpose, formattedDateTime:date, pickupLocation:pickUp, dropLocation:drop, noOfPassengers:passengerCount, specialRequirement:specialRequirements, phoneNumber:number,userName } = req.body;
+        let { name, purposeOfTravel: purpose, formattedDateTime: date, pickupLocation: pickUp, dropLocation: drop, noOfPassengers: passengerCount, specialRequirement: specialRequirements, phoneNumber: number, userName } = req.body;
+        console.log("hello", name)
         const user = await User.findOne({ where: { name: userName } });
 
         if (!user) {
             res.status(200).send({ "message": "User not found" });
             return;
         }
-        console.log(user.name);
         const dateObject = moment(date);
         const formattedDate = dateObject.format('YYYY-MM-DD');
         const formattedTime = dateObject.format('HH:mm:ss');
@@ -52,7 +52,7 @@ const getTransport = async (req, res) => {
             whereClause.UserId = UserId;
         }
         if (name) {
-            const user = await User.findOne({where:{name: name}})
+            const user = await User.findOne({ where: { name: name } })
 
             whereClause.UserId = UserId;
         }
