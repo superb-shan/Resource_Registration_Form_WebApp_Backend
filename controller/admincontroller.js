@@ -41,7 +41,7 @@ const AdminLogin = async(req, res) => {
             res.end(JSON.stringify({ "message": false }));
 
     } catch (err) {
-        res.status(200).send(JSON.stringify({ "message": "No user found" }));
+        res.status(200).send(JSON.stringify({ "message": "No admin found" }));
     }
 }
 
