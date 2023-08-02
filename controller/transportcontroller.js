@@ -40,7 +40,7 @@ const createTransport = async (req, res) => {
 
 
 const getTransport = async (req, res) => {
-    const { UserId, id, name } = req.query;
+    const { UserId, id, name, date } = req.query;
 
     try {
         const whereClause = {};
@@ -70,6 +70,10 @@ const getTransport = async (req, res) => {
         // if (passengerCount) {
         //   whereClause.passengerCount = passengerCount;
         // }
+        if (date) {
+            const s_date = moment(date, "DD-MM-YYYY").format('YYYY-MM-DD')
+            whereClause.date = s_date;
+        }
         const result = await Transport.findAll({
             where: whereClause,
         });
