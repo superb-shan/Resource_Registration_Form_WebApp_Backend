@@ -34,8 +34,8 @@ const createTransport = async (req, res) => {
 
         res.send({ "message": true, "data": transport.toJSON() });
     } catch (error) {
-        console.error('Error:', error);
-        res.status(200).send(error.message);
+        console.error('Error:', error.message);
+        res.status(200).send(JSON.stringify({'message':error.message}));
     }
 }
 
@@ -125,7 +125,7 @@ const deleteTransport = async (req, res) => {
 
 
         const del = await Transport.destroy({ where: { id: id } })
-        res.send(JSON.stringify({ "message": "success", "data": del }))
+        res.send(JSON.stringify({ "message": "Successfully deleted", "data": del }))
         return;
     } catch (err) {
         res.send(err.message)
