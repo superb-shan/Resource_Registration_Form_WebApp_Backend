@@ -1,5 +1,6 @@
 const Transport = require('../models/transport')
 const User = require('../models/user')
+const sequelize = require('sequelize')
 const moment = require('moment')
 const { v4: uuidv4 } = require('uuid');
 const createTransport = async (req, res) => {
@@ -78,6 +79,9 @@ const getTransport = async (req, res) => {
         }
         const result = await Transport.findAll({
             where: whereClause,
+            order: [
+                [sequelize.literal('createdAt'), 'DESC']
+            ]
         });
 
         if (!result || result.length === 0) {
