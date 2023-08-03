@@ -83,6 +83,10 @@ const Seminar = sequelize.define("transport", {
         allowNull: true
 
     }
+    ,type:{
+        type:DataTypes.STRING,
+        defaultValue:'Seminar'
+    }
 
 }, {
     // Options object to define the table name
