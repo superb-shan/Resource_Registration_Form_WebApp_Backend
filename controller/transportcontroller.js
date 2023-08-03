@@ -53,8 +53,8 @@ const getTransport = async (req, res) => {
         }
         if (name) {
             const user = await User.findOne({ where: { name: name } })
-
-            whereClause.UserId = UserId;
+       console.log(user)
+            whereClause.UserId = user.id;
         }
 
         // if (purpose) {
@@ -114,7 +114,7 @@ const updateTransport = async (req, res) => {
 }
 const deleteTransport = async (req, res) => {
     try {
-        const id = req.params.id;
+        const id = req.query.id;
         // Your deletion logic here, based on the transportId
         // ...
 
