@@ -30,7 +30,20 @@ const Seminar = sequelize.define("transport", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    date: {
+    startDate: {
+        //date of travel
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+        get() {
+            return moment(this.getDataValue('date')).format('DD-MM-YYYY');
+        },
+        validate: {
+            isDate: true,
+            isAfter: moment().format('YYYY-MM-DD'),
+
+        }
+    },
+    EndDate: {
         //date of travel
         type: DataTypes.DATEONLY,
         allowNull: false,
@@ -82,6 +95,10 @@ const Seminar = sequelize.define("transport", {
         type: DataTypes.TEXT,
         allowNull: true
 
+    }
+    ,type:{
+        type:DataTypes.STRING,
+        defaultValue:'Seminar'
     }
 
 }, {
