@@ -5,13 +5,14 @@ const { v4: uuidv4 } = require('uuid');
 const moment = require('moment')
 
 
-const Seminar = sequelize.define("transport", {
+const Seminar = sequelize.define("Seminar", {
     id: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
 
     },
+
     number: {
         type: DataTypes.STRING,
         allowNull: false,
