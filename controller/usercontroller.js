@@ -22,19 +22,20 @@ const CreateUser = async (req, res) => {
     }
 }
 const updateUser = async (req, res) => {
-    const { name, email, id,password} = req.body 
-    
-
-
-    const DbUser = await User.findOne({ where: { name: name } })
-
     try {
-        console.log(DbUser)
-        const user = await User.update({ name: name || DbUser.name, email: email || DbUser.email, password: password  }, { where: { id: id || DbUser.id } })
+        const { name, email, id, password } = req.body
 
-        return res.json({message: "success"}).status(200)
+
+
+        const DbUser = await User.findOne({ where: { name: name } })
+
+
+        console.log(DbUser)
+        const user = await User.update({ name: name || DbUser.name, email: email || DbUser.email, password: password }, { where: { id: id || DbUser.id } })
+
+        return res.json({ message: true }).status(200)
     } catch (err) {
-        return res.status(200).json({message: err.message})
+        return res.status(200).json({ message: err.message })
     }
 }
 const UserLogin = async (req, res) => {

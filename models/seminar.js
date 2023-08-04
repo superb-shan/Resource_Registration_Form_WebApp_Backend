@@ -12,8 +12,12 @@ const Seminar = sequelize.define("Seminar", {
         primaryKey: true,
 
     },
+    DesignationDepartment: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
 
-    number: {
+    contactNumber: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -44,7 +48,7 @@ const Seminar = sequelize.define("Seminar", {
 
         }
     },
-    EndDate: {
+    endDate: {
         //date of travel
         type: DataTypes.DATEONLY,
         allowNull: false,
@@ -65,7 +69,7 @@ const Seminar = sequelize.define("Seminar", {
         type: DataTypes.TIME,
         allowNull: false
     },
-    no_of_Attendees: {
+    noOfAttendees: {
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
@@ -80,7 +84,7 @@ const Seminar = sequelize.define("Seminar", {
         }
     },
 
-    EquipmentRequired: {
+    equipmentNeeded: {
         type: DataTypes.TEXT,
         allowNull: true
     },
@@ -97,9 +101,9 @@ const Seminar = sequelize.define("Seminar", {
         allowNull: true
 
     }
-    ,type:{
-        type:DataTypes.STRING,
-        defaultValue:'Seminar'
+    , type: {
+        type: DataTypes.STRING,
+        defaultValue: 'Seminar'
     }
 
 }, {
@@ -108,7 +112,7 @@ const Seminar = sequelize.define("Seminar", {
 
 })
 
-User.hasMany(Seminar,{
+User.hasMany(Seminar, {
     onDelete: 'RESTRICT', // Prevent user deletion if associated Seminar exist
-  })
+})
 module.exports = Seminar;
