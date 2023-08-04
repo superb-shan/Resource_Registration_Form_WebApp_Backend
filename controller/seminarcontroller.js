@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const createSeminar = async (req, res) => {
     try {
-        let { name, number, date, startTime, endTime, purpose, no_of_Attendees, seating_capacity, EquipmentRequired, specialRequiremnts } = req.body;
+        let { name, number, startDate, endDate, startTime, endTime, purpose, no_of_Attendees, seating_capacity, EquipmentRequired, specialRequiremnts } = req.body;
         const user = await User.findOne({ where: { name: name } });
 
         if (!user) {
@@ -15,7 +15,8 @@ const createSeminar = async (req, res) => {
 
         const dateFormat = "YYYY-MM-DD";
         const timeFormat = "HH:mm:ss";
-        const parsedDate = moment(date, "DD-MM-YYYY");
+        const parsedstartDate = moment(startDate, "DD-MM-YYYY");
+        const parsedendDate = moment(endDate, "DD-MM-YYYY")
         const parsedStartTime = moment(startTime, timeFormat);
         const parsedEndTime = moment(endTime, timeFormat);
 
@@ -23,9 +24,10 @@ const createSeminar = async (req, res) => {
             id: uuidv4(),
             name: user.name,
             number,
-            date: parsedDate.format(dateFormat),
+            startDate: parsedstartDate.format(dateFormat),
             startTime: parsedStartTime.format(timeFormat),
             endTime: parsedEndTime.format(timeFormat),
+            EndDate: parsedendDate.format(dateFormat),
             purpose,
             no_of_Attendees,
             seating_capacity,
