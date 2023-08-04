@@ -13,7 +13,7 @@ const Seminar = sequelize.define("Seminar", {
 
     },
 
-    number: {
+    contactNumber: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -44,7 +44,7 @@ const Seminar = sequelize.define("Seminar", {
 
         }
     },
-    EndDate: {
+    endDate: {
         //date of travel
         type: DataTypes.DATEONLY,
         allowNull: false,
@@ -65,7 +65,7 @@ const Seminar = sequelize.define("Seminar", {
         type: DataTypes.TIME,
         allowNull: false
     },
-    no_of_Attendees: {
+    noOfAttendees: {
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
@@ -80,7 +80,7 @@ const Seminar = sequelize.define("Seminar", {
         }
     },
 
-    EquipmentRequired: {
+    equipmentNeeded: {
         type: DataTypes.TEXT,
         allowNull: true
     },
