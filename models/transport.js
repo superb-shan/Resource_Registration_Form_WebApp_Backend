@@ -76,8 +76,8 @@ const Transport = sequelize.define("Transport", {
     tableName: "Transport"
 })
 
-User.hasMany(Transport)
-// Assuming your sequelize object is correctly initialized and connected to the database
-
+User.hasMany(Transport, {
+    onDelete: 'RESTRICT', // Prevent user deletion if associated transports exist
+  });
 
 module.exports = Transport;

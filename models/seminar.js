@@ -90,5 +90,7 @@ const Seminar = sequelize.define("transport", {
 
 })
 
-User.hasMany(Seminar)
+User.hasMany(Seminar,{
+    onDelete: 'RESTRICT', // Prevent user deletion if associated Seminar exist
+  })
 module.exports = Seminar;

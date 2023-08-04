@@ -4,8 +4,6 @@ const { CreateUser, updateUser, UserLogin } = require('../controller/usercontrol
 
 
 userRoutes.post('/create', CreateUser);
-
-
 userRoutes.patch('/update', updateUser)
 userRoutes.get('/Login', UserLogin)
 
