@@ -12,6 +12,10 @@ const Seminar = sequelize.define("Seminar", {
         primaryKey: true,
 
     },
+    DesignationDepartment: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
 
     contactNumber: {
         type: DataTypes.STRING,
@@ -97,9 +101,9 @@ const Seminar = sequelize.define("Seminar", {
         allowNull: true
 
     }
-    ,type:{
-        type:DataTypes.STRING,
-        defaultValue:'Seminar'
+    , type: {
+        type: DataTypes.STRING,
+        defaultValue: 'Seminar'
     }
 
 }, {
@@ -108,7 +112,7 @@ const Seminar = sequelize.define("Seminar", {
 
 })
 
-User.hasMany(Seminar,{
+User.hasMany(Seminar, {
     onDelete: 'RESTRICT', // Prevent user deletion if associated Seminar exist
-  })
+})
 module.exports = Seminar;
