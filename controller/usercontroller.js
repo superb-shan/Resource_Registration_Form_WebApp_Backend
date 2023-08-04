@@ -12,7 +12,7 @@ const CreateUser = async (req, res) => {
 
         if (created) {
             // New user was created
-            return res.status(200).json(user.toJSON());
+            return res.status(200).json({message: "success", newUserData: user});
         } else {
             // User with the same name already exists
             return res.status(200).json({ message: 'User already exists with the same name.' });
