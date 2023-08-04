@@ -35,13 +35,13 @@ const createTransport = async (req, res) => {
         res.send({ "message": true, "data": transport.toJSON() });
     } catch (error) {
         console.error('Error:', error.message);
-        res.status(200).send(JSON.stringify({'message':error.message}));
+        res.status(200).send(JSON.stringify({ 'message': error.message }));
     }
 }
 
 
 const getTransport = async (req, res) => {
-    const { UserId, id, name, date } = req.query;
+    const { UserId, id, name, date, status } = req.query;
 
     try {
         const whereClause = {};
@@ -54,16 +54,16 @@ const getTransport = async (req, res) => {
         }
         if (name) {
             const user = await User.findOne({ where: { name: name } })
-       console.log(user)
+            console.log(user)
             whereClause.UserId = user.id;
         }
 
         // if (purpose) {
         //   whereClause.purpose = purpose;
         // }
-        // if (date) {
-        //   whereClause.date = date;
-        // }
+        if (date) {
+            whereClause.date = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
+        }
         // if (pickUp) {
         //   whereClause.pickUp = pickUp;
         // }
@@ -73,6 +73,10 @@ const getTransport = async (req, res) => {
         // if (passengerCount) {
         //   whereClause.passengerCount = passengerCount;
         // }
+        if (status) {
+            const statusVal = { "Pending": null, "Success": 1, "Rejected": 0 }
+            whereClause.isapproved = statusVal[status]
+        }
         if (date) {
             const s_date = moment(date, "DD-MM-YYYY").format('YYYY-MM-DD')
             whereClause.date = s_date;
