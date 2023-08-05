@@ -146,7 +146,7 @@ const CheckAvilablity = async (req, res) => {
         });
 
         if (overlappingSeminars.length === 0) {
-            res.send(JSON.stringify({ message: "The slot is available" }));
+            res.send(JSON.stringify({ message: true }));
         } else {
             res.send(JSON.stringify({ message: "The slot is not available", overlappingSeminars }));
         }
