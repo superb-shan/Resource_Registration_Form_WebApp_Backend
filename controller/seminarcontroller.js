@@ -102,7 +102,9 @@ const DeleteSeminar = async (req, res) => {
 }
 
 
-const CheckAvilablity = async (req, res) => {
+
+
+const CheckAvailability = async (req, res) => {
     try {
         const { startDate, endDate, startTime, endTime } = req.query;
 
@@ -190,5 +192,5 @@ module.exports = {
     createSeminar: createSeminar,
     UpdateSeminar: UpdateSeminar,
     GetSeminar: GetSeminar, DeleteSeminar,
-    CheckAvilablity: CheckAvilablity
+    CheckAvailability: CheckAvailability
 }
