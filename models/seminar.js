@@ -42,11 +42,7 @@ const Seminar = sequelize.define("Seminar", {
         get() {
             return moment(this.getDataValue('date')).format('DD-MM-YYYY');
         },
-        validate: {
-            isDate: true,
-            isAfter: moment().format('YYYY-MM-DD'),
 
-        }
     },
     endDate: {
         //date of travel
@@ -55,11 +51,7 @@ const Seminar = sequelize.define("Seminar", {
         get() {
             return moment(this.getDataValue('date')).format('DD-MM-YYYY');
         },
-        validate: {
-            isDate: true,
-            isAfter: moment().format('YYYY-MM-DD'),
 
-        }
     },
     startTime: {
         type: DataTypes.TIME,

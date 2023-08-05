@@ -5,20 +5,20 @@ const { v4: uuidv4 } = require('uuid');
 
 const createSeminar = async (req, res) => {
     try {
-        let { name, number, startDate, endDate, startTime, DesignationDepartment, endTime, purpose, no_of_Attendees, seating_capacity, EquipmentRequired, specialRequiremnts } = req.body;
+        let { name, contactNumber: number, startDate, endDate, startTime, designation: DesignationDepartment, endTime, purpose, noOfAttendees: no_of_Attendees, seating_capacity, equipmentNeeded: EquipmentRequired, specialRequiremnts } = req.body;
         const user = await User.findOne({ where: { name: name } });
 
         if (!user) {
             res.status(200).send(JSON.stringify({ "message": "user not found" }));
             return;
         }
-
+        console.log(startTime, endTime);
         const dateFormat = "YYYY-MM-DD";
         const timeFormat = "HH:mm:ss";
         const parsedstartDate = moment(startDate, "DD-MM-YYYY");
         const parsedendDate = moment(endDate, "DD-MM-YYYY")
-        const parsedStartTime = moment(startTime, timeFormat);
-        const parsedEndTime = moment(endTime, timeFormat);
+        const parsedStartTime = moment(startTime.toString());
+        const parsedEndTime = moment(endTime.toString());
 
         const seminarObj = await Seminar.create({
             id: uuidv4(),
@@ -31,13 +31,13 @@ const createSeminar = async (req, res) => {
             purpose,
             DesignationDepartment,
             noOfAttendees: no_of_Attendees,
-            seating_capacity,
+            seating_capacity: seating_capacity || 20,
             EquipmentRequired,
             specialRequiremnts,
             "UserId": user.id, // Use "userId" here (consistent with the model definition)
         });
 
-        res.status(200).send(JSON.stringify({ "message": "Seminar created successfully", "seminar": seminarObj }));
+        res.status(200).send(JSON.stringify({ "message": "true", "seminar": seminarObj }));
 
     } catch (error) {
         res.status(200).send(error.message);
@@ -65,7 +65,15 @@ const UpdateSeminar = async (req, res) => {
         res.send(err.message);
     }
 }
+const CheckAvilablity = async (req, res) => {
+    try {
+        const { startDate, endDate, startTime, endTime } = req.query;
+        //Do logic
+    } catch (error) {
+        res.send(JSON.stringify({ "message": error.message }));
+    }
 
+}
 
 const GetSeminar = async (req, res) => {
     try {
