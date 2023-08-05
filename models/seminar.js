@@ -53,6 +53,10 @@ const Seminar = sequelize.define("Seminar", {
         },
 
     },
+    requiredHall: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     startTime: {
         type: DataTypes.TIME,
         allowNull: false
