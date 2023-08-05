@@ -104,7 +104,7 @@ const DeleteSeminar = async (req, res) => {
 
 const CheckAvilablity = async (req, res) => {
     try {
-        const { startDate, endDate, startTime, endTime, requiredHall } = req.query;
+        const { startDate, endDate, startTime, endTime } = req.query;
 
         // Validate input parameters
         if (!startDate || !endDate || !startTime || !endTime) {
@@ -129,7 +129,7 @@ const CheckAvilablity = async (req, res) => {
         // Check if there's any seminar that overlaps with the provided date and time and has the same requiredHall value
         const overlappingSeminars = await Seminar.findAll({
             where: {
-                // requiredHall,
+
                 [Op.or]: [
                     {
                         startDate: {
@@ -143,36 +143,27 @@ const CheckAvilablity = async (req, res) => {
                         startDate: {
                             [Op.eq]: parsedStartDate.format(dateFormat),
                         },
-                        [Op.and]: [
-                            {
-                                startTime: {
-                                    [Op.lt]: parsedEndTime.format(timeFormat),
-                                },
-                            },
-                            {
-                                endTime: {
-                                    [Op.gte]: parsedStartTime.format(timeFormat),
-                                },
-                            },
-                        ],
+                        startTime: {
+                            [Op.lt]: parsedEndTime.format(timeFormat),
+                        },
                     },
                     {
                         endDate: {
                             [Op.eq]: parsedEndDate.format(dateFormat),
                         },
-                        [Op.and]: [
-                            {
-                                startTime: {
-                                    [Op.lt]: parsedEndTime.format(timeFormat),
-                                },
-                            },
-                            {
-                                endTime: {
-                                    [Op.gte]: parsedStartTime.format(timeFormat),
-                                },
-                            },
-                        ],
+                        endTime: {
+                            [Op.gt]: parsedStartTime.format(timeFormat),
+                        },
                     },
+                    {
+                        endDate: {
+                            [Op.eq]: parsedStartDate.format(dateFormat),
+                        },
+                        endTime: {
+                            [Op.gt]: parsedStartTime.format(timeFormat),
+                        }
+
+                    }
                 ],
             },
             attributes: ["requiredHall"],
@@ -188,7 +179,6 @@ const CheckAvilablity = async (req, res) => {
         res.send(JSON.stringify({ message: error.message }));
     }
 };
-
 
 
 
