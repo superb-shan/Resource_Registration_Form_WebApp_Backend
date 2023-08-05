@@ -119,7 +119,7 @@ const CheckAvilablity = async (req, res) => {
         // Check if there's any seminar that overlaps with the provided date and time and has the same requiredHall value
         const overlappingSeminars = await Seminar.findAll({
             where: {
-                requiredHall: req.query.requiredHall,
+                // requiredHall: req.query.requiredHall,
                 [Op.or]: [
                     {
                         startDate: {
@@ -143,6 +143,7 @@ const CheckAvilablity = async (req, res) => {
                     },
                 ],
             },
+            attributes: ["requiredHall"]
         });
 
         if (overlappingSeminars.length === 0) {
