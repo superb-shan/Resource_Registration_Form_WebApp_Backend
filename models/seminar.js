@@ -40,7 +40,7 @@ const Seminar = sequelize.define("Seminar", {
         type: DataTypes.DATEONLY,
         allowNull: false,
         get() {
-            return moment(this.getDataValue('date')).format('DD-MM-YYYY');
+            return moment(this.getDataValue('startDate')).format('DD-MM-YYYY');
         },
 
     },
@@ -49,7 +49,7 @@ const Seminar = sequelize.define("Seminar", {
         type: DataTypes.DATEONLY,
         allowNull: false,
         get() {
-            return moment(this.getDataValue('date')).format('DD-MM-YYYY');
+            return moment(this.getDataValue('endDate')).format('DD-MM-YYYY');
         },
 
     },

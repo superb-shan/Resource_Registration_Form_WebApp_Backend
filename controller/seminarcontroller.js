@@ -2,7 +2,7 @@ const Seminar = require('../models/seminar')
 const User = require('../models/user')
 const moment = require('moment')
 const { v4: uuidv4 } = require('uuid');
-const sequelize = require('sequelize')
+const { Op } = require('sequelize')
 
 const createSeminar = async (req, res) => {
     try {
@@ -13,22 +13,22 @@ const createSeminar = async (req, res) => {
             res.status(200).send(JSON.stringify({ "message": "user not found" }));
             return;
         }
-        console.log(startTime, endTime, requiredHall);
-        const dateFormat = "YYYY-MM-DD";
+        //console.log(startTime, endTime, requiredHall);
+        const dateFormat = "YYYY-MM-DD"; // Corrected date format
         const timeFormat = "HH:mm:ss";
-        const parsedstartDate = moment(startDate, "DD-MM-YYYY");
-        const parsedendDate = moment(endDate, "DD-MM-YYYY")
-        const parsedStartTime = moment(startTime.toString());
-        const parsedEndTime = moment(endTime.toString());
-
+        const parsedstartDate = moment(startDate);
+        const parsedendDate = moment(endDate)
+        const parsedStartTime = moment(startTime, timeFormat);
+        const parsedEndTime = moment(endTime, timeFormat);
+        console.log(parsedstartDate.format("YYYY-MM-DD"), parsedendDate.format("YYYY-MM-DD"))
         const seminarObj = await Seminar.create({
             id: uuidv4(),
             name: user.name,
             contactNumber: number,
-            startDate: parsedstartDate.format(dateFormat),
+            startDate: parsedstartDate.format("YYYY-MM-DD"),
             startTime: parsedStartTime.format(timeFormat),
             endTime: parsedEndTime.format(timeFormat),
-            endDate: parsedendDate.format(dateFormat),
+            endDate: parsedendDate.format("YYYY-MM-DD"),
             purpose,
             requiredHall,
             DesignationDepartment,
@@ -45,6 +45,7 @@ const createSeminar = async (req, res) => {
         res.status(200).send(error.message);
     }
 };
+
 
 
 const UpdateSeminar = async (req, res) => {
@@ -99,6 +100,10 @@ const DeleteSeminar = async (req, res) => {
     }
 
 }
+
+
+
+
 const CheckAvilablity = async (req, res) => {
     try {
         const { startDate, endDate, startTime, endTime } = req.query;
@@ -114,46 +119,24 @@ const CheckAvilablity = async (req, res) => {
         // Check if there's any seminar that overlaps with the provided date and time and has the same requiredHall value
         const overlappingSeminars = await Seminar.findAll({
             where: {
-                requiredHall: req.body.requiredHall, // Add the condition for requiredHall
-                [sequelize.Op.or]: [
+                requiredHall: req.query.requiredHall,
+                [Op.or]: [
                     {
                         startDate: {
-                            [sequelize.Op.between]: [parsedStartDate.format(dateFormat), parsedEndDate.format(dateFormat)],
-                        },
-                        startTime: {
-                            [sequelize.Op.lt]: parsedEndTime.format(timeFormat),
-                        },
-                    },
-                    {
-                        endDate: {
-                            [sequelize.Op.between]: [parsedStartDate.format(dateFormat), parsedEndDate.format(dateFormat)],
-                        },
-                        endTime: {
-                            [sequelize.Op.gt]: parsedStartTime.format(timeFormat),
-                        },
-                    },
-                    {
-                        startDate: {
-                            [sequelize.Op.lte]: parsedStartDate.format(dateFormat),
+                            [Op.lte]: parsedEndDate.format(dateFormat),
                         },
                         endDate: {
-                            [sequelize.Op.gte]: parsedEndDate.format(dateFormat),
+                            [Op.gte]: parsedStartDate.format(dateFormat),
                         },
-                        [sequelize.Op.or]: [
+                        [Op.and]: [
                             {
                                 startTime: {
-                                    [sequelize.Op.lte]: parsedStartTime.format(timeFormat),
-                                },
-                                endTime: {
-                                    [sequelize.Op.gte]: parsedStartTime.format(timeFormat),
+                                    [Op.lte]: parsedEndTime.format(timeFormat),
                                 },
                             },
                             {
-                                startTime: {
-                                    [sequelize.Op.lte]: parsedEndTime.format(timeFormat),
-                                },
                                 endTime: {
-                                    [sequelize.Op.gte]: parsedEndTime.format(timeFormat),
+                                    [Op.gte]: parsedStartTime.format(timeFormat),
                                 },
                             },
                         ],
@@ -175,8 +158,15 @@ const CheckAvilablity = async (req, res) => {
 
 
 
+
+
+
+
+
+
 module.exports = {
     createSeminar: createSeminar,
     UpdateSeminar: UpdateSeminar,
-    GetSeminar: GetSeminar, DeleteSeminar
+    GetSeminar: GetSeminar, DeleteSeminar,
+    CheckAvilablity: CheckAvilablity
 }
