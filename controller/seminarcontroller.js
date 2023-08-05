@@ -102,11 +102,15 @@ const DeleteSeminar = async (req, res) => {
 }
 
 
-
-
 const CheckAvilablity = async (req, res) => {
     try {
-        const { startDate, endDate, startTime, endTime } = req.query;
+        const { startDate, endDate, startTime, endTime, requiredHall } = req.query;
+
+        // Validate input parameters
+        if (!startDate || !endDate || !startTime || !endTime) {
+            res.status(400).send({ message: 'Invalid input. Please provide startDate, endDate, startTime, endTime, and requiredHall in the query parameters.' });
+            return;
+        }
 
         // Parse dates and times using moment.js
         const dateFormat = "YYYY-MM-DD";
@@ -116,22 +120,50 @@ const CheckAvilablity = async (req, res) => {
         const parsedStartTime = moment(startTime, timeFormat);
         const parsedEndTime = moment(endTime, timeFormat);
 
+        // Check if the provided time slot is valid
+        if (parsedStartDate.isAfter(parsedEndDate) || parsedStartTime.isAfter(parsedEndTime)) {
+            res.send(JSON.stringify({ message: "Invalid time slot. The start date/time should be before the end date/time." }));
+            return;
+        }
+
         // Check if there's any seminar that overlaps with the provided date and time and has the same requiredHall value
         const overlappingSeminars = await Seminar.findAll({
             where: {
-                // requiredHall: req.query.requiredHall,
+                // requiredHall,
                 [Op.or]: [
                     {
                         startDate: {
-                            [Op.lte]: parsedEndDate.format(dateFormat),
+                            [Op.lt]: parsedEndDate.format(dateFormat),
                         },
                         endDate: {
-                            [Op.gte]: parsedStartDate.format(dateFormat),
+                            [Op.gt]: parsedStartDate.format(dateFormat),
+                        },
+                    },
+                    {
+                        startDate: {
+                            [Op.eq]: parsedStartDate.format(dateFormat),
                         },
                         [Op.and]: [
                             {
                                 startTime: {
-                                    [Op.lte]: parsedEndTime.format(timeFormat),
+                                    [Op.lt]: parsedEndTime.format(timeFormat),
+                                },
+                            },
+                            {
+                                endTime: {
+                                    [Op.gte]: parsedStartTime.format(timeFormat),
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        endDate: {
+                            [Op.eq]: parsedEndDate.format(dateFormat),
+                        },
+                        [Op.and]: [
+                            {
+                                startTime: {
+                                    [Op.lt]: parsedEndTime.format(timeFormat),
                                 },
                             },
                             {
@@ -143,7 +175,7 @@ const CheckAvilablity = async (req, res) => {
                     },
                 ],
             },
-            attributes: ["requiredHall"]
+            attributes: ["requiredHall"],
         });
 
         if (overlappingSeminars.length === 0) {
@@ -156,7 +188,6 @@ const CheckAvilablity = async (req, res) => {
         res.send(JSON.stringify({ message: error.message }));
     }
 };
-
 
 
 
