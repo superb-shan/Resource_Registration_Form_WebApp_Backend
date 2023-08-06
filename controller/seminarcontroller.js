@@ -131,42 +131,28 @@ const CheckAvailability = async (req, res) => {
         // Check if there's any seminar that overlaps with the provided date and time and has the same requiredHall value
         const overlappingSeminars = await Seminar.findAll({
             where: {
+                [Op.or]: [{
+                    [Op.or]: [
+                        {
+                            startDate: {
+                                [Op.lte]: parsedEndDate.format(dateFormat),
+                            },
+                            endDate: {
+                                [Op.gte]: parsedStartDate.format(dateFormat),
+                            },
 
-                [Op.or]: [
-                    {
-                        startDate: {
-                            [Op.lt]: parsedEndDate.format(dateFormat),
-                        },
-                        endDate: {
-                            [Op.gt]: parsedStartDate.format(dateFormat),
-                        },
-                    },
-                    {
-                        startDate: {
-                            [Op.eq]: parsedStartDate.format(dateFormat),
-                        },
-                        startTime: {
-                            [Op.lt]: parsedEndTime.format(timeFormat),
-                        },
-                    },
-                    {
-                        endDate: {
-                            [Op.eq]: parsedEndDate.format(dateFormat),
-                        },
-                        endTime: {
-                            [Op.gt]: parsedStartTime.format(timeFormat),
-                        },
-                    },
-                    {
-                        endDate: {
-                            [Op.eq]: parsedStartDate.format(dateFormat),
-                        },
-                        endTime: {
-                            [Op.gt]: parsedStartTime.format(timeFormat),
-                        }
 
+                        },
+
+                    ],
+                    startTime: {
+                        [Op.between]: [parsedStartTime.format(timeFormat), parsedEndTime.format(timeFormat)]
+                    },
+                    endTime: {
+                        [Op.between]: [parsedStartTime.format(timeFormat), parsedEndTime.format(timeFormat)]
                     }
-                ],
+
+                }]
             },
             attributes: ["requiredHall"],
         });
