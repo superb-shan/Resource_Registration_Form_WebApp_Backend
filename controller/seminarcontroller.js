@@ -6,8 +6,8 @@ const { Op } = require('sequelize')
 
 const createSeminar = async (req, res) => {
     try {
-        let { name, contactNumber: number, startDate, endDate, startTime, designation: DesignationDepartment, requiredhall: requiredHall, endTime, purpose, noOfAttendees: no_of_Attendees, seating_capacity, equipmentNeeded: EquipmentRequired, specialRequiremnts } = req.body;
-        const user = await User.findOne({ where: { name: name } });
+        let { userName, name, contactNumber: number, startDate, endDate, startTime, designation: DesignationDepartment, requiredhall: requiredHall, endTime, purpose, noOfAttendees: no_of_Attendees, seating_capacity, equipmentNeeded, specialRequirements } = req.body;
+        const user = await User.findOne({ where: { name: userName } });
 
         if (!user) {
             res.status(200).send(JSON.stringify({ "message": "user not found" }));
@@ -23,7 +23,7 @@ const createSeminar = async (req, res) => {
         console.log(parsedstartDate.format("YYYY-MM-DD"), parsedendDate.format("YYYY-MM-DD"))
         const seminarObj = await Seminar.create({
             id: uuidv4(),
-            name: user.name,
+            name,
             contactNumber: number,
             startDate: parsedstartDate.format("YYYY-MM-DD"),
             startTime: parsedStartTime.format(timeFormat),
@@ -34,8 +34,8 @@ const createSeminar = async (req, res) => {
             DesignationDepartment,
             noOfAttendees: no_of_Attendees,
             seating_capacity: seating_capacity || 20,
-            EquipmentRequired,
-            specialRequiremnts,
+            equipmentNeeded,
+            specialRequirements,
             "UserId": user.id, // Use "userId" here (consistent with the model definition)
         });
 
