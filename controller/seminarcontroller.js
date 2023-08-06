@@ -131,6 +131,9 @@ const CheckAvailability = async (req, res) => {
         // Check if there's any seminar that overlaps with the provided date and time and has the same requiredHall value
         const overlappingSeminars = await Seminar.findAll({
             where: {
+                isapproved: {
+                    [Op.not]: false
+                },
                 [Op.or]: [{
                     [Op.or]: [
                         {
