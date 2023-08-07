@@ -86,7 +86,7 @@ const GetSeminar = async (req, res) => {
 
         const result = await Seminar.findAll({ where: whereclause })
         console.log("result",result)
-        res.send(result)
+        res.send(JSON.stringify({"data":result||[]}))
 
     } catch (error) {
 
