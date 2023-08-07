@@ -1,4 +1,4 @@
-
+const path = require('path');
 const nodemailer = require('nodemailer');
 const ejs = require('ejs');
 const fs = require('fs');
@@ -22,7 +22,7 @@ async function sendEmail(emailData, template) {
     try {
         let emailTemplatePath;
         if (template == 'accepted') {
-            emailTemplatePath = '../emailSender/templates/accept.ejs'
+            emailTemplatePath = path.join(__dirname, 'templates','accepted.ejs')
         }
         const emailTemplate = fs.readFileSync(emailTemplatePath, 'utf-8');
         const renderedEmail = ejs.render(emailTemplate, emailData);
@@ -40,8 +40,5 @@ async function sendEmail(emailData, template) {
         console.error('Error sending email:', error);
     }
 }
-
-sendEmail('John Doe', 'Resource XYZ', 'IT Department', 'Resource', 'ragunanthan8888@gmail.com');
-
-
+const myPath = path.join(__dirname);
 module.exports = sendEmail
