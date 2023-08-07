@@ -73,19 +73,23 @@ const UpdateSeminar = async (req, res) => {
 const GetSeminar = async (req, res) => {
     try {
         const { name } = req.query;
-        const whereclause={}
-        if(name){
-            
-        const user = await User.findOne({ where: { name: name } })
-        if (!user) {
-            res.send(JSON.stringify({ "message": "user not fond" }))
-            return;
-        }
-        whereclause["UserId"]=user.id;
+        const whereclause = {}
+        if (name) {
+
+            const user = await User.findOne({ where: { name: name } })
+            if (!user) {
+                res.send(JSON.stringify({ "message": "user not fond" }))
+                return;
+            }
+            whereclause["UserId"] = user.id;
         }
 
-        const result = await Seminar.findAll({ where: whereclause })
-        console.log("result",result)
+        const result = await Seminar.findAll({
+            where: whereclause, order: [
+                [sequelize.literal('createdAt'), 'DESC']
+            ]
+        })
+        console.log("result", result)
         res.send(result)
 
     } catch (error) {
