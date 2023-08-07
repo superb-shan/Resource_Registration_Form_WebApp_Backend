@@ -122,11 +122,11 @@ const updateTransport = async (req, res) => {
                 const form = await Transport.findOne({where:{id}})
                 const user = await User.findOne({where:{id:form.UserId}})
                 const emailData = {
-                    sendername:user.name,
-                    time:`form ${form.time}`,
+                    sendername:"Resource",
+                    time:formform.time,
                     date:form.date,
                     username:form.name,
-                    sendEmail:'ragunanthan8888@gmail.com'
+                    sendEmail:user.email
                 }
                 sendEmail(emailData,'accepted')
             }
