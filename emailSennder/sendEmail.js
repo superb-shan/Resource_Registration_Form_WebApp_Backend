@@ -3,15 +3,25 @@ const nodemailer = require('nodemailer');
 const ejs = require('ejs');
 const fs = require('fs');
 
+// const smtpConfig = {
+//     host: 'smtp.gmail.com', // Replace with the correct SMTP server address for your email provider
+//     port: 587, // SMTP port for Gmail
+//     secure: false, // Set to true if your provider requires SSL/TLS
+//     auth: {
+//         user: 'ragunanthan8888@gmail.com',
+//         pass: 'exbhyapjoeqedvco',
+//     },
+// };
 const smtpConfig = {
-    host: 'smtp.gmail.com', // Replace with the correct SMTP server address for your email provider
-    port: 587, // SMTP port for Gmail
-    secure: false, // Set to true if your provider requires SSL/TLS
+    host: 'smtp.gmail.com',
+    port: 465, // Use port 465 for SSL/TLS
+    secure: true, // Use SSL/TLS
     auth: {
         user: 'ragunanthan8888@gmail.com',
-        pass: 'exbhyapjoeqedvco',
+        pass: 'exbhyapjoeqedvco', // Generated App Password
     },
 };
+
 
 const transporter = nodemailer.createTransport(smtpConfig);
 
