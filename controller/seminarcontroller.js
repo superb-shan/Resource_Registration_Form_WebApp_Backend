@@ -3,7 +3,7 @@ const User = require('../models/user')
 const moment = require('moment')
 const { v4: uuidv4 } = require('uuid');
 const { Op } = require('sequelize')
-
+const sequelize = require('sequelize')
 const createSeminar = async (req, res) => {
     try {
         let { userName, name, contactNumber: number, startDate, endDate, startTime, designation: DesignationDepartment, requiredhall: requiredHall, endTime, purpose, noOfAttendees: no_of_Attendees, seating_capacity, equipmentNeeded, specialRequirements } = req.body;
@@ -90,10 +90,10 @@ const GetSeminar = async (req, res) => {
             ]
         })
         console.log("result", result)
-        res.send(result)
+        res.send(JSON.stringify({"message":result||[]}))
 
     } catch (error) {
-
+            res.send(error.message)
     }
 }
 
