@@ -43,6 +43,7 @@ const createTransport = async (req, res) => {
 
 const getTransport = async (req, res) => {
     const { UserId, id, name, date, status } = req.query;
+    console.log(UserId, id, name, date, status )
 
     try {
         const whereClause = {};
