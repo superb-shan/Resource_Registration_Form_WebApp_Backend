@@ -166,10 +166,10 @@ const CheckAvailability = async (req, res) => {
 
                     ],
                     startTime: {
-                        [Op.between]: [parsedStartTime.format(timeFormat), parsedEndTime.format(timeFormat)]
+                        [Op.lte]: parsedStartTime.format(timeFormat)
                     },
                     endTime: {
-                        [Op.between]: [parsedStartTime.format(timeFormat), parsedEndTime.format(timeFormat)]
+                        [Op.gte]: parsedStartTime.format(timeFormat)
                     }
 
                 }]
