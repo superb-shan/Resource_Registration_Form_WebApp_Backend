@@ -32,7 +32,7 @@ const createTransport = async (req, res) => {
             specialRequirements,
             "UserId": user.id,
         });
-        
+
 
         res.send({ "message": true, "data": transport.toJSON() });
     } catch (error) {
@@ -44,7 +44,7 @@ const createTransport = async (req, res) => {
 
 const getTransport = async (req, res) => {
     const { UserId, id, name, date, status } = req.query;
-    console.log(UserId, id, name, date, status )
+    console.log(UserId, id, name, date, status)
 
     try {
         const whereClause = {};
@@ -94,7 +94,7 @@ const getTransport = async (req, res) => {
         if (!result || result.length === 0) {
             res.send({ "message": "No forms found" });
         } else {
-            res.send({ "message": "Forms found", "data": result });
+            res.send({ "message": "Forms found", "data": result || [] });
         }
     } catch (error) {
         console.error('Error:', error);
@@ -117,20 +117,20 @@ const updateTransport = async (req, res) => {
 
         // Correct the syntax for the update method
         const form = await Transport.update(whereClause, { where: { id } });
-          if(isapproved){
-            if(isapproved === 'true'){
-                const form = await Transport.findOne({where:{id}})
-                const user = await User.findOne({where:{id:form.UserId}})
+        if (isapproved) {
+            if (isapproved === 'true') {
+                const form = await Transport.findOne({ where: { id } })
+                const user = await User.findOne({ where: { id: form.UserId } })
                 const emailData = {
-                    sendername:"Resource",
-                    time:formform.time,
-                    date:form.date,
-                    username:form.name,
-                    sendEmail:user.email
+                    sendername: "Resource",
+                    time: formform.time,
+                    date: form.date,
+                    username: form.name,
+                    sendEmail: user.email
                 }
-                sendEmail(emailData,'accepted')
+                sendEmail(emailData, 'accepted')
             }
-          }
+        }
         res.send(JSON.stringify({ "message": "success" }));
     } catch (err) {
         res.send(err.message);
