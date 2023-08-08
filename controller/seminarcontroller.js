@@ -72,7 +72,7 @@ const UpdateSeminar = async (req, res) => {
 
 const GetSeminar = async (req, res) => {
     try {
-        const { name } = req.query;
+        const { name, date } = req.query;
         const whereclause = {}
         if (name) {
 
@@ -83,6 +83,14 @@ const GetSeminar = async (req, res) => {
             }
             whereclause["UserId"] = user.id;
         }
+        if (date) {
+            whereclause["startDate"] = {
+                [Op.lte]: moment(date).format("YYYY-MM-DD"),
+            }
+            whereclause["endDate"] = {
+                [Op.gte]: moment(date).format("YYYY-MM-DD"),
+            }
+        }
 
         const result = await Seminar.findAll({
             where: whereclause, order: [
@@ -90,10 +98,10 @@ const GetSeminar = async (req, res) => {
             ]
         })
         console.log("result", result)
-        res.send(JSON.stringify({"data":result||[]}))
+        res.send(JSON.stringify({ "data": result || [] }))
 
     } catch (error) {
-            res.send(error.message)
+        res.send(error.message)
     }
 }
 
