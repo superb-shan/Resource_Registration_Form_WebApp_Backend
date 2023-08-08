@@ -98,7 +98,7 @@ const GetSeminar = async (req, res) => {
             ]
         })
         console.log("result", result)
-        res.send(JSON.stringify({ "data": result || [] }))
+        res.send(JSON.stringify({ "data": (result || []) }))
 
     } catch (error) {
         res.send(error.message)
@@ -166,10 +166,10 @@ const CheckAvailability = async (req, res) => {
 
                     ],
                     startTime: {
-                        [Op.between]: [parsedStartTime.format(timeFormat), parsedEndTime.format(timeFormat)]
+                        [Op.lte]: parsedStartTime.format(timeFormat)
                     },
                     endTime: {
-                        [Op.between]: [parsedStartTime.format(timeFormat), parsedEndTime.format(timeFormat)]
+                        [Op.gte]: parsedStartTime.format(timeFormat)
                     }
 
                 }]
