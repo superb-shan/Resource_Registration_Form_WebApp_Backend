@@ -98,7 +98,7 @@ const GetSeminar = async (req, res) => {
             ]
         })
         console.log("result", result)
-        res.send(JSON.stringify({ "data": result || [] }))
+        res.send(JSON.stringify({ "data": (result || []) }))
 
     } catch (error) {
         res.send(error.message)
