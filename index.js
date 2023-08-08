@@ -7,6 +7,7 @@ const adminRoutes = require('./routers/Admin');
 const userRoutes = require('./routers/User');
 const transportRoutes = require('./routers/Transport');
 const seminarRoutes = require('./routers/Seminar')
+const GuestHouse = require('./models/GuestHouse')
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -25,6 +26,6 @@ app.use('/seminar', seminarRoutes);
 
 app.listen(8000, async () => {
     console.log("Server running at http://localhost:8000");
-    await sequelize.sync({ alter: true });
+    await sequelize.authenticate();
     console.log("Database synced");
 });
