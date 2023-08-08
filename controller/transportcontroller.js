@@ -92,7 +92,7 @@ const getTransport = async (req, res) => {
         });
 
         if (!result || result.length === 0) {
-            res.send({ "message": "No forms found" });
+            res.send({ "message": "No forms found", "data": result || [] });
         } else {
             res.send({ "message": "Forms found", "data": result || [] });
         }
