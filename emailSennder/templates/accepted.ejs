@@ -1,32 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accepted Resource</title>
+    <title>Request Approved</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            background-color: #f5f5f5;
         }
+        
         h1 {
-            color: #333;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
         }
-        p {
-            margin: 10px 0;
+        
+        ul {
+            list-style: none;
+            padding: 0;
         }
+        
+        li {
+            background-color: #fff;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
         strong {
             font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        span {
+            font-weight: normal;
+            color: #555;
         }
     </style>
 </head>
+
 <body>
-    <h1>Resource Accepted</h1>
-    <p><strong>Applicant name:</strong> <%= username %></p>
-    <p><strong>Date:</strong> <%= date %></p>
-    <p><strong>Time:</strong> <%= time %></p>
-    <p><strong>Sender Name:</strong> <%= sendername %></p>
+    <h1>Request Approved</h1>
+    <p>Hello
+        <%= emailData.receiverName %>,</p>
+    <p>Your request has been
+        <%= emailData.status%>.</p>
+    <p>Details:</p>
+    <ul>
+        <% for (const key in emailData) { %>
+            <% if (key !== 'sendEmail' || key !== 'receiverName') { %>
+                <li>
+
+                    <strong><%= key %>:</strong>
+                    <span><%= emailData[key] %></span>
+                </li>
+                <% } %>
+                    <% } %>
+    </ul>
+    <p>Thank you for using our services.</p>
+    <p>Best regards,<br>Your Team</p>
 </body>
+
 </html>

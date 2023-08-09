@@ -15,10 +15,6 @@ const GuestHouse = sequelize.define("GuestHouse", {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    AppicantName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
     contactNumber: {
         type: DataTypes.STRING,
         allowNull: false,

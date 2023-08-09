@@ -9,29 +9,26 @@ const smtpConfig = {
     secure: false, // Set to true if your provider requires SSL/TLS
     auth: {
         user: 'ragunanthan8888@gmail.com',
-        pass: 'qtcwtmudbudcrpin',
+        pass: 'rpefaqczvtbavmtf',
     },
 };
 const transporter = nodemailer.createTransport(smtpConfig);
 
 
 
-async function sendEmail(emailData, template) {
+async function sendEmail(emailData) {
 
 
     try {
+        console.log("sending email")
 
-        let emailTemplatePath;
-        if (template == 'accepted') {
-            emailTemplatePath = path.join(__dirname, 'templates','accepted.ejs')
-        }
-        const emailTemplate = fs.readFileSync(emailTemplatePath, 'utf-8');
-        const renderedEmail = ejs.render(emailTemplate, emailData);
+        const emailTemplate = fs.readFileSync(path.join(__dirname, 'templates', 'accepted.ejs'), 'utf-8');
+        const renderedEmail = ejs.render(emailTemplate, { emailData });
 
         const mailOptions = {
             from: 'ragunanthan8888@gmail.com',
             to: emailData.sendEmail,
-            subject: 'Request Approved',
+            subject: `Request ${emailData.status}`,
             html: renderedEmail,
         };
 

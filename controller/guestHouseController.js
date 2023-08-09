@@ -1,4 +1,4 @@
-const GusetHouse = require('../models/GusetHouse')
+const GuestHouse = require('../models/GuestHouse')
 const User = require('../models/user')
 const moment = require('moment')
 const { v4: uuidv4 } = require('uuid');
@@ -6,8 +6,9 @@ const { Op } = require('sequelize')
 const sequelize = require('sequelize')
 const createGusetHouse = async (req, res) => {
     try {
+        console.log("hi")
         let { userName, DesignationDepartment,
-            AppicantName,
+
             contactNumber,
             name,
             purpose,
@@ -25,15 +26,14 @@ const createGusetHouse = async (req, res) => {
         }
         //console.log(startTime, endTime, requiredHall);
         const dateTimeFormat = "YYYY-MM-DD HH:mm:ss"; // Corrected date format
-
-        const GusetHouseObj = await GusetHouse.create({
+        console.log(moment(ArrivialDateTime).format(dateTimeFormat), moment(DepartureDateTime).format(dateTimeFormat))
+        const GusetHouseObj = await GuestHouse.create({
             DesignationDepartment,
-            AppicantName,
-            contactNumber,
             name,
+            contactNumber,
             purpose,
-            ArrivialDateTime: moment(ArrivialDateTime).format(dateTimeFormat), // Use the appropriate date
-            DepartureDateTime: moment(DepartureDateTime).format(dateTimeFormat), // Use the appropriate date
+            ArrivialDateTime: new Date(ArrivialDateTime), // Use the appropriate date
+            DepartureDateTime: new Date(DepartureDateTime), // Use the appropriate date
             Accommodation,
             noOfGuest,
             FoodRequirements,
@@ -64,7 +64,7 @@ const UpdateGusetHouse = async (req, res) => {
         }
 
         // Correct the syntax for the update method
-        const form = await GusetHouse.update(whereClause, { where: { id } });
+        const form = await GuestHouse.update(whereClause, { where: { id } });
 
         res.send(JSON.stringify({ "message": "success" }));
     } catch (err) {
@@ -95,7 +95,7 @@ const GetGusetHouse = async (req, res) => {
             }
         }
 
-        const result = await GusetHouse.findAll({
+        const result = await GuestHouse.findAll({
             where: whereclause, order: [
                 [sequelize.literal('createdAt'), 'DESC']
             ]
@@ -112,7 +112,7 @@ const GetGusetHouse = async (req, res) => {
 const DeleteGusetHouse = async (req, res) => {
     try {
         const id = req.query.id;
-        const result = await GusetHouse.destroy({ where: { id: id } })
+        const result = await GuestHouse.destroy({ where: { id: id } })
         res.send(JSON.stringify({ "message": "success", "count": result }))
 
     } catch (err) {
@@ -135,15 +135,16 @@ const CheckAvailability = async (req, res) => {
         const dateTimeFormat = "YYYY-MM-DD HH:mm:ss";
         const dept = moment(DepartureDateTime).format(dateTimeFormat);
         const arrival = moment(ArrivialDateTime).format(dateTimeFormat);
-
+        let dep = moment(DepartureDateTime)
+        let arvg = moment(ArrivialDateTime)
         // Check if the provided time slot is valid
-        if (dept.isAfter(arrival)) {
+        if (arvg.isAfter(dep)) {
             res.send(JSON.stringify({ message: "Invalid time slot. The start date/time should be before the end date/time." }));
             return;
         }
 
         // Check if there's any GusetHouse that overlaps with the provided date and time and has the same requiredHall value
-        const overlappingGusetHouses = await GusetHouse.findAll({
+        const overlappingGusetHouses = await GuestHouse.findAll({
             where: {
                 isapproved: {
                     [Op.not]: false

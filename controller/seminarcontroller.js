@@ -20,7 +20,7 @@ const createSeminar = async (req, res) => {
         const parsedendDate = moment(endDate)
         const parsedStartTime = moment(startTime, timeFormat);
         const parsedEndTime = moment(endTime, timeFormat);
-        console.log(parsedstartDate.format("YYYY-MM-DD"), parsedendDate.format("YYYY-MM-DD"))
+        //console.log(parsedstartDate.format("YYYY-MM-DD"), parsedendDate.format("YYYY-MM-DD"))
         const seminarObj = await Seminar.create({
             id: uuidv4(),
             name,
@@ -97,7 +97,7 @@ const GetSeminar = async (req, res) => {
                 [sequelize.literal('createdAt'), 'DESC']
             ]
         })
-        console.log("result", result)
+        // console.log("result", result)
         res.send(JSON.stringify({ "data": (result || []) }))
 
     } catch (error) {

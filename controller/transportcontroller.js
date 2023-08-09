@@ -7,7 +7,7 @@ const sendEmail = require('../emailSennder/sendEmail');
 const createTransport = async (req, res) => {
     try {
         let { name, purposeOfTravel: purpose, formattedDateTime: date, pickupLocation: pickUp, dropLocation: drop, noOfPassengers: passengerCount, specialRequirement: specialRequirements, phoneNumber: number, userName } = req.body;
-        console.log("hello", name)
+
         const user = await User.findOne({ where: { name: userName } });
 
         if (!user) {
@@ -17,7 +17,7 @@ const createTransport = async (req, res) => {
         const dateObject = moment(date);
         const formattedDate = dateObject.format('YYYY-MM-DD');
         const formattedTime = dateObject.format('HH:mm:ss');
-        console.log(formattedDate, formattedTime);
+
 
         const transport = await Transport.create({
             id: uuidv4(),
@@ -44,7 +44,6 @@ const createTransport = async (req, res) => {
 
 const getTransport = async (req, res) => {
     const { UserId, id, name, date, status } = req.query;
-    console.log(UserId, id, name, date, status)
 
     try {
         const whereClause = {};
@@ -57,7 +56,7 @@ const getTransport = async (req, res) => {
         }
         if (name) {
             const user = await User.findOne({ where: { name: name } })
-            console.log(user)
+
             whereClause.UserId = user.id;
         }
 
@@ -122,13 +121,28 @@ const updateTransport = async (req, res) => {
                 const form = await Transport.findOne({ where: { id } })
                 const user = await User.findOne({ where: { id: form.UserId } })
                 const emailData = {
-                    sendername: "Resource",
-                    time: formform.time,
+                    receiverName: user.name,
+                    time: form.time,
                     date: form.date,
+                    status: "Accepted",
                     username: form.name,
                     sendEmail: user.email
                 }
-                sendEmail(emailData, 'accepted')
+                sendEmail(emailData)
+            }
+            else {
+                const form = await Transport.findOne({ where: { id } })
+                const user = await User.findOne({ where: { id: form.UserId } })
+                const emailData = {
+                    receiverName: user.name,
+                    time: form.time,
+                    date: form.date,
+                    status: "Rejected",
+                    username: form.name,
+                    Remark: form.remarks,
+                    sendEmail: user.email
+                }
+                sendEmail(emailData)
             }
         }
         res.send(JSON.stringify({ "message": "success" }));
