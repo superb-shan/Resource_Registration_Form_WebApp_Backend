@@ -55,6 +55,15 @@ const GuestHouse = sequelize.define("GuestHouse", {
         type: DataTypes.STRING,
         allowNull: false
     },
+    RequiredRoom:{
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    applicantName:{
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+    ,
     noOfGuest: {
         type: DataTypes.INTEGER,
         allowNull: false,

@@ -8,7 +8,7 @@ const createGusetHouse = async (req, res) => {
     try {
         console.log("hi")
         let { userName, DesignationDepartment,
-
+           applicantName,
             contactNumber,
             name,
             purpose,
@@ -38,7 +38,7 @@ const createGusetHouse = async (req, res) => {
             noOfGuest,
             FoodRequirements,
             Menu,
-
+           applicantName,
             "UserId": user.id, // Use "userId" here (consistent with the model definition)
         });
 

@@ -7,7 +7,7 @@ const CreateAdmin = async (req, res) => {
         const admin = await Admin.create({ name, email, password: password });
         return res.json(admin.toJSON()).status(200)
     } catch (err) {
-        return res.status(200).json(err.message)
+        return res.status(200).json({"error":err.message})
     }
 }
 const updateAdmin = async (req, res) => {
