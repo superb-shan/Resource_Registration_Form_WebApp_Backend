@@ -4,20 +4,27 @@ const moment = require('moment')
 const { v4: uuidv4 } = require('uuid');
 const { Op } = require('sequelize')
 const sequelize = require('sequelize')
+
+
 const createGusetHouse = async (req, res) => {
     try {
-        console.log("hi")
-        let { userName, DesignationDepartment,
-           applicantName,
+        
+        let { 
+            userName, 
+            DesignationDepartment,
+            applicantName,
             contactNumber,
             name,
             purpose,
             ArrivialDateTime, // Use the appropriate date
             DepartureDateTime, // Use the appropriate date
-            Accommodation,
             noOfGuest,
-            FoodRequirements,
-            Menu, } = req.body;
+            foodRequired,
+            menuRequired, 
+            paymentDoneBy, 
+            requiredRoom,
+            specialRequirements 
+        } = req.body;
         const user = await User.findOne({ where: { name: userName } });
 
         if (!user) {
@@ -34,11 +41,13 @@ const createGusetHouse = async (req, res) => {
             purpose,
             ArrivialDateTime: new Date(ArrivialDateTime), // Use the appropriate date
             DepartureDateTime: new Date(DepartureDateTime), // Use the appropriate date
-            Accommodation,
             noOfGuest,
-            FoodRequirements,
-            Menu,
-           applicantName,
+            foodRequired,
+            menuRequired, 
+            paymentDoneBy, 
+            requiredRoom,
+            applicantName,
+            specialRequirements,
             "UserId": user.id, // Use "userId" here (consistent with the model definition)
         });
 
