@@ -174,6 +174,7 @@ const CheckAvailability = async (req, res) => {
                     ],
                 }]
             },
+            attributes:["RequiredRoom"]
 
         });
 
