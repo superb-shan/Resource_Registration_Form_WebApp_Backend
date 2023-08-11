@@ -89,7 +89,7 @@ const Item = sequelize.define('item', {
     }
     , type: {
         type: DataTypes.STRING,
-        defaultValue: 'Item'
+        defaultValue: 'Items'
     }
 });
 
