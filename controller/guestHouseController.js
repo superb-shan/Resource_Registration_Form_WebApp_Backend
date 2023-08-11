@@ -43,9 +43,9 @@ const createGusetHouse = async (req, res) => {
             DepartureDateTime: new Date(DepartureDateTime), // Use the appropriate date
             noOfGuest,
             foodRequired,
-            menuRequired, 
+            Menu: menuRequired, 
             paymentDoneBy, 
-            requiredRoom,
+            RequiredRoom: requiredRoom,
             applicantName,
             specialRequirements,
             "UserId": user.id, // Use "userId" here (consistent with the model definition)

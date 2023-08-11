@@ -51,7 +51,8 @@ const GuestHouse = sequelize.define("GuestHouse", {
         },
 
     },
-    Accommodation: {
+    
+    paymentDoneBy:{
         type: DataTypes.STRING,
         allowNull: false
     },
