@@ -42,7 +42,7 @@ const createGusetHouse = async (req, res) => {
             ArrivialDateTime: new Date(ArrivialDateTime), // Use the appropriate date
             DepartureDateTime: new Date(DepartureDateTime), // Use the appropriate date
             noOfGuest,
-            foodRequired,
+            FoodRequirements:foodRequired,
             Menu: menuRequired, 
             paymentDoneBy, 
             RequiredRoom: requiredRoom,
