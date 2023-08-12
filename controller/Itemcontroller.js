@@ -32,10 +32,11 @@ const createItem = async (req, res) => {
         if (!user) {
             res.send(JSON.stringify({ "message": "No user found" }))
         }
+        console.log(selectedDate)
         const item = await Item.create({
             name,
             EmpID,
-            selectedDate: moment(selectedDate).format('YYYY-MM-DD'),
+            selectedDate: moment(selectedDate.toString()).format('YYYY-MM-DD'),
             Designation,
             Department,
             printing,

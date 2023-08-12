@@ -19,7 +19,7 @@ const Item = sequelize.define('item', {
         allowNull: false,
     },
     selectedDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: true,
     },
     Designation: {
