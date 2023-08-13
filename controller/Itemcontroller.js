@@ -132,38 +132,37 @@ const updateItem = async (req, res) => {
         if (remarks) {
             whereClause.remarks = remarks;
         }
-
         // Correct the syntax for the update method
         const form = await Item.update(whereClause, { where: { id } });
-        if (isapproved) {
-            if (isapproved === 'true') {
-                const form = await Item.findOne({ where: { id } })
-                const user = await User.findOne({ where: { id: form.UserId } })
-                const emailData = {
-                    receiverName: user.name,
+        // if (isapproved) {
+        //     if (isapproved === 'true') {
+        //         const form = await Item.findOne({ where: { id } })
+        //         const user = await User.findOne({ where: { id: form.UserId } })
+        //         const emailData = {
+        //             receiverName: user.name,
 
-                    date: form.selectedDate,
-                    status: "Accepted",
-                    username: form.name,
-                    sendEmail: user.email
-                }
-                sendEmail(emailData)
-            }
-            else {
-                const form = await Item.findOne({ where: { id } })
-                const user = await User.findOne({ where: { id: form.UserId } })
-                const emailData = {
-                    receiverName: user.name,
-                    time: form.time,
-                    date: form.selectedDate,
-                    status: "Rejected",
-                    username: form.name,
-                    Remark: form.remarks,
-                    sendEmail: user.email
-                }
-                sendEmail(emailData)
-            }
-        }
+        //             date: form.selectedDate,
+        //             status: "Accepted",
+        //             username: form.name,
+        //             sendEmail: user.email
+        //         }
+        //         sendEmail(emailData)
+        //     }
+        //     else {
+        //         const form = await Item.findOne({ where: { id } })
+        //         const user = await User.findOne({ where: { id: form.UserId } })
+        //         const emailData = {
+        //             receiverName: user.name,
+        //             time: form.time,
+        //             date: form.selectedDate,
+        //             status: "Rejected",
+        //             username: form.name,
+        //             Remark: form.remarks,
+        //             sendEmail: user.email
+        //         }
+        //         sendEmail(emailData)
+        //     }
+        // }
         res.send(JSON.stringify({ "message": "success" }));
     } catch (err) {
         res.send(err.message);

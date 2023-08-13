@@ -8,7 +8,13 @@ const userRoutes = require('./routers/User');
 const transportRoutes = require('./routers/Transport');
 const seminarRoutes = require('./routers/Seminar')
 const guesthouseroutes = require('./routers/GuestHouse');
-const itemRoutes = require('./routers/Item')
+const itemRoutes = require('./routers/Item');
+const resourceRoutes = require('./routers/resource')
+
+
+
+
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -24,6 +30,8 @@ app.use('/transport', transportRoutes);
 app.use('/seminar', seminarRoutes);
 app.use('/guesthouse', guesthouseroutes)
 app.use('/Item', itemRoutes)
+app.use('/reource', resourceRoutes)
+
 app.listen(8000, async () => {
     console.log("Server running at http://localhost:8000");
     await sequelize.sync({ alter: true });
