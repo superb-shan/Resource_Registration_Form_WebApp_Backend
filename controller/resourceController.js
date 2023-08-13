@@ -41,6 +41,22 @@ const deleteResource = async (req, res) => {
     }
 }
 
+
+const getResource = async (req, res) => {
+    const whereClause = {}
+    try {
+        const key = Object.keys(req.body);
+        key.forEach(key => { whereClause[key] = req.body[key] })
+
+
+        const resource = await Resource.findAll({ where: whereClause, attributes: ["name"] })
+        res.send(JSON.stringify({ "data": resource || [] }))
+
+    } catch (error) {
+        res.send(JSON.stringify({ "message": error.message }))
+    }
+}
+
 module.exports = {
-    deleteResource, createResource
+    deleteResource, createResource, getResource
 }

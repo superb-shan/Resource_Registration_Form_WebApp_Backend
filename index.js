@@ -30,7 +30,7 @@ app.use('/transport', transportRoutes);
 app.use('/seminar', seminarRoutes);
 app.use('/guesthouse', guesthouseroutes)
 app.use('/Item', itemRoutes)
-app.use('/reource', resourceRoutes)
+app.use('/resource', resourceRoutes)
 
 app.listen(8000, async () => {
     console.log("Server running at http://localhost:8000");
