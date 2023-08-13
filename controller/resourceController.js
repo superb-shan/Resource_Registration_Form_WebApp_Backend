@@ -21,7 +21,7 @@ const deleteResource = async (req, res) => {
 
     try {
 
-        const key = Object.keys(req.body);
+        const key = Object.keys(req.query);
         if (key.length == 0) {
             res.send(JSON.stringify({ "message": "invalid type" }))
         }
@@ -45,7 +45,7 @@ const deleteResource = async (req, res) => {
 const getResource = async (req, res) => {
     const whereClause = {}
     try {
-        const key = Object.keys(req.body);
+        const key = Object.keys(req.query);
         key.forEach(key => { whereClause[key] = req.body[key] })
 
 
