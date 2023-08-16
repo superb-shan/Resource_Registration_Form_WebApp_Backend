@@ -171,6 +171,12 @@ const updateItem = async (req, res) => {
 }
 const deleteItem = async (req, res) => {
     try {
+
+        const key = Object.keys(req.query)
+        if (key.length == 0) {
+            res.send(JSON.stringify({ "message": "delete command with no arguments" }))
+            return;
+        }
         const id = req.query.id;
         // Your deletion logic here, based on the transportId
         // ...

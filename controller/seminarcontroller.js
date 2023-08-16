@@ -108,6 +108,13 @@ const GetSeminar = async (req, res) => {
 
 const DeleteSeminar = async (req, res) => {
     try {
+
+
+        const key = Object.keys(req.query)
+        if (key.length == 0) {
+            res.send(JSON.stringify({ "message": "delete command with no arguments" }))
+            return;
+        }
         const id = req.query.id;
         const result = await Seminar.destroy({ where: { id: id } })
         res.send(JSON.stringify({ "message": "success", "count": result }))

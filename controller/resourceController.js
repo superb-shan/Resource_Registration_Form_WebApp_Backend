@@ -24,6 +24,7 @@ const deleteResource = async (req, res) => {
         const key = Object.keys(req.query);
         if (key.length == 0) {
             res.send(JSON.stringify({ "message": "invalid type" }))
+            return;
         }
         const whereClause = {}
         key.forEach(key => { whereClause[key] = req.body[key] })
