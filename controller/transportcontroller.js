@@ -33,7 +33,30 @@ const createTransport = async (req, res) => {
             "UserId": user.id,
         });
 
+        const form = transport
+        let emailData = {
+            type: "Transport",
+            receiverName: user.name,
+            time: form.time,
+            date: form.date,
+            status: "Requested",
+            username: form.name,
+            Remark: form.remarks,
+            sendEmail: user.email
+        }
+        sendEmail(emailData)
 
+        emailData = {
+            type: "Transport",
+            receiverName: user.name,
+            time: form.time,
+            date: form.date,
+            status: "Requested",
+            username: form.name,
+            Remark: form.remarks,
+            sendEmail: "jeethupachi@gmail.com"
+        }
+        sendEmail(emailData)
         res.send({ "message": true, "data": transport.toJSON() });
     } catch (error) {
         console.error('Error:', error.message);
@@ -121,6 +144,7 @@ const updateTransport = async (req, res) => {
                 const form = await Transport.findOne({ where: { id } })
                 const user = await User.findOne({ where: { id: form.UserId } })
                 const emailData = {
+                    type: "Transport",
                     receiverName: user.name,
                     time: form.time,
                     date: form.date,
@@ -134,6 +158,7 @@ const updateTransport = async (req, res) => {
                 const form = await Transport.findOne({ where: { id } })
                 const user = await User.findOne({ where: { id: form.UserId } })
                 const emailData = {
+                    type: "Transport",
                     receiverName: user.name,
                     time: form.time,
                     date: form.date,

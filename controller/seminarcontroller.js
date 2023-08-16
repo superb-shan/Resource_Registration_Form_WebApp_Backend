@@ -3,7 +3,9 @@ const User = require('../models/user')
 const moment = require('moment')
 const { v4: uuidv4 } = require('uuid');
 const { Op } = require('sequelize')
-const sequelize = require('sequelize')
+const sequelize = require('sequelize');
+const sendEmail = require('../emailSennder/sendEmail');
+
 const createSeminar = async (req, res) => {
     try {
         let { userName, name, contactNumber: number, startDate, endDate, startTime, designation: DesignationDepartment, requiredhall: requiredHall, endTime, purpose, noOfAttendees: no_of_Attendees, seating_capacity, equipmentNeeded, specialRequirements } = req.body;
@@ -38,7 +40,27 @@ const createSeminar = async (req, res) => {
             specialRequirements,
             "UserId": user.id, // Use "userId" here (consistent with the model definition)
         });
-
+        const form = seminarObj
+        let emailData = {
+            type: "Seminar",
+            receiverName: user.name,
+            startDate: form.startDate.toString() + form.startTime.toString(),
+            endDate: form.endDate.toString() + form.endTime.toString(),
+            status: "Request",
+            username: form.name,
+            sendEmail: user.email
+        }
+        sendEmail(emailData)
+        emailData = {
+            type: "Seminar",
+            receiverName: user.name,
+            startDate: form.startDate.toString() + form.startTime.toString(),
+            endDate: form.endDate.toString() + form.endTime.toString(),
+            status: "Request",
+            username: form.name,
+            sendEmail: "jeethupachi@gmial.com"
+        }
+        sendEmail(emailData)
         res.status(200).send(JSON.stringify({ "message": "true", "seminar": seminarObj }));
 
     } catch (error) {
@@ -63,6 +85,37 @@ const UpdateSeminar = async (req, res) => {
         // Correct the syntax for the update method
         const form = await Seminar.update(whereClause, { where: { id } });
 
+        if (isapproved) {
+            if (isapproved === 'true') {
+                const form = await Seminar.findOne({ where: { id } })
+                const user = await User.findOne({ where: { id: form.UserId } })
+                const emailData = {
+                    type: "Seminar",
+                    receiverName: user.name,
+                    startDate: form.startDate.toString() + form.startTime.toString(),
+                    endDate: form.endDate.toString() + form.endTime.toString(),
+                    status: "Accepted",
+                    username: form.name,
+                    sendEmail: user.email
+                }
+                sendEmail(emailData)
+            }
+            else {
+                const form = await Seminar.findOne({ where: { id } })
+                const user = await User.findOne({ where: { id: form.UserId } })
+                const emailData = {
+                    type: "Seminar",
+                    receiverName: user.name,
+                    startDate: form.startDate.toString() + form.startTime.toString(),
+                    endDate: form.endDate.toString() + form.endTime.toString(),
+                    status: "Rejected",
+                    username: form.name,
+                    Remark: form.remarks,
+                    sendEmail: user.email
+                }
+                sendEmail(emailData)
+            }
+        }
         res.send(JSON.stringify({ "message": "success" }));
     } catch (err) {
         res.send(err.message);

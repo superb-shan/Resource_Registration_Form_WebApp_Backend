@@ -3,8 +3,8 @@ const User = require('../models/user')
 const moment = require('moment')
 const { v4: uuidv4 } = require('uuid');
 const { Op } = require('sequelize')
-const sequelize = require('sequelize')
-
+const sequelize = require('sequelize');
+const sendEmail = require('../emailSennder/sendEmail');
 
 const createGusetHouse = async (req, res) => {
     try {
@@ -74,6 +74,39 @@ const UpdateGusetHouse = async (req, res) => {
 
         // Correct the syntax for the update method
         const form = await GuestHouse.update(whereClause, { where: { id } });
+        if (isapproved) {
+            if (isapproved === 'true') {
+                const form = await GuestHouse.findOne({ where: { id } })
+                const user = await User.findOne({ where: { id: form.UserId } })
+                const emailData = {
+                    receiverName: user.name,
+                    ArrivialDateTime: form.ArrivialDateTime,
+                    DepartureDateTime: form.DepartureDateTime,
+                    FoodRequirements: form.FoodRequirements,
+                    Menu: form.Menu,
+                    status: "Accepted",
+                    username: form.name,
+                    sendEmail: user.email
+                }
+                sendEmail(emailData)
+            }
+            else {
+                const form = await Item.findOne({ where: { id } })
+                const user = await User.findOne({ where: { id: form.UserId } })
+                const emailData = {
+                    receiverName: user.name,
+                    ArrivialDateTime: form.ArrivialDateTime,
+                    DepartureDateTime: form.DepartureDateTime,
+                    FoodRequirements: form.FoodRequirements,
+                    Menu: form.Menu,
+                    status: "Rejected",
+                    username: form.name,
+                    Remark: form.remarks,
+                    sendEmail: user.email
+                }
+                sendEmail(emailData)
+            }
+        }
 
         res.send(JSON.stringify({ "message": "success" }));
     } catch (err) {

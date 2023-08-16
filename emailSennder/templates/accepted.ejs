@@ -46,7 +46,10 @@
 </head>
 
 <body>
-    <h1>Request Approved</h1>
+    <h1>Resource
+        <%= emailData.status%>
+            <%=emailData.type %>
+    </h1>
     <p>Hello
         <%= emailData.receiverName %>,</p>
     <p>Your request has been
@@ -54,7 +57,7 @@
     <p>Details:</p>
     <ul>
         <% for (const key in emailData) { %>
-            <% if (key !== 'sendEmail' || key !== 'receiverName') { %>
+            <% if (key != 'sendEmail' || key != 'receiverName') { %>
                 <li>
 
                     <strong><%= key %>:</strong>

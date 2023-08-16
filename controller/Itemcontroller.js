@@ -1,7 +1,9 @@
+const sendEmail = require("../emailSennder/sendEmail");
 const Item = require("../models/Item");
 const User = require("../models/user");
 const moment = require("moment");
 const sequelize = require("sequelize");
+
 const createItem = async (req, res) => {
     try {
         const {
@@ -25,7 +27,7 @@ const createItem = async (req, res) => {
             userName
 
         } = req.body
-
+        console.log(req.body)
 
 
         const user = await User.findOne({ where: { name: userName } })
@@ -53,6 +55,34 @@ const createItem = async (req, res) => {
             Ondate,
             UserId: user.id,
         })
+        console.log("hai")
+        const form = item
+        const emailData = {
+            receiverName: user.name,
+            EmpID: form.EmpID,
+            selectedDate: form.selectedDate.toString(),
+            Designation: form.Designation,
+            Department: form.Department,
+            printing: form.printing,
+            guestMomento: form.guestMomento,
+            studentMomento: form.studentMomento,
+            printedEnvelope: form.printedEnvelope,
+            answerBooklet: form.answerBooklet,
+            studentNotebook: form.studentNotebook,
+            studentNotebookWithGraph: form.studentNotebookWithGraph,
+            studentNotebookWithoutGraph: form.studentNotebookWithoutGraph,
+            observation: form.observation,
+            purpose: form.purpose,
+            withindays: form.withindays,
+            Ondate: form.Ondate.toString(),
+            status: "Requested",
+            username: form.name,
+            sendEmail: user.email
+        }
+        sendEmail(emailData)
+        // emailData.sendEmail = "jeethupachi@gmail.com"
+
+        // sendEmail(emailData)
         res.send(JSON.stringify({ "message": true, "data": item }))
 
     } catch (error) {
@@ -135,35 +165,64 @@ const updateItem = async (req, res) => {
         }
         // Correct the syntax for the update method
         const form = await Item.update(whereClause, { where: { id } });
-        // if (isapproved) {
-        //     if (isapproved === 'true') {
-        //         const form = await Item.findOne({ where: { id } })
-        //         const user = await User.findOne({ where: { id: form.UserId } })
-        //         const emailData = {
-        //             receiverName: user.name,
+        if (isapproved) {
+            if (isapproved === 'true') {
+                const form = await Item.findOne({ where: { id } })
+                const user = await User.findOne({ where: { id: form.UserId } })
+                const emailData = {
+                    receiverName: user.name,
+                    EmpID: form.EmpID,
+                    selectedDate: form.selectedDate.toString(),
+                    Designation: form.Designation,
+                    Department: form.Department,
+                    printing: form.printing,
+                    guestMomento: form.guestMomento,
+                    studentMomento: form.studentMomento,
+                    printedEnvelope: form.printedEnvelope,
+                    answerBooklet: form.answerBooklet,
+                    studentNotebook: form.studentNotebook,
+                    studentNotebookWithGraph: form.studentNotebookWithGraph,
+                    studentNotebookWithoutGraph: form.studentNotebookWithoutGraph,
+                    observation: form.observation,
+                    purpose: form.purpose,
+                    withindays: form.withindays,
+                    Ondate: form.Ondate.toString(),
+                    status: "Accepted",
+                    username: form.name,
+                    sendEmail: user.email
+                }
+                sendEmail(emailData)
+            }
+            else {
 
-        //             date: form.selectedDate,
-        //             status: "Accepted",
-        //             username: form.name,
-        //             sendEmail: user.email
-        //         }
-        //         sendEmail(emailData)
-        //     }
-        //     else {
-        //         const form = await Item.findOne({ where: { id } })
-        //         const user = await User.findOne({ where: { id: form.UserId } })
-        //         const emailData = {
-        //             receiverName: user.name,
-        //             time: form.time,
-        //             date: form.selectedDate,
-        //             status: "Rejected",
-        //             username: form.name,
-        //             Remark: form.remarks,
-        //             sendEmail: user.email
-        //         }
-        //         sendEmail(emailData)
-        //     }
-        // }
+                const form = await Item.findOne({ where: { id } })
+                const user = await User.findOne({ where: { id: form.UserId } })
+                const emailData = {
+                    receiverName: user.name,
+                    EmpID: form.EmpID,
+                    selectedDate: form.selectedDate.toString(),
+                    Designation: form.Designation,
+                    Department: form.Department,
+                    printing: form.printing,
+                    guestMomento: form.guestMomento,
+                    studentMomento: form.studentMomento,
+                    printedEnvelope: form.printedEnvelope,
+                    answerBooklet: form.answerBooklet,
+                    studentNotebook: form.studentNotebook,
+                    studentNotebookWithGraph: form.studentNotebookWithGraph,
+                    studentNotebookWithoutGraph: form.studentNotebookWithoutGraph,
+                    observation: form.observation,
+                    purpose: form.purpose,
+                    withindays: form.withindays,
+                    Ondate: form.Ondate.toString(),
+                    status: "Rejected",
+                    username: form.name,
+                    sendEmail: user.email
+                }
+                sendEmail(emailData)
+
+            }
+        }
         res.send(JSON.stringify({ "message": "success" }));
     } catch (err) {
         res.send(err.message);

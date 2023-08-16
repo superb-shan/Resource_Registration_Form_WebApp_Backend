@@ -9,7 +9,7 @@ const smtpConfig = {
     secure: false, // Set to true if your provider requires SSL/TLS
     auth: {
         user: 'ragunanthan8888@gmail.com',
-        pass: 'rpefaqczvtbavmtf',
+        pass: 'yjqkoklvulnnokfm',
     },
 };
 const transporter = nodemailer.createTransport(smtpConfig);
