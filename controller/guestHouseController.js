@@ -8,9 +8,9 @@ const sequelize = require('sequelize')
 
 const createGusetHouse = async (req, res) => {
     try {
-        
-        let { 
-            userName, 
+
+        let {
+            userName,
             DesignationDepartment,
             applicantName,
             contactNumber,
@@ -20,10 +20,10 @@ const createGusetHouse = async (req, res) => {
             DepartureDateTime, // Use the appropriate date
             noOfGuest,
             foodRequired,
-            menuRequired, 
-            paymentDoneBy, 
+            menuRequired,
+            paymentDoneBy,
             requiredRoom,
-            specialRequirements 
+            specialRequirements
         } = req.body;
         const user = await User.findOne({ where: { name: userName } });
 
@@ -42,9 +42,9 @@ const createGusetHouse = async (req, res) => {
             ArrivialDateTime: new Date(ArrivialDateTime), // Use the appropriate date
             DepartureDateTime: new Date(DepartureDateTime), // Use the appropriate date
             noOfGuest,
-            FoodRequirements:foodRequired,
-            Menu: menuRequired, 
-            paymentDoneBy, 
+            FoodRequirements: foodRequired,
+            Menu: menuRequired,
+            paymentDoneBy,
             RequiredRoom: requiredRoom,
             applicantName,
             specialRequirements,
@@ -120,6 +120,11 @@ const GetGusetHouse = async (req, res) => {
 
 const DeleteGusetHouse = async (req, res) => {
     try {
+        const key = Object.keys(req.query)
+        if (key.length == 0) {
+            res.send(JSON.stringify({ "message": "delete command with no arguments" }))
+            return;
+        }
         const id = req.query.id;
         const result = await GuestHouse.destroy({ where: { id: id } })
         res.send(JSON.stringify({ "message": "success", "count": result }))
@@ -174,7 +179,7 @@ const CheckAvailability = async (req, res) => {
                     ],
                 }]
             },
-            attributes:["RequiredRoom"]
+            attributes: ["RequiredRoom"]
 
         });
 
