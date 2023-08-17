@@ -52,7 +52,7 @@ const createItem = async (req, res) => {
             observation,
             purpose,
             withindays,
-            Ondate,
+            Ondate:moment(Ondate.toString()).format("YYYY-MM-DD"),
             UserId: user.id,
         })
         console.log("hai")
@@ -130,8 +130,8 @@ const getItem = async (req, res) => {
             whereClause.isapproved = statusVal[status]
         }
         if (date) {
-            const s_date = moment(date, "DD-MM-YYYY").format('YYYY-MM-DD')
-            whereClause.date = s_date;
+            const s_date = moment(date.toString()).format('YYYY-MM-DD')
+            whereClause.selectedDate = s_date;
         }
         const result = await Item.findAll({
             where: whereClause,

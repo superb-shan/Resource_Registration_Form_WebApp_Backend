@@ -87,7 +87,7 @@ const getTransport = async (req, res) => {
         //   whereClause.purpose = purpose;
         // }
         if (date) {
-            whereClause.date = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
+            whereClause.date = moment(date.toString()).format('YYYY-MM-DD')
         }
         // if (pickUp) {
         //   whereClause.pickUp = pickUp;
@@ -102,10 +102,10 @@ const getTransport = async (req, res) => {
             const statusVal = { "Pending": null, "Success": 1, "Rejected": 0 }
             whereClause.isapproved = statusVal[status]
         }
-        if (date) {
-            const s_date = moment(date, "DD-MM-YYYY").format('YYYY-MM-DD')
-            whereClause.date = s_date;
-        }
+        // if (date) {
+        //     const s_date = moment(date, "DD-MM-YYYY").format('YYYY-MM-DD')
+        //     whereClause.date = s_date;
+        // }
         const result = await Transport.findAll({
             where: whereClause,
             order: [

@@ -13,6 +13,10 @@ const Item = sequelize.define('item', {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
+        get(){
+            let sendName = this.getDataValue("name")
+            return sendName[0].toUpperCase()+sendName.slice(1)
+        }
     },
     EmpID: {
         type: DataTypes.STRING,
@@ -21,6 +25,9 @@ const Item = sequelize.define('item', {
     selectedDate: {
         type: DataTypes.DATEONLY,
         allowNull: true,
+        get(){
+            return moment(this.getDataValue('selectedDate')).format("DD MMM YYYY")
+        }
     },
     Designation: {
         type: DataTypes.STRING,
@@ -77,6 +84,9 @@ const Item = sequelize.define('item', {
     Ondate: {
         type: DataTypes.DATE,
         allowNull: true,
+        get(){
+            return moment(this.getDataValue('OnDate')).format("DD MMM YYYY")
+        }
     },
     isapproved: {
         type: DataTypes.BOOLEAN,
