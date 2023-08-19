@@ -114,7 +114,7 @@ const getItem = async (req, res) => {
         //   whereClause.purpose = purpose;
         // }
         if (date) {
-            whereClause.selectedDate = moment(date).format('YYYY-MM-DD')
+            whereClause.selectedDate = moment(date.toString()).format('YYYY-MM-DD')
         }
         // if (pickUp) {
         //   whereClause.pickUp = pickUp;
@@ -128,10 +128,6 @@ const getItem = async (req, res) => {
         if (status) {
             const statusVal = { "Pending": null, "Success": 1, "Rejected": 0 }
             whereClause.isapproved = statusVal[status]
-        }
-        if (date) {
-            const s_date = moment(date, "DD-MM-YYYY").format('YYYY-MM-DD')
-            whereClause.date = s_date;
         }
         const result = await Item.findAll({
             where: whereClause,
