@@ -52,7 +52,7 @@ const createItem = async (req, res) => {
             observation,
             purpose,
             withindays,
-            Ondate,
+            Ondate: moment(Ondate.toString()).format("YYYY-MM-DD"),
             UserId: user.id,
         })
         console.log("hai")
