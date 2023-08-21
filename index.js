@@ -12,8 +12,6 @@ const itemRoutes = require('./routers/Item');
 const resourceRoutes = require('./routers/resource')
 
 
-// for Print
-const PDFDocument = require("pdfkit");
 const fs = require("fs");
 
 app.get("/generate-pdf", (req, res) => {
@@ -38,7 +36,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('', (req, res) => {
-    res.send("trail");
+  res.send("trail");
 });
 
 // Use your routes
@@ -51,7 +49,7 @@ app.use('/Items', itemRoutes)
 app.use('/resource', resourceRoutes)
 
 app.listen(8000, async () => {
-    console.log("Server running at http://localhost:8000");
-    await sequelize.authenticate();
-    console.log("Database synced");
+  console.log("Server running at http://localhost:8000");
+  await sequelize.sync({ alter: true });
+  console.log("Database synced");
 });

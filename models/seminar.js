@@ -1,114 +1,97 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../database');
-const User = require('./user')
-const { v4: uuidv4 } = require('uuid');
-const moment = require('moment')
+const User = require('./user');
+const moment = require('moment');
 
-
-const Seminar = sequelize.define("Seminar", {
+const Seminar = sequelize.define("SeminarHall", {
     id: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
-
     },
-    DesignationDepartment: {
+    userName: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-
-    contactNumber: {
+    coordinatorName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    coordinatorPhoneNumber: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
             isNumeric: true,
-            len: [10, 10]
-        }
+            len: [10, 10],
+        },
     },
-    name: {
+    speakerName: {
         type: DataTypes.STRING,
-        allowNull: false
-
+        allowNull: false,
     },
-    purpose: {
-        //store the purpose of travel
+    speakerPhoneNumber: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            isNumeric: true,
+            len: [10, 10],
+        },
     },
-    startDate: {
-        //date of travel
-        type: DataTypes.DATEONLY,
+    organizingDepartment: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    topic: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    startDateTime: {
+        type: DataTypes.DATE,
         allowNull: false,
         get() {
-            return moment(this.getDataValue('startDate')).format('DD-MM-YYYY');
+            return moment(this.getDataValue('startDateTime')).format('YYYY-MM-DD HH:mm:ss');
         },
-
     },
-    endDate: {
-        //date of travel
-        type: DataTypes.DATEONLY,
+    endDateTime: {
+        type: DataTypes.DATE,
         allowNull: false,
         get() {
-            return moment(this.getDataValue('endDate')).format('DD-MM-YYYY');
+            return moment(this.getDataValue('endDateTime')).format('YYYY-MM-DD HH:mm:ss');
         },
-
-    },
-    requiredHall: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    startTime: {
-        type: DataTypes.TIME,
-        allowNull: false
-    },
-    endTime: {
-        type: DataTypes.TIME,
-        allowNull: false
     },
     noOfAttendees: {
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
-            notIn: [[0]]
-        }
+            notIn: [[0]],
+        },
     },
-    seating_capacity: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-            notIn: [[0]]
-        }
-    },
-
-    equipmentNeeded: {
-        type: DataTypes.TEXT,
-        allowNull: true
+    equipmentsRequired: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     specialRequirements: {
         type: DataTypes.TEXT,
-        allowNull: true
+        allowNull: true,
+    },
+    hallRequired: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     isapproved: {
         type: DataTypes.BOOLEAN,
-
+        allowNull: true,
     },
     remarks: {
         type: DataTypes.TEXT,
-        allowNull: true
-
-    }
-    , type: {
-        type: DataTypes.STRING,
-        defaultValue: 'Seminar'
-    }
-
+        allowNull: true,
+    },
 }, {
-    // Options object to define the table name
-    tableName: 'seminar',
-
-})
+    tableName: 'seminar_hall',
+});
 
 User.hasMany(Seminar, {
-    onDelete: 'RESTRICT', // Prevent user deletion if associated Seminar exist
-})
+    onDelete: 'RESTRICT', // Prevent user deletion if associated SeminarHall exists
+});
+
 module.exports = Seminar;

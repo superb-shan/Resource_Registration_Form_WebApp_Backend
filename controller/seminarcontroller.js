@@ -8,72 +8,65 @@ const sendEmail = require('../emailSennder/sendEmail');
 
 const createSeminar = async (req, res) => {
     try {
-        let { userName, name, contactNumber: number, startDate, endDate, startTime, designation: DesignationDepartment, requiredhall: requiredHall, endTime, purpose, noOfAttendees: no_of_Attendees, seating_capacity, equipmentNeeded, specialRequirements } = req.body;
+        // Extract data from the request body
+        const {
+            userName,
+            coordinatorName,
+            coordinatorPhoneNumber,
+            speakerName,
+            speakerPhoneNumber,
+            organizingDepartment,
+            topic,
+            startDateTime,
+            endDateTime,
+            noOfAttendees,
+            equipmentsRequired,
+            specialRequirements,
+            hallRequired
+        } = req.body;
+
+        // Find the user by name
         const user = await User.findOne({ where: { name: userName } });
 
         if (!user) {
-            res.status(200).send(JSON.stringify({ "message": "user not found" }));
+            res.status(200).send(JSON.stringify({ "message": "User not found" }));
             return;
         }
-        //console.log(startTime, endTime, requiredHall);
-        const dateFormat = "YYYY-MM-DD"; // Corrected date format
-        const timeFormat = "HH:mm:ss";
-        const parsedstartDate = moment(startDate);
-        const parsedendDate = moment(endDate)
-        const parsedStartTime = moment(startTime, timeFormat);
-        const parsedEndTime = moment(endTime, timeFormat);
-        //console.log(parsedstartDate.format("YYYY-MM-DD"), parsedendDate.format("YYYY-MM-DD"))
-        const seminarObj = await Seminar.create({
+
+        // Corrected date and time format
+        const dateFormat = "YYYY-MM-DD HH:mm:ss";
+        const parsedStartDateTime = moment(startDateTime, dateFormat);
+        const parsedEndDateTime = moment(endDateTime, dateFormat);
+
+        // Create a new SeminarHall record
+        const seminarHall = await Seminar.create({
             id: uuidv4(),
-            name,
-            contactNumber: number,
-            startDate: parsedstartDate.format("YYYY-MM-DD"),
-            startTime: parsedStartTime.format(timeFormat),
-            endTime: parsedEndTime.format(timeFormat),
-            endDate: parsedendDate.format("YYYY-MM-DD"),
-            purpose,
-            requiredHall,
-            DesignationDepartment,
-            noOfAttendees: no_of_Attendees,
-            seating_capacity: seating_capacity || 20,
-            equipmentNeeded,
+            userName,
+            coordinatorName,
+            coordinatorPhoneNumber,
+            speakerName,
+            speakerPhoneNumber,
+            organizingDepartment,
+            topic,
+            startDateTime: parsedStartDateTime.toDate(),
+            endDateTime: parsedEndDateTime.toDate(),
+            noOfAttendees,
+            equipmentsRequired,
             specialRequirements,
-            "UserId": user.id, // Use "userId" here (consistent with the model definition)
+            hallRequired,
+            "UserId": user.id,
         });
-        const form = seminarObj
-        let emailData = {
-            type: "Seminar",
-            receiverName: user.name,
-            startDate: form.startDate.toString() + form.startTime.toString(),
-            endDate: form.endDate.toString() + form.endTime.toString(),
-            status: "Request",
-            username: form.name,
-            sendEmail: user.email
-        }
-        sendEmail(emailData)
-        emailData = {
-            type: "Seminar",
-            receiverName: user.name,
-            startDate: form.startDate.toString() + form.startTime.toString(),
-            endDate: form.endDate.toString() + form.endTime.toString(),
-            status: "Request",
-            username: form.name,
-            sendEmail: "jeethupachi@gmial.com"
-        }
-        sendEmail(emailData)
-        res.status(200).send(JSON.stringify({ "message": "true", "seminar": seminarObj }));
+
+        res.status(200).send(JSON.stringify({ "message": "true", "data": seminarHall }));
 
     } catch (error) {
         res.status(200).send(error.message);
     }
-};
-
-
-
+}
 const UpdateSeminar = async (req, res) => {
     try {
         const { isapproved, id, remarks } = req.body;
-        const whereClause = {}; // Move the whereClause here
+        const whereClause = {};
 
         if (isapproved) {
             whereClause.isapproved = isapproved === 'true' ? 1 : 0;
@@ -91,11 +84,11 @@ const UpdateSeminar = async (req, res) => {
                 const user = await User.findOne({ where: { id: form.UserId } })
                 const emailData = {
                     type: "Seminar",
-                    receiverName: user.name,
-                    startDate: form.startDate.toString() + form.startTime.toString(),
-                    endDate: form.endDate.toString() + form.endTime.toString(),
+                    receiverName: user.coordinatorName,
+                    startDate: form.startDateTime.toString(),
+                    endDate: form.endDateTime.toString(),
                     status: "Accepted",
-                    username: form.name,
+                    username: form.coordinatorName,
                     sendEmail: user.email
                 }
                 sendEmail(emailData)
@@ -105,11 +98,11 @@ const UpdateSeminar = async (req, res) => {
                 const user = await User.findOne({ where: { id: form.UserId } })
                 const emailData = {
                     type: "Seminar",
-                    receiverName: user.name,
+                    receiverName: user.coordinatorName,
                     startDate: form.startDate.toString() + form.startTime.toString(),
                     endDate: form.endDate.toString() + form.endTime.toString(),
                     status: "Rejected",
-                    username: form.name,
+                    username: form.coordinatorName,
                     Remark: form.remarks,
                     sendEmail: user.email
                 }
@@ -137,11 +130,11 @@ const GetSeminar = async (req, res) => {
             whereclause["UserId"] = user.id;
         }
         if (date) {
-            whereclause["startDate"] = {
-                [Op.lte]: moment(date).format("YYYY-MM-DD"),
+            whereclause["startDateTime"] = {
+                [Op.lte]: moment(date.toString()).format("YYYY-MM-DD HH:mm:ss"),
             }
-            whereclause["endDate"] = {
-                [Op.gte]: moment(date).format("YYYY-MM-DD"),
+            whereclause["endDateTime"] = {
+                [Op.gte]: moment(date.toString()).format("YYYY-MM-DD HH:mm:ss"),
             }
         }
 
@@ -183,70 +176,53 @@ const DeleteSeminar = async (req, res) => {
 
 const CheckAvailability = async (req, res) => {
     try {
-        const { startDate, endDate, startTime, endTime } = req.query;
+        const { startDateTime, endDateTime } = req.query;
 
         // Validate input parameters
-        if (!startDate || !endDate || !startTime || !endTime) {
-            res.status(400).send({ message: 'Invalid input. Please provide startDate, endDate, startTime, endTime, and requiredHall in the query parameters.' });
+        if (!startDateTime || !endDateTime) {
+            res.status(400).send({ message: 'Invalid input. Please provide startDate, endDate, startTime, and endTime in the query parameters.' });
             return;
         }
 
         // Parse dates and times using moment.js
-        const dateFormat = "YYYY-MM-DD";
-        const timeFormat = "HH:mm:ss";
-        const parsedStartDate = moment(startDate, dateFormat);
-        const parsedEndDate = moment(endDate, dateFormat);
-        const parsedStartTime = moment(startTime, timeFormat);
-        const parsedEndTime = moment(endTime, timeFormat);
+        const dateFormat = "YYYY-MM-DD HH:mm:ss";
+        const parsedStartDateTime = moment(startDateTime, dateFormat);
+        const parsedEndDateTime = moment(endDateTime, dateFormat);
 
         // Check if the provided time slot is valid
-        if (parsedStartDate.isAfter(parsedEndDate) || parsedStartTime.isAfter(parsedEndTime)) {
+        if (parsedStartDateTime.isAfter(parsedEndDateTime)) {
             res.send(JSON.stringify({ message: "Invalid time slot. The start date/time should be before the end date/time." }));
             return;
         }
 
-        // Check if there's any seminar that overlaps with the provided date and time and has the same requiredHall value
-        const overlappingSeminars = await Seminar.findAll({
+        // Check if there's any seminar hall that overlaps with the provided date and time
+        const overlappingSeminarHalls = await Seminar.findAll({
             where: {
-                isapproved: {
-                    [Op.not]: false
-                },
-                [Op.or]: [{
-                    [Op.or]: [
-                        {
-                            startDate: {
-                                [Op.lte]: parsedEndDate.format(dateFormat),
-                            },
-                            endDate: {
-                                [Op.gte]: parsedStartDate.format(dateFormat),
-                            },
-
-
+                [Op.or]: [
+                    {
+                        startDateTime: {
+                            [Op.lte]: parsedEndDateTime.toDate(),
                         },
-
-                    ],
-                    startTime: {
-                        [Op.lte]: parsedStartTime.format(timeFormat)
+                        endDateTime: {
+                            [Op.gte]: parsedStartDateTime.toDate(),
+                        },
                     },
-                    endTime: {
-                        [Op.gte]: parsedStartTime.format(timeFormat)
-                    }
-
-                }]
+                ],
             },
-            attributes: ["requiredHall"],
+            attributes: ["hallRequired", "coordinatorName", "organizingDepartment"],
         });
 
-        if (overlappingSeminars.length === 0) {
-            res.send(JSON.stringify({ message: true }));
+        if (overlappingSeminarHalls.length === 0) {
+            res.send(JSON.stringify({ message: true, overlappingSeminarHalls: [] }));
         } else {
-            res.send(JSON.stringify({ message: "The slot is not available", overlappingSeminars }));
+            res.send(JSON.stringify({ message: "The slot is not available", overlappingSeminarHalls }));
         }
 
     } catch (error) {
         res.send(JSON.stringify({ message: error.message }));
     }
 };
+
 
 
 

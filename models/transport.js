@@ -1,60 +1,144 @@
+// const { Sequelize, DataTypes } = require('sequelize');
+// const sequelize = require('../database');
+// const User = require('./user')
+// const { v4: uuidv4 } = require('uuid');
+// const moment = require('moment')
+
+
+
+// const Transport = sequelize.define("Transport", {
+//     id: {
+//         type: DataTypes.UUID,
+//         defaultValue: Sequelize.UUIDV4,
+//         primaryKey: true,
+//     },
+//     type:{
+//         type: DataTypes.STRING,
+//         defaultValue: "Transport"
+//     },
+//     number: {
+//         type: DataTypes.STRING,
+//         allowNull: false,
+//         validate: {
+//             isNumeric: true,
+//             len: [10, 10]
+//         }
+//     },
+//     name: {
+//         type: DataTypes.STRING,
+//         allowNull: false
+
+//     },
+//     purpose: {
+//         //store the purpose of travel
+//         type: DataTypes.STRING,
+//         allowNull: false
+//     },
+//     date: {
+//         //date of travel
+//         type: DataTypes.DATEONLY,
+//         allowNull: false,
+//         validate: {
+//             isDate: true,
+//         }
+//     },
+//     time: {
+//         type: DataTypes.TIME,
+//         allowNull: false
+//     },
+//     pickUp: {
+//         type: DataTypes.STRING,
+//         allowNull: false
+//     },
+//     drop: {
+//         type: DataTypes.STRING,
+//         allowNull: false
+//     },
+//     passengerCount: {
+//         type: DataTypes.SMALLINT,
+//         allowNull: false
+//     },
+//     specialRequirements: {
+//         type: DataTypes.TEXT,
+//         allowNull: true
+//     },
+//     isapproved: {
+//         type: DataTypes.BOOLEAN,
+
+//     },
+//     remarks: {
+//         type: DataTypes.TEXT,
+//         allowNull: true
+
+//     }
+
+// }, {
+//     tableName: "Transport"
+// })
+
+// User.hasMany(Transport, {
+//     onDelete: 'RESTRICT', // Prevent user deletion if associated transports exist
+//   });
+
+// module.exports = Transport;
+
+
+
+
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../database');
-const User = require('./user')
-const { v4: uuidv4 } = require('uuid');
-const moment = require('moment')
-
-
+const User = require('./user');
+const moment = require('moment');
 
 const Transport = sequelize.define("Transport", {
-    id: {
-        type: DataTypes.UUID,
-        defaultValue: Sequelize.UUIDV4,
-        primaryKey: true,
-    },
-    type:{
+    userName: {
         type: DataTypes.STRING,
-        defaultValue: "Transport"
+        allowNull: false
     },
-    number: {
+    coordinatorName: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true
+    },
+    coordinatorPhoneNumber: {
+        type: DataTypes.STRING,
+        allowNull: true,
         validate: {
             isNumeric: true,
             len: [10, 10]
         }
     },
-    name: {
+    guestName: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    guestPhoneNumber: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+            isNumeric: true,
+            len: [10, 10]
+        }
+    },
+    purposeOfTravel: {
         type: DataTypes.STRING,
         allowNull: false
-
     },
-    purpose: {
-        //store the purpose of travel
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    date: {
-        //date of travel
-        type: DataTypes.DATEONLY,
+    travelDateTime: {
+        type: DataTypes.DATE,
         allowNull: false,
         validate: {
             isDate: true,
         }
     },
-    time: {
-        type: DataTypes.TIME,
-        allowNull: false
-    },
-    pickUp: {
+    pickupLocation: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    drop: {
+    dropLocation: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    passengerCount: {
+    noOfPassengers: {
         type: DataTypes.SMALLINT,
         allowNull: false
     },
@@ -62,22 +146,20 @@ const Transport = sequelize.define("Transport", {
         type: DataTypes.TEXT,
         allowNull: true
     },
-    isapproved: {
-        type: DataTypes.BOOLEAN,
-
-    },
     remarks: {
         type: DataTypes.TEXT,
         allowNull: true
-
+    },
+    isapproved: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true
     }
-
 }, {
     tableName: "Transport"
-})
+});
 
 User.hasMany(Transport, {
     onDelete: 'RESTRICT', // Prevent user deletion if associated transports exist
-  });
+});
 
 module.exports = Transport;
