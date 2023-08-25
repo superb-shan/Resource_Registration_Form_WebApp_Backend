@@ -1,39 +1,44 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../database');
-const User = require('./user')
-const moment = require('moment')
-// Define the "item" model
-const Item = sequelize.define('item', {
+const User = require('./user');
+const moment = require('moment');
+
+// Define the "Item" model
+const Item = sequelize.define('Item', {
     id: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
 
     },
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        get() {
-            let sendName = this.getDataValue("name")
-            return sendName[0].toUpperCase() + sendName.slice(1)
-        }
-    },
-    EmpID: {
+    userName: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    selectedDate: {
-        type: DataTypes.DATEONLY,
-        allowNull: true,
-        get() {
-            return moment(this.getDataValue('selectedDate')).format("DD MMM YYYY")
-        }
+    requestorEmpId: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
-    Designation: {
+    requestorName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    department: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    Department: {
+    purposeOfItem: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    requisitionDateTime: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        get() {
+            return moment(this.getDataValue('ItemDateTime')).format("DD MMM YYYY");
+        }
+    },
+    designation: {
         type: DataTypes.STRING,
         allowNull: true,
     },
@@ -49,63 +54,50 @@ const Item = sequelize.define('item', {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
-    printedEnvelope: {
+    printedEnvelopes: {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
-    answerBooklet: {
+    answerBooklets: {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
-    studentNotebook: {
+    studentNotebooks: {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
-    studentNotebookWithGraph: {
+    recordNoteWithGraph: {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
-    studentNotebookWithoutGraph: {
+    observationBook: {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
-    observation: {
+    recordNoteWithoutGraph: {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
-    purpose: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    withindays: {
+    clearanceOfBill: {
         type: DataTypes.INTEGER,
         allowNull: true,
-    },
-    Ondate: {
-        type: DataTypes.DATE,
-        allowNull: true,
-        get() {
-            return moment(this.getDataValue('OnDate')).format("DD MMM YYYY")
-        }
     },
     isapproved: {
         type: DataTypes.BOOLEAN,
-
+        allowNull: true,
     },
     remarks: {
         type: DataTypes.TEXT,
-        allowNull: true
-
-    }
-    , type: {
-        type: DataTypes.STRING,
-        defaultValue: 'Items'
-    }
+        allowNull: true,
+    },
+}, {
+    // Additional model options can go here
 });
 
 User.hasMany(Item, {
-    onDelete: 'RESTRICT', // Prevent user deletion if associated Seminar exist
-})
+    onDelete: 'RESTRICT',
+});
+
 // Sync the model with the database
-// Export the model
+
 module.exports = Item;
