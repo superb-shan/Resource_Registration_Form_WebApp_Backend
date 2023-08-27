@@ -91,6 +91,11 @@ const User = require('./user');
 const moment = require('moment');
 
 const Transport = sequelize.define("Transport", {
+    id: {
+         type: DataTypes.UUID,
+         defaultValue: Sequelize.UUIDV4,
+         primaryKey: true,
+    },
     userName: {
         type: DataTypes.STRING,
         allowNull: false
