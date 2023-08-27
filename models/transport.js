@@ -153,6 +153,10 @@ const Transport = sequelize.define("Transport", {
     isapproved: {
         type: DataTypes.BOOLEAN,
         allowNull: true
+    },
+    type: {
+        type: DataTypes.STRING,
+        defaultValue: 'Transport'
     }
 }, {
     tableName: "Transport"

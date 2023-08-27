@@ -86,6 +86,10 @@ const Seminar = sequelize.define("SeminarHall", {
         type: DataTypes.TEXT,
         allowNull: true,
     },
+    type: {
+        type: DataTypes.STRING,
+        defaultValue: 'Seminar'
+    }
 }, {
     tableName: 'seminar_hall',
 });

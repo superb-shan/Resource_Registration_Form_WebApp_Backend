@@ -4,6 +4,8 @@ const User = require('./user')
 const moment = require('moment')
 
 
+
+
 const GuestHouse = sequelize.define("GuestHouse", {
     id: {
         type: DataTypes.UUID,
@@ -11,76 +13,84 @@ const GuestHouse = sequelize.define("GuestHouse", {
         primaryKey: true,
 
     },
-    DesignationDepartment: {
+    userName: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    contactNumber: {
+    coordinatorName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    coordinatorPhoneNumber: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
             isNumeric: true,
             len: [10, 10]
-        }
+        },
     },
-    name: {
+    guestName: {
         type: DataTypes.STRING,
-        allowNull: false
-
+        allowNull: false,
     },
-    purpose: {
-        //store the purpose of travel
+    guestPhoneNumber: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            isNumeric: true,
+            len: [10, 10]
+        },
     },
-    ArrivialDateTime: {
-        //date of travel
+    organizingDepartment: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    purposeOfStay: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    foodRequired: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+    },
+    menuRequired: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    paymentDoneBy: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    startDateTime: {
         type: DataTypes.DATE,
         allowNull: false,
         get() {
-            return moment(this.getDataValue('ArrivialDateTime')).format('DD-MM-YYYY HH:mm:ss');
+            return moment(this.getDataValue('startDateTime')).format('DD-MM-YYYY HH:mm:ss');
         },
-
     },
-    DepartureDateTime: {
-        //date of travel
+    endDateTime: {
         type: DataTypes.DATE,
         allowNull: false,
         get() {
-            return moment(this.getDataValue('DepartureDateTime')).format('DD-MM-YYYY HH:mm:ss');
+            return moment(this.getDataValue('endDateTime')).format('DD-MM-YYYY HH:mm:ss');
         },
-
     },
-    
-    paymentDoneBy:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    RequiredRoom:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    applicantName:{
-        type: DataTypes.STRING,
-        allowNull: false
-    }
-    ,
-    noOfGuest: {
+    noOfGuests: {
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
             notIn: [[0]]
-        }
+        },
     },
-    FoodRequirements: {
-        type: DataTypes.TEXT,
-        allowNull: true
-    },
-    Menu: {
+    roomRequired: {
         type: DataTypes.STRING,
-        allowNull: false
-
+        allowNull: false,
     },
+    specialRequirements: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
+
     isapproved: {
         type: DataTypes.BOOLEAN,
 
@@ -94,13 +104,13 @@ const GuestHouse = sequelize.define("GuestHouse", {
         type: DataTypes.STRING,
         defaultValue: 'GuestHouse'
     }
-
 }, {
-    // Options object to define the table name
     tableName: 'guestHouse',
+});
 
-})
+// You can add any associations or additional configurations here
 
+// Create the table in the database
 User.hasMany(GuestHouse, {
     onDelete: 'RESTRICT', // Prevent user deletion if associated GuestHouse exist
 })

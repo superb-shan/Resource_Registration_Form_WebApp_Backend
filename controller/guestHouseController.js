@@ -1,241 +1,205 @@
-const GuestHouse = require('../models/GuestHouse')
-const User = require('../models/user')
-const moment = require('moment')
-const { v4: uuidv4 } = require('uuid');
-const { Op } = require('sequelize')
-const sequelize = require('sequelize');
+const GuestHouse = require('../models/GuestHouse');
+const User = require('../models/user'); // Assuming you have a User model
+const moment = require('moment');
+const { Op } = require('sequelize');
 const sendEmail = require('../emailSennder/sendEmail');
 
-const createGusetHouse = async (req, res) => {
+const createGuestHouse = async (req, res) => {
     try {
-
-        let {
+        const {
             userName,
-            DesignationDepartment,
-            applicantName,
-            contactNumber,
-            name,
-            purpose,
-            ArrivialDateTime, // Use the appropriate date
-            DepartureDateTime, // Use the appropriate date
-            noOfGuest,
+            coordinatorName,
+            coordinatorPhoneNumber,
+            guestName,
+            guestPhoneNumber,
+            organizingDepartment,
+            purposeOfStay,
             foodRequired,
             menuRequired,
             paymentDoneBy,
-            requiredRoom,
+            startDateTime,
+            endDateTime,
+            noOfGuests,
+            roomRequired,
             specialRequirements
         } = req.body;
+
         const user = await User.findOne({ where: { name: userName } });
 
         if (!user) {
-            res.status(200).send(JSON.stringify({ "message": "user not found" }));
+            res.status(404).json({ message: "User not found" });
             return;
         }
-        //console.log(startTime, endTime, requiredHall);
-        const dateTimeFormat = "YYYY-MM-DD HH:mm:ss"; // Corrected date format
-        console.log(moment(ArrivialDateTime).format(dateTimeFormat), moment(DepartureDateTime).format(dateTimeFormat))
-        const GusetHouseObj = await GuestHouse.create({
-            DesignationDepartment,
-            name,
-            contactNumber,
-            purpose,
-            ArrivialDateTime: new Date(ArrivialDateTime), // Use the appropriate date
-            DepartureDateTime: new Date(DepartureDateTime), // Use the appropriate date
-            noOfGuest,
-            FoodRequirements: foodRequired,
-            Menu: menuRequired,
+
+        const guestHouse = await GuestHouse.create({
+            userName,
+            coordinatorName,
+            coordinatorPhoneNumber,
+            guestName,
+            guestPhoneNumber,
+            organizingDepartment,
+            purposeOfStay,
+            foodRequired,
+            menuRequired,
             paymentDoneBy,
-            RequiredRoom: requiredRoom,
-            applicantName,
-            specialRequirements,
-            "UserId": user.id, // Use "userId" here (consistent with the model definition)
+            startDateTime: moment(startDateTime).format("YYYY-MM-DD HH:mm:ss"),
+            endDateTime: moment(endDateTime).format("YYYY-MM-DD HH:mm:ss"),
+            noOfGuests,
+            roomRequired,
+            specialRequirements, // Assuming you want to set isapproved to false by default
+            UserId: user.id // Set the user association
         });
 
-        res.status(200).send(JSON.stringify({ "message": "true", "GusetHouse": GusetHouseObj }));
+        res.status(201).json({ message: "GuestHouse created successfully", GuestHouse: guestHouse });
 
+        // Send email notification
+        const emailData = {
+            receiverName: user.name,
+            ArrivialDateTime: guestHouse.startDateTime,
+            DepartureDateTime: guestHouse.endDateTime,
+            FoodRequirements: guestHouse.foodRequired,
+            Menu: guestHouse.menuRequired,
+            status: "Pending",
+            username: guestHouse.userName,
+            sendEmail: user.email
+        };
+
+        sendEmail(emailData);
     } catch (error) {
-        res.status(200).send(error.message);
+        res.status(500).json({ message: "An error occurred", error: error.message });
     }
 };
 
-
-
-const UpdateGusetHouse = async (req, res) => {
+const updateGuestHouse = async (req, res) => {
     try {
         const { isapproved, id, remarks } = req.body;
-        const whereClause = {}; // Move the whereClause here
+        const whereClause = { id };
 
-        if (isapproved) {
-            whereClause.isapproved = isapproved === 'true' ? 1 : 0;
+        if (isapproved !== undefined) {
+            whereClause.isapproved = isapproved;
         }
-        if (remarks) {
+
+        if (remarks !== undefined) {
             whereClause.remarks = remarks;
         }
 
-        // Correct the syntax for the update method
-        const form = await GuestHouse.update(whereClause, { where: { id } });
-        if (isapproved) {
-            if (isapproved === 'true') {
-                const form = await GuestHouse.findOne({ where: { id } })
-                const user = await User.findOne({ where: { id: form.UserId } })
-                const emailData = {
-                    receiverName: user.name,
-                    ArrivialDateTime: form.ArrivialDateTime,
-                    DepartureDateTime: form.DepartureDateTime,
-                    FoodRequirements: form.FoodRequirements,
-                    Menu: form.Menu,
-                    status: "Accepted",
-                    username: form.name,
-                    sendEmail: user.email
-                }
-                sendEmail(emailData)
-            }
-            else {
-                const form = await Item.findOne({ where: { id } })
-                const user = await User.findOne({ where: { id: form.UserId } })
-                const emailData = {
-                    receiverName: user.name,
-                    ArrivialDateTime: form.ArrivialDateTime,
-                    DepartureDateTime: form.DepartureDateTime,
-                    FoodRequirements: form.FoodRequirements,
-                    Menu: form.Menu,
-                    status: "Rejected",
-                    username: form.name,
-                    Remark: form.remarks,
-                    sendEmail: user.email
-                }
-                sendEmail(emailData)
-            }
+        await GuestHouse.update(whereClause, { where: { id } });
+
+        // Send email notifications based on approval status
+        const guestHouse = await GuestHouse.findByPk(id, { include: User });
+
+        if (guestHouse) {
+            const emailData = {
+                receiverName: guestHouse.User.name,
+                ArrivialDateTime: guestHouse.startDateTime,
+                DepartureDateTime: guestHouse.endDateTime,
+                FoodRequirements: guestHouse.foodRequired,
+                Menu: guestHouse.menuRequired,
+                status: isapproved === true ? "Accepted" : "Rejected",
+                username: guestHouse.userName,
+                Remark: remarks || "",
+                sendEmail: guestHouse.User.email,
+            };
+
+            sendEmail(emailData);
         }
 
-        res.send(JSON.stringify({ "message": "success" }));
-    } catch (err) {
-        res.send(err.message);
+        res.status(200).json({ message: "GuestHouse updated successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "An error occurred", error: error.message });
     }
-}
+};
 
-
-const GetGusetHouse = async (req, res) => {
+const getGuestHouses = async (req, res) => {
     try {
         const { name, date } = req.query;
-        const whereclause = {}
-        if (name) {
+        const whereClause = {};
 
-            const user = await User.findOne({ where: { name: name } })
+        if (name) {
+            const user = await User.findOne({ where: { name } });
             if (!user) {
-                res.send(JSON.stringify({ "message": "user not fond" }))
+                res.status(404).json({ message: "User not found" });
                 return;
             }
-            whereclause["UserId"] = user.id;
+            whereClause.UserId = user.id;
         }
+
         if (date) {
-            whereclause["ArrivialDateTime"] = {
+            whereClause.startDateTime = {
                 [Op.lte]: moment(date).format("YYYY-MM-DD HH:mm:ss"),
-            }
-            whereclause["DepartureDateTime"] = {
+            };
+            whereClause.endDateTime = {
                 [Op.gte]: moment(date).format("YYYY-MM-DD HH:mm:ss"),
-            }
+            };
         }
 
-        const result = await GuestHouse.findAll({
-            where: whereclause, order: [
-                [sequelize.literal('createdAt'), 'DESC']
-            ]
-        })
-        console.log("result", result)
-        res.send(JSON.stringify({ "data": result || [] }))
+        const guestHouses = await GuestHouse.findAll({
+            where: whereClause,
+            include: User,
+            order: [["createdAt", "DESC"]],
+        });
 
+        res.status(200).json({ data: guestHouses });
     } catch (error) {
-        res.send(error.message)
+        res.status(500).json({ message: "An error occurred", error: error.message });
     }
-}
+};
 
-
-const DeleteGusetHouse = async (req, res) => {
+const deleteGuestHouse = async (req, res) => {
     try {
-        const key = Object.keys(req.query)
-        if (key.length == 0) {
-            res.send(JSON.stringify({ "message": "delete command with no arguments" }))
-            return;
-        }
-        const id = req.query.id;
-        const result = await GuestHouse.destroy({ where: { id: id } })
-        res.send(JSON.stringify({ "message": "success", "count": result }))
+        const { id } = req.query;
 
-    } catch (err) {
-        res.send(err.message)
-    }
-
-}
-
-
-
-
-const CheckAvailability = async (req, res) => {
-    try {
-        const { DepartureDateTime, ArrivialDateTime } = req.query;
-
-        // Validate input parameters
-
-
-        // Parse dates and times using moment.js
-        const dateTimeFormat = "YYYY-MM-DD HH:mm:ss";
-        const dept = moment(DepartureDateTime).format(dateTimeFormat);
-        const arrival = moment(ArrivialDateTime).format(dateTimeFormat);
-        let dep = moment(DepartureDateTime)
-        let arvg = moment(ArrivialDateTime)
-        // Check if the provided time slot is valid
-        if (arvg.isAfter(dep)) {
-            res.send(JSON.stringify({ message: "Invalid time slot. The start date/time should be before the end date/time." }));
+        if (!id) {
+            res.status(400).json({ message: "Missing 'id' parameter" });
             return;
         }
 
-        // Check if there's any GusetHouse that overlaps with the provided date and time and has the same requiredHall value
-        const overlappingGusetHouses = await GuestHouse.findAll({
+        const result = await GuestHouse.destroy({ where: { id } });
+
+        if (result === 0) {
+            res.status(404).json({ message: "GuestHouse not found" });
+        } else {
+            res.status(200).json({ message: "GuestHouse deleted successfully" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "An error occurred", error: error.message });
+    }
+};
+
+const checkAvailability = async (req, res) => {
+    try {
+        const { startDateTime, endDateTime } = req.query;
+
+        const overlappingGuestHouses = await GuestHouse.findAll({
             where: {
                 isapproved: {
                     [Op.not]: false
                 },
-                [Op.or]: [{
-                    [Op.or]: [
-                        {
-                            ArrivialDateTime: {
-                                [Op.lte]: dept,
-                            },
-                            DepartureDateTime: {
-                                [Op.gte]: arrival,
-                            },
-
-
-                        },
-
-                    ],
-                }]
+                startDateTime: {
+                    [Op.lte]: moment(endDateTime.toString()).format("YYYY-MM-DD HH:mm:ss"),
+                },
+                endDateTime: {
+                    [Op.gte]: moment(startDateTime.toString()).format("YYYY-MM-DD HH:mm:ss"),
+                },
             },
-            attributes: ["RequiredRoom"]
-
+            attributes: ["roomRequired", "coordinatorName",
+                "coordinatorPhoneNumber"]
         });
 
-        if (overlappingGusetHouses.length === 0) {
-            res.send(JSON.stringify({ message: true }));
+        if (overlappingGuestHouses.length === 0) {
+            res.status(200).json({ message: "The slot is available" });
         } else {
-            res.send(JSON.stringify({ message: "The slot is not available", overlappingGusetHouses }));
+            res.status(200).json({ message: "The slot is not available", overlappingGuestHouses });
         }
-
     } catch (error) {
-        res.send(JSON.stringify({ message: error.message }));
+        res.status(500).json({ message: "An error occurred", error: error.message });
     }
 };
 
-
-
-
-
-
-
 module.exports = {
-    createGusetHouse: createGusetHouse,
-    UpdateGusetHouse: UpdateGusetHouse,
-    GetGusetHouse: GetGusetHouse, DeleteGusetHouse,
-    CheckAvailability: CheckAvailability
-}
+    createGuestHouse,
+    updateGuestHouse,
+    getGuestHouses,
+    deleteGuestHouse,
+    checkAvailability
+};

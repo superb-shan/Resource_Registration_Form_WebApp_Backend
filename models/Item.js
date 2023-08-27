@@ -90,6 +90,10 @@ const Item = sequelize.define('Item', {
         type: DataTypes.TEXT,
         allowNull: true,
     },
+    type: {
+        type: DataTypes.STRING,
+        defaultValue: 'Item'
+    }
 }, {
     // Additional model options can go here
 });

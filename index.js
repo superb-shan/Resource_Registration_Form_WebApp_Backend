@@ -50,6 +50,6 @@ app.use('/resource', resourceRoutes)
 
 app.listen(8000, async () => {
   console.log("Server running at http://localhost:8000");
-  await sequelize.authenticate();
+  await sequelize.sync({ alter: true });
   console.log("Database synced");
 });
