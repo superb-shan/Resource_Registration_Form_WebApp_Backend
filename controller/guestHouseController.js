@@ -172,6 +172,7 @@ const deleteGuestHouse = async (req, res) => {
 
 const checkAvailability = async (req, res) => {
     try {
+        console.log(req.query);
         const { startDateTime, endDateTime } = req.query;
 
         const overlappingGuestHouses = await GuestHouse.findAll({
