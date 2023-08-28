@@ -118,10 +118,10 @@ const getGuestHouses = async (req, res) => {
         if (name) {
             const user = await User.findOne({ where: { name } });
             if (!user) {
-                res.status(404).json({ message: "User not found" });
+                res.send(JSON.stringify({ "message": "user not fond" }))
                 return;
             }
-            whereClause.UserId = user.id;
+            whereclause["UserId"] = user.id;
         }
 
         if (date) {
@@ -203,3 +203,9 @@ module.exports = {
     deleteGuestHouse,
     checkAvailability
 };
+
+
+// res.status(404).json({ message: "User not found" });
+// return;
+// }
+// whereClause.UserId = user.id;
