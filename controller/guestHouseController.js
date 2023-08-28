@@ -2,6 +2,7 @@ const GuestHouse = require('../models/GuestHouse');
 const User = require('../models/user'); // Assuming you have a User model
 const moment = require('moment');
 const { Op } = require('sequelize');
+const sequelize = require('sequelize');
 const sendEmail = require('../emailSennder/sendEmail');
 
 const createGuestHouse = async (req, res) => {
@@ -122,7 +123,6 @@ const getGuestHouses = async (req, res) => {
                 return;
             }
             whereClause.UserId = user.id;
-            console.log(user.name)
         }
 
         if (date) {
@@ -204,3 +204,9 @@ module.exports = {
     deleteGuestHouse,
     checkAvailability
 };
+
+
+// res.status(404).json({ message: "User not found" });
+// return;
+// }
+// whereClause.UserId = user.id;
