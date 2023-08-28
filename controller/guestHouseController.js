@@ -122,6 +122,7 @@ const getGuestHouses = async (req, res) => {
                 return;
             }
             whereClause.UserId = user.id;
+            console.log(user.name)
         }
 
         if (date) {
@@ -135,7 +136,7 @@ const getGuestHouses = async (req, res) => {
 
         const guestHouses = await GuestHouse.findAll({
             where: whereClause,
-            include: User,
+
             order: [["createdAt", "DESC"]],
         });
 
