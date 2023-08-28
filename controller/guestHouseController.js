@@ -119,10 +119,10 @@ const getGuestHouses = async (req, res) => {
         if (name) {
             const user = await User.findOne({ where: { name } });
             if (!user) {
-            res.status(404).json({ message: "User not found" });
-                 return;
-                 } 
-         whereClause.UserId = user.id;
+                res.status(404).json({ message: "User not found" });
+                return;
+            }
+            whereClause.UserId = user.id;
         }
 
         if (date) {
@@ -135,12 +135,9 @@ const getGuestHouses = async (req, res) => {
         }
 
         const guestHouses = await GuestHouse.findAll({
-            // where: whereClause,
-            // include: User,
-            // order: [["createdAt", "DESC"]],
-            where: whereClause, order: [
-                [sequelize.literal('createdAt'), 'DESC']
-            ]
+            where: whereClause,
+
+            order: [["createdAt", "DESC"]],
         });
 
         res.status(200).json({ data: guestHouses });
