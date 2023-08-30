@@ -185,7 +185,7 @@ const checkAvailability = async (req, res) => {
                 },
             },
             attributes: ["roomRequired", "coordinatorName",
-                "coordinatorPhoneNumber"]
+                "coordinatorPhoneNumber","startDateTime","endDateTime"]
         });
 
         if (overlappingGuestHouses.length === 0) {
