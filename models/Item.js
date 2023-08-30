@@ -27,7 +27,7 @@ const Item = sequelize.define('Item', {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    purposeOfItem: {
+    purposeOfRequisition: {
         type: DataTypes.STRING,
         allowNull: true,
     },
@@ -35,13 +35,13 @@ const Item = sequelize.define('Item', {
         type: DataTypes.DATE,
         allowNull: true,
         get() {
-            return moment(this.getDataValue('ItemDateTime')).format("DD MMM YYYY");
+            return moment(this.getDataValue('ItemDateTime')).format("DD MMM YYYY HH:mm:ss");
         }
     },
-    designation: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
+    // designation: {
+    //     type: DataTypes.STRING,
+    //     allowNull: true,
+    // },
     printing: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -116,3 +116,4 @@ User.hasMany(Item, {
 // Sync the model with the database
 
 module.exports = Item;
+// sequelize.sync({alter:true})
