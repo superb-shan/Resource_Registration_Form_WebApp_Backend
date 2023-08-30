@@ -189,7 +189,7 @@ const checkAvailability = async (req, res) => {
         });
 
         if (overlappingGuestHouses.length === 0) {
-            res.status(200).json({ message: "The slot is available" });
+            res.status(200).json({ message: "The slot is available" ,overlappingGuestHouses:[]});
         } else {
             res.status(200).json({ message: "The slot is not available", overlappingGuestHouses });
         }

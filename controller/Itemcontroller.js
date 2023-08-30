@@ -57,7 +57,7 @@ const createItem = async (req, res) => {
             clearanceOfBill,
             UserId: user.id,
         });
-
+console.log(item,"ggggg")
         const form = item;
 
         const emailData = {
