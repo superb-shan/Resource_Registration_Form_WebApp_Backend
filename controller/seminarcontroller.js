@@ -209,7 +209,7 @@ const CheckAvailability = async (req, res) => {
                     },
                 ],
             },
-            attributes: ["hallRequired", "coordinatorName", "organizingDepartment"],
+            attributes: ["hallRequired", "coordinatorName", "organizingDepartment","startDateTime","endDateTime"],
         });
 
         if (overlappingSeminarHalls.length === 0) {

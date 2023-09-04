@@ -169,6 +169,7 @@ const deleteGuestHouse = async (req, res) => {
 
 const checkAvailability = async (req, res) => {
     try {
+        console.log(req.query);
         const { startDateTime, endDateTime } = req.query;
 
         const overlappingGuestHouses = await GuestHouse.findAll({
@@ -184,11 +185,11 @@ const checkAvailability = async (req, res) => {
                 },
             },
             attributes: ["roomRequired", "coordinatorName",
-                "coordinatorPhoneNumber"]
+                "coordinatorPhoneNumber","startDateTime","endDateTime"]
         });
 
         if (overlappingGuestHouses.length === 0) {
-            res.status(200).json({ message: "The slot is available" });
+            res.status(200).json({ message: "The slot is available" ,overlappingGuestHouses:[]});
         } else {
             res.status(200).json({ message: "The slot is not available", overlappingGuestHouses });
         }

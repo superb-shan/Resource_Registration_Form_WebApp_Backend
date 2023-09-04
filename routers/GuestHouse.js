@@ -14,7 +14,7 @@ guesthouseroutes.get('/get', getGuestHouses);
 //to update the Transportform
 guesthouseroutes.patch('/update', updateGuestHouse);
 guesthouseroutes.delete('/delete', deleteGuestHouse);
-guesthouseroutes.get('/checkAvailablity', checkAvailability)
+guesthouseroutes.get('/checkAvailability', checkAvailability)
 
 
 module.exports = guesthouseroutes

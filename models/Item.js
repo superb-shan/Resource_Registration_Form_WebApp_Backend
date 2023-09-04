@@ -27,7 +27,7 @@ const Item = sequelize.define('Item', {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    purposeOfItem: {
+    purposeOfRequisition: {
         type: DataTypes.STRING,
         allowNull: true,
     },
@@ -35,60 +35,71 @@ const Item = sequelize.define('Item', {
         type: DataTypes.DATE,
         allowNull: true,
         get() {
-            return moment(this.getDataValue('ItemDateTime')).format("DD MMM YYYY");
+            return moment(this.getDataValue('requisitionDateTime')).format("DD MMM YYYY HH:mm:ss");
         }
     },
-    designation: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
+    // designation: {
+    //     type: DataTypes.STRING,
+    //     allowNull: true,
+    // },
     printing: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        default:0
     },
     guestMomento: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        default:0
     },
     studentMomento: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        default:0
     },
     printedEnvelopes: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        default:0
     },
     answerBooklets: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        default:0
     },
     studentNotebooks: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        default:0
     },
     recordNoteWithGraph: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        default:0
     },
     observationBook: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        default:0
     },
     recordNoteWithoutGraph: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        default:0
     },
     clearanceOfBill: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+        type: DataTypes.DATE,
+        
     },
     isapproved: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
+        default:0
     },
     remarks: {
         type: DataTypes.TEXT,
         allowNull: true,
+        default:0
     },
     type: {
         type: DataTypes.STRING,
@@ -105,3 +116,4 @@ User.hasMany(Item, {
 // Sync the model with the database
 
 module.exports = Item;
+// sequelize.sync({alter:true})

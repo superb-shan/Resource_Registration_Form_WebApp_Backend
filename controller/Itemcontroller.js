@@ -16,7 +16,7 @@ const createItem = async (req, res) => {
             department,
             purposeOfRequisition,
             requisitionDateTime,
-            designation,
+            // designation,
             printing,
             guestMomento,
             studentMomento,
@@ -44,7 +44,7 @@ const createItem = async (req, res) => {
             department,
             purposeOfRequisition,
             requisitionDateTime,
-            designation,
+            // designation,
             printing,
             guestMomento,
             studentMomento,
@@ -57,14 +57,14 @@ const createItem = async (req, res) => {
             clearanceOfBill,
             UserId: user.id,
         });
-
+console.log(item,"ggggg")
         const form = item;
 
         const emailData = {
             receiverName: user.name,
             EmpID: form.requestorEmpId,
             selectedDate: form.requisitionDateTime,
-            Designation: form.designation,
+            // Designation: form.designation,
             Department: form.department,
             printing: form.printing,
             guestMomento: form.guestMomento,
@@ -158,7 +158,7 @@ const updateItem = async (req, res) => {
                 receiverName: user.name,
                 EmpID: form.requestorEmpId,
                 selectedDate: form.requisitionDateTime.toString(),
-                Designation: form.designation,
+                // Designation: form.designation,
                 Department: form.department,
                 printing: form.printing,
                 guestMomento: form.guestMomento,

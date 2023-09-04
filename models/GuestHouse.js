@@ -50,7 +50,7 @@ const GuestHouse = sequelize.define("GuestHouse", {
         allowNull: false,
     },
     foodRequired: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     menuRequired: {
