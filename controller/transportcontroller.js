@@ -151,7 +151,7 @@ const getTransport = async (req, res) => {
         });
 
         if (!result || result.length === 0) {
-            res.status(404).json({ message: "No forms found", data: [] });
+            res.status(200).json({ message: "No forms found", data: [] });
         } else {
             res.status(200).json({ message: "Forms found", data: result });
         }
