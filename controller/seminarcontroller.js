@@ -180,7 +180,7 @@ const CheckAvailability = async (req, res) => {
 
         // Validate input parameters
         if (!startDateTime || !endDateTime) {
-            res.status(400).send({ message: 'Invalid input. Please provide startDate, endDate, startTime, and endTime in the query parameters.' });
+            res.status(200).send({ message: 'Invalid input. Please provide startDate, endDate, startTime, and endTime in the query parameters.' });
             return;
         }
 
@@ -209,7 +209,7 @@ const CheckAvailability = async (req, res) => {
                     },
                 ],
             },
-            attributes: ["hallRequired", "coordinatorName", "organizingDepartment","startDateTime","endDateTime"],
+            attributes: ["hallRequired", "coordinatorName", "organizingDepartment", "startDateTime", "endDateTime"],
         });
 
         if (overlappingSeminarHalls.length === 0) {

@@ -67,7 +67,7 @@ const createGuestHouse = async (req, res) => {
 
         sendEmail(emailData);
     } catch (error) {
-        res.status(500).json({ message: "An error occurred", error: error.message });
+        res.status(200).json({ message: "An error occurred", error: error.message });
     }
 };
 
@@ -107,7 +107,7 @@ const updateGuestHouse = async (req, res) => {
 
         res.status(200).json({ message: "GuestHouse updated successfully" });
     } catch (error) {
-        res.status(500).json({ message: "An error occurred", error: error.message });
+        res.status(200).json({ message: "An error occurred", error: error.message });
     }
 };
 
@@ -142,7 +142,7 @@ const getGuestHouses = async (req, res) => {
 
         res.status(200).json({ data: guestHouses });
     } catch (error) {
-        res.status(500).json({ message: "An error occurred", error: error.message });
+        res.status(200).json({ message: "An error occurred", error: error.message });
     }
 };
 
@@ -151,7 +151,7 @@ const deleteGuestHouse = async (req, res) => {
         const { id } = req.query;
 
         if (!id) {
-            res.status(400).json({ message: "Missing 'id' parameter" });
+            res.status(200).json({ message: "Missing 'id' parameter" });
             return;
         }
 
@@ -163,7 +163,7 @@ const deleteGuestHouse = async (req, res) => {
             res.status(200).json({ message: "GuestHouse deleted successfully" });
         }
     } catch (error) {
-        res.status(500).json({ message: "An error occurred", error: error.message });
+        res.status(200).json({ message: "An error occurred", error: error.message });
     }
 };
 
@@ -185,16 +185,16 @@ const checkAvailability = async (req, res) => {
                 },
             },
             attributes: ["roomRequired", "coordinatorName",
-                "coordinatorPhoneNumber","startDateTime","endDateTime"]
+                "coordinatorPhoneNumber", "startDateTime", "endDateTime"]
         });
 
         if (overlappingGuestHouses.length === 0) {
-            res.status(200).json({ message: "The slot is available" ,overlappingGuestHouses:[]});
+            res.status(200).json({ message: "The slot is available", overlappingGuestHouses: [] });
         } else {
             res.status(200).json({ message: "The slot is not available", overlappingGuestHouses });
         }
     } catch (error) {
-        res.status(500).json({ message: "An error occurred", error: error.message });
+        res.status(200).json({ message: "An error occurred", error: error.message });
     }
 };
 

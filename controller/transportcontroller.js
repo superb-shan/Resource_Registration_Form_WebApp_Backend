@@ -24,7 +24,7 @@ const createTransport = async (req, res) => {
         const user = await User.findOne({ where: { name: userName } });
 
         if (!user) {
-            res.status(400).json({ message: "User not found" });
+            res.status(200).json({ message: "User not found" });
             return;
         }
 
@@ -63,7 +63,7 @@ const createTransport = async (req, res) => {
         res.status(201).json({ message: "Transport created successfully", data: transport });
     } catch (error) {
         console.error('Error:', error.message);
-        res.status(500).json({ message: error.message });
+        res.status(200).json({ message: error.message });
     }
 }
 
@@ -114,7 +114,7 @@ const updateTransport = async (req, res) => {
         res.status(200).json({ message: "Transport updated successfully" });
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(200).json({ message: 'Internal server error' });
     }
 }
 
@@ -157,7 +157,7 @@ const getTransport = async (req, res) => {
         }
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({ message: "Error retrieving forms" });
+        res.status(200).json({ message: "Error retrieving forms" });
     }
 }
 
@@ -166,7 +166,7 @@ const deleteTransport = async (req, res) => {
         const { id } = req.query;
 
         if (!id) {
-            res.status(400).json({ message: "Delete command with no arguments" });
+            res.status(200).json({ message: "Delete command with no arguments" });
             return;
         }
 
@@ -174,7 +174,7 @@ const deleteTransport = async (req, res) => {
         res.status(204).end();
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(200).json({ message: 'Internal server error' });
     }
 }
 
