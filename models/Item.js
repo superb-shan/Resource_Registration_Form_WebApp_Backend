@@ -35,7 +35,7 @@ const Item = sequelize.define('Item', {
         type: DataTypes.DATE,
         allowNull: true,
         get() {
-            return moment(this.getDataValue('ItemDateTime')).format("DD MMM YYYY HH:mm:ss");
+            return moment(this.getDataValue('requisitionDateTime')).format("DD MMM YYYY HH:mm:ss");
         }
     },
     // designation: {
