@@ -155,6 +155,11 @@ const Transport = sequelize.define("Transport", {
         type: DataTypes.TEXT,
         allowNull: true
     },
+    organizingDepartment:{
+        type: DataTypes.STRING,
+        allowNull:true
+    },
+
     isapproved: {
         type: DataTypes.BOOLEAN,
         allowNull: true

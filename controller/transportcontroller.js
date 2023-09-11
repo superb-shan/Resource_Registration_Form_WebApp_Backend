@@ -11,6 +11,7 @@ const createTransport = async (req, res) => {
             coordinatorName,
             coordinatorPhoneNumber,
             guestName,
+            organizingDepartment,
             guestPhoneNumber,
             purposeOfTravel,
             travelDateTime,
@@ -37,6 +38,7 @@ const createTransport = async (req, res) => {
             userName,
             coordinatorName,
             coordinatorPhoneNumber,
+            organizingDepartment,
             guestName,
             guestPhoneNumber,
             purposeOfTravel,
@@ -56,7 +58,8 @@ const createTransport = async (req, res) => {
             date: formattedDate,
             status: "Requested",
             username: userName,
-            sendEmail: user.email
+            sendEmail: user.email,
+            Department:transport.organizingDepartment
         };
         sendEmail(emailData);
 
