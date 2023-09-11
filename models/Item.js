@@ -103,7 +103,7 @@ const Item = sequelize.define('Item', {
     },
     type: {
         type: DataTypes.STRING,
-        defaultValue: 'Item'
+        defaultValue: 'Items'
     }
 }, {
     // Additional model options can go here

@@ -14,19 +14,7 @@ const resourceRoutes = require('./routers/resource')
 
 const fs = require("fs");
 
-app.get("/generate-pdf", (req, res) => {
-  console.log("entered")
-  const pdfDoc = new PDFDocument();
-  pdfDoc.text("Hello, PDF!");
 
-  const pdfPath = "generated-pdf.pdf";
-  pdfDoc.pipe(fs.createWriteStream(pdfPath));
-  pdfDoc.end();
-
-  res.download(pdfPath, "generated-pdf.pdf", () => {
-    fs.unlinkSync(pdfPath);
-  });
-});
 
 //end of print
 
