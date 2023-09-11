@@ -138,20 +138,20 @@ const getItem = async (req, res) => {
 
 const updateItem = async (req, res) => {
     try {
-        const { approvalStatus, id, remarks } = req.body;
+        const { isapproved, id, remarks } = req.body;
         const whereClause = {};
 
-        if (approvalStatus) {
+        if (isapproved) {
             // Modify this part to match your status field in the Requisition model
-            whereClause.approvalStatus = approvalStatus === 'true' ? 1 : 0;
+            whereClause.isapproved = isapproved === 'true' ? 1 : 0;
         }
         if (remarks) {
             whereClause.remarks = remarks;
         }
-
+   console.log( whereClause)
         const item = await Item.update(whereClause, { where: { id } });
-
-        if (approvalStatus) {
+            console.log(item)
+        if (isapproved) {
             const form = await Item.findOne({ where: { id } });
             const user = await User.findOne({ where: { id: form.UserId } });
             const emailData = {
@@ -172,7 +172,7 @@ const updateItem = async (req, res) => {
                 purpose: form.purposeOfRequisition,
                 withindays: form.clearanceOfBill,
                 Ondate: moment(form.requisitionDateTime).format('DD MMM YYYY'),
-                status: approvalStatus === 'true' ? "Accepted" : "Rejected",
+                status: isapproved === 'true' ? "Accepted" : "Rejected",
                 username: form.userName,
                 sendEmail: user.email,
             };

@@ -69,6 +69,7 @@ const Seminar = sequelize.define("SeminarHall", {
     equipmentsRequired: {
         type: DataTypes.STRING,
         allowNull: true,
+        defaultValue:"Nil"
     },
     specialRequirements: {
         type: DataTypes.TEXT,
