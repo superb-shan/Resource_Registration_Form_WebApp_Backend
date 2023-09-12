@@ -37,7 +37,16 @@ const createSeminar = async (req, res) => {
         const dateFormat = "YYYY-MM-DD HH:mm:ss";
         const parsedStartDateTime = moment(startDateTime, dateFormat);
         const parsedEndDateTime = moment(endDateTime, dateFormat);
-
+        const noofDays = parsedEndDateTime.diff(startDateTime, 'days')
+        if (noofDays > 20) {
+            res.send(JSON.stringify({ "message": `long days booking cannot permitt ${noofDays}` }))
+            return;
+        }
+        const earlyBooking = parsedStartDateTime.diff(moment(), 'days')
+        if (earlyBooking > 50) {
+            res.send(JSON.stringify({ "message": `No long preior booking can be scheduled` }))
+            return;
+        }
         // Create a new SeminarHall record
         const seminarHall = await Seminar.create({
             id: uuidv4(),
@@ -209,7 +218,7 @@ const CheckAvailability = async (req, res) => {
                     },
                 ],
             },
-            attributes: ["hallRequired", "coordinatorName", "organizingDepartment", "startDateTime", "endDateTime","coordinatorPhoneNumber"],
+            attributes: ["hallRequired", "coordinatorName", "organizingDepartment", "startDateTime", "endDateTime", "coordinatorPhoneNumber"],
         });
 
         if (overlappingSeminarHalls.length === 0) {
