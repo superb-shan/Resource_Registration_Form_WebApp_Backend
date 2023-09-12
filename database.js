@@ -8,7 +8,8 @@ un = process.env.DB_USERNAME;
 pwd = process.env.DB_PASSWORD;
 
 
-const sequelize = new Sequlize("resource", un, pwd, {
+const sequelize = new Sequlize("sql12645849", un, pwd, {
+    host: 'sql12.freesqldatabase.com',
     dialect: "mysql",
     logging: false,
     timezone: '+05:30',
