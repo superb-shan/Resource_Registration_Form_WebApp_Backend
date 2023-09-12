@@ -29,10 +29,10 @@ const createTransport = async (req, res) => {
             return;
         }
 
-        const dateObject = moment(travelDateTime);
-        const formattedDate = dateObject.format('YYYY-MM-DD');
-        const formattedTime = dateObject.format('HH:mm:ss');
-
+        const dateObject = moment.utc(travelDateTime);
+        const formattedDate = dateObject.local().format('YYYY-MM-DD');
+        const formattedTime = dateObject.local().format('HH:mm:ss');
+        console.log(dateObject.toString())
         const transport = await Transport.create({
             id: uuidv4(),
             userName,
@@ -82,19 +82,19 @@ const updateTransport = async (req, res) => {
         if (remarks) {
             whereClause.remarks = remarks;
         }
+        console.log("hi")
 
         await Transport.update(whereClause, { where: { id } });
 
         // Email sending logic for approval/rejection
         const transport = await Transport.findOne({ where: { id } });
         const user = await User.findOne({ where: { id: transport.UserId } });
-
+        console.log(transport, user);
         if (isapproved === 'true') {
             const emailData = {
                 type: "Transport",
                 receiverName: user.name,
-                time: transport.time,
-                date: transport.date,
+                DateTime: transport.travelDateTime,
                 status: "Accepted",
                 username: transport.userName,
                 sendEmail: user.email
@@ -104,8 +104,8 @@ const updateTransport = async (req, res) => {
             const emailData = {
                 type: "Transport",
                 receiverName: user.name,
-                time: transport.time,
-                date: transport.date,
+                DateTime: transport.travelDateTime,
+
                 status: "Rejected",
                 username: transport.userName,
                 Remark: transport.remarks,
@@ -117,7 +117,7 @@ const updateTransport = async (req, res) => {
         res.status(200).json({ message: "Transport updated successfully" });
     } catch (error) {
         console.error('Error:', error);
-        res.status(200).json({ message: 'Internal server error' });
+        res.status(200).json({ message: error.message });
     }
 }
 

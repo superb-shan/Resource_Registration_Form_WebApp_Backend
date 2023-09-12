@@ -92,9 +92,9 @@ const moment = require('moment');
 
 const Transport = sequelize.define("Transport", {
     id: {
-         type: DataTypes.UUID,
-         defaultValue: Sequelize.UUIDV4,
-         primaryKey: true,
+        type: DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
     },
     userName: {
         type: DataTypes.STRING,
@@ -133,6 +133,10 @@ const Transport = sequelize.define("Transport", {
         allowNull: false,
         validate: {
             isDate: true,
+        },
+        get() {
+
+            return moment.utc(this.getDataValue('travelDateTime')).local().format('YYYY-MM-DD HH:mm:ss');
         }
     },
     pickupLocation: {
@@ -155,9 +159,9 @@ const Transport = sequelize.define("Transport", {
         type: DataTypes.TEXT,
         allowNull: true
     },
-    organizingDepartment:{
+    organizingDepartment: {
         type: DataTypes.STRING,
-        allowNull:true
+        allowNull: true
     },
 
     isapproved: {

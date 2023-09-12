@@ -12,7 +12,10 @@ const sequelize = new Sequlize("sql12645849", un, pwd, {
     host: 'sql12.freesqldatabase.com',
     dialect: "mysql",
     logging: false,
-
+    timezone: '+05:30',
+    dialectOptions: {
+        useUTC: false //for reading from database
+    },
 
 })
 module.exports = sequelize
