@@ -3,7 +3,7 @@ const User = require('../models/user');
 const moment = require('moment');
 const { v4: uuidv4 } = require('uuid');
 const sendEmail = require('../emailSennder/sendEmail');
-
+const { Op, where } = require('sequelize');
 const createTransport = async (req, res) => {
     try {
         const {
@@ -59,7 +59,7 @@ const createTransport = async (req, res) => {
             status: "Requested",
             username: userName,
             sendEmail: user.email,
-            Department:transport.organizingDepartment
+            Department: transport.organizingDepartment
         };
         sendEmail(emailData);
 
@@ -139,13 +139,20 @@ const getTransport = async (req, res) => {
             whereClause.UserId = user.id;
         }
         if (date) {
-            whereClause.travelDateTime = moment(date.toString()).format('YYYY-MM-DD HH:mm:ss');
+            // Modify the date filter to cover the entire day from 00:00:00 to 23:59:59
+            const startDate = moment(date.toString()).startOf('day').format('YYYY-MM-DD HH:mm:ss');
+            const endDate = moment(date.toString()).endOf('day').format('YYYY-MM-DD HH:mm:ss');
+            console.log(startDate, endDate);
+            whereClause.travelDateTime = {
+                [Op.lte]: endDate,
+                [Op.gte]: startDate
+            };
         }
         if (status) {
             const statusVal = { "Pending": null, "Success": true, "Rejected": false }
-            whereClause.isapproved = statusVal[status]
+            whereClause.isapproved = statusVal[status];
         }
-
+        console.log(whereClause)
         const result = await Transport.findAll({
             where: whereClause,
             order: [
@@ -163,6 +170,7 @@ const getTransport = async (req, res) => {
         res.status(200).json({ message: "Error retrieving forms" });
     }
 }
+
 
 const deleteTransport = async (req, res) => {
     try {
