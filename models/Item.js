@@ -45,61 +45,61 @@ const Item = sequelize.define('Item', {
     printing: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        default:0
+        default: 0
     },
     guestMomento: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        default:0
+        default: 0
     },
     studentMomento: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        default:0
+        default: 0
     },
     printedEnvelopes: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        default:0
+        default: 0
     },
     answerBooklets: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        default:0
+        default: 0
     },
     studentNotebooks: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        default:0
+        default: 0
     },
     recordNoteWithGraph: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        default:0
+        default: 0
     },
     observationBook: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        default:0
+        default: 0
     },
     recordNoteWithoutGraph: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        default:0
+        default: 0
     },
     clearanceOfBill: {
         type: DataTypes.DATE,
-        
+
     },
     isapproved: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
-        default:0
+        default: 0
     },
     remarks: {
         type: DataTypes.TEXT,
         allowNull: true,
-        default:0
+        default: 0
     },
     type: {
         type: DataTypes.STRING,
