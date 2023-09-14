@@ -35,8 +35,10 @@ const createSeminar = async (req, res) => {
 
         // Corrected date and time format
         const dateFormat = "YYYY-MM-DD HH:mm:ss";
-        const parsedStartDateTime = moment(startDateTime, dateFormat);
-        const parsedEndDateTime = moment(endDateTime, dateFormat);
+        const parsedStartDateTime = moment.utc(startDateTime, dateFormat);
+        const parsedEndDateTime = moment.utc(endDateTime, dateFormat);
+
+
         const noofDays = parsedEndDateTime.diff(startDateTime, 'days')
         if (noofDays > 20) {
             res.send(JSON.stringify({ "message": `long days booking cannot permitt ${noofDays}` }))
@@ -57,8 +59,8 @@ const createSeminar = async (req, res) => {
             speakerPhoneNumber,
             organizingDepartment,
             topic,
-            startDateTime: parsedStartDateTime.toDate(),
-            endDateTime: parsedEndDateTime.toDate(),
+            startDateTime: parsedStartDateTime.local().format(dateFormat),
+            endDateTime: parsedEndDateTime.local().format(dateFormat),
             noOfAttendees,
             equipmentsRequired,
             specialRequirements,
