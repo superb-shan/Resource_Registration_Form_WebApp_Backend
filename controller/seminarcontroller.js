@@ -142,12 +142,13 @@ const GetSeminar = async (req, res) => {
         }
         if (date) {
             whereclause["startDateTime"] = {
-                [Op.lte]: moment(date.toString()).format("YYYY-MM-DD HH:mm:ss"),
+                [Op.gte]: moment(date.toString()).startOf('day').format("YYYY-MM-DD HH:mm:ss"),
             }
             whereclause["endDateTime"] = {
-                [Op.gte]: moment(date.toString()).format("YYYY-MM-DD HH:mm:ss"),
+                [Op.lte]: moment(date.toString()).endOf('day').format("YYYY-MM-DD HH:mm:ss"),
             }
         }
+        console.log(whereclause)
 
         const result = await Seminar.findAll({
             where: whereclause, order: [
