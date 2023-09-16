@@ -16,7 +16,13 @@ const Resource = sequelize.define('Resource', {
     type: {
         type: DataTypes.STRING,
         allowNull: false,
-    }
+    },
+    capacity:
+    {
+        type: DataTypes.NUMBER,
+        allowNull: true,
+    },
+
 });
 
 // Sync the model with the database
