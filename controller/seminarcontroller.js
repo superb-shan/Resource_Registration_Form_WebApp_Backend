@@ -206,24 +206,27 @@ const CheckAvailability = async (req, res) => {
             res.send(JSON.stringify({ message: "Invalid time slot. The start date/time should be before the end date/time." }));
             return;
         }
-
+        console.log(parsedEndDateTime.format(dateFormat),parsedStartDateTime.format(dateFormat))
         // Check if there's any seminar hall that overlaps with the provided date and time
         const overlappingSeminarHalls = await Seminar.findAll({
             where: {
                 [Op.or]: [
                     {
                         startDateTime: {
-                            [Op.lte]: parsedEndDateTime.toDate(),
+                            [Op.lte]: parsedEndDateTime.format(dateFormat),
                         },
                         endDateTime: {
-                            [Op.gte]: parsedStartDateTime.toDate(),
+                            [Op.gte]: parsedStartDateTime.format(dateFormat),
                         },
                     },
                 ],
+                isapproved:{
+                    [Op.not]:false
+                }
             },
             attributes: ["hallRequired", "coordinatorName", "organizingDepartment", "startDateTime", "endDateTime", "coordinatorPhoneNumber"],
         });
-
+        console.log(overlappingSeminarHalls)
         if (overlappingSeminarHalls.length === 0) {
             res.send(JSON.stringify({ message: true, overlappingSeminarHalls: [] }));
         } else {
