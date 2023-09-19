@@ -57,7 +57,7 @@ const createItem = async (req, res) => {
             clearanceOfBill,
             UserId: user.id,
         });
-console.log(item,"ggggg")
+        console.log(item, "ggggg")
         const form = item;
 
         const emailData = {
@@ -117,6 +117,9 @@ const getItem = async (req, res) => {
             // Replace 'approvalStatus' with your actual field name
             whereClause.approvalStatus = statusVal[status];
         }
+        whereClause.isapproved = {
+            [sequelize.Op.not]: 2
+        }
 
         const result = await Item.findAll({
             where: whereClause,
@@ -148,9 +151,9 @@ const updateItem = async (req, res) => {
         if (remarks) {
             whereClause.remarks = remarks;
         }
-   console.log( whereClause)
+        console.log(whereClause)
         const item = await Item.update(whereClause, { where: { id } });
-            console.log(item)
+        console.log(item)
         if (isapproved) {
             const form = await Item.findOne({ where: { id } });
             const user = await User.findOne({ where: { id: form.UserId } });
