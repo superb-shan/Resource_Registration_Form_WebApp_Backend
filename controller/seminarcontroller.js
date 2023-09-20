@@ -221,7 +221,7 @@ const CheckAvailability = async (req, res) => {
                     },
                 ],
                 isapproved:{
-                    [Op.not]:false
+                    [Op.not]:false 
                 }
             },
             attributes: ["hallRequired", "coordinatorName", "organizingDepartment", "startDateTime", "endDateTime", "coordinatorPhoneNumber"],
