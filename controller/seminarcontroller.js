@@ -129,7 +129,7 @@ const UpdateSeminar = async (req, res) => {
 
 const GetSeminar = async (req, res) => {
     try {
-        const { name, date } = req.query;
+        const { name, date,isapproved } = req.query;
         const whereclause = {}
         if (name) {
 
@@ -139,6 +139,11 @@ const GetSeminar = async (req, res) => {
                 return;
             }
             whereclause["UserId"] = user.id;
+        }
+        if(isapproved){
+            whereclause["isapproved"]={
+                    [Op.not]:false
+            }
         }
         if (date) {
             whereclause["startDateTime"] = {

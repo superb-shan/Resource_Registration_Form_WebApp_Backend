@@ -113,7 +113,7 @@ const updateGuestHouse = async (req, res) => {
 
 const getGuestHouses = async (req, res) => {
     try {
-        const { name, date } = req.query;
+        const { name, date,isapproved } = req.query;
         const whereClause = {};
 
         if (name) {
@@ -133,7 +133,11 @@ const getGuestHouses = async (req, res) => {
                 [Op.gte]: moment(date).format("YYYY-MM-DD HH:mm:ss"),
             };
         }
-
+        if(isapproved){
+            whereClause["isapproved"]={
+                    [Op.not]:false
+            }
+        }
         const guestHouses = await GuestHouse.findAll({
             where: whereClause,
 

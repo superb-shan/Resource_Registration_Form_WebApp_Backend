@@ -105,6 +105,7 @@ const getItem = async (req, res) => {
             whereClause.UserId = UserId;
         }
         if (name) {
+            console.log(name)
             const user = await User.findOne({ where: { name: name } });
             whereClause.UserId = user.id;
         }
@@ -117,9 +118,7 @@ const getItem = async (req, res) => {
             // Replace 'approvalStatus' with your actual field name
             whereClause.approvalStatus = statusVal[status];
         }
-        whereClause.isapproved = {
-            [sequelize.Op.not]: 2
-        }
+       
 
         const result = await Item.findAll({
             where: whereClause,
