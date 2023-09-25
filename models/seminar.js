@@ -25,6 +25,10 @@ const Seminar = sequelize.define("SeminarHall", {
             len: [10, 10],
         },
     },
+    category: {
+        type: DataTypes.STRING,
+        defaultValue: "Auditorium/ Training Halls",
+    },
     speakerName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -63,13 +67,15 @@ const Seminar = sequelize.define("SeminarHall", {
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
-            notIn: [[0]],
+            notIn: [
+                [0]
+            ],
         },
     },
     equipmentsRequired: {
         type: DataTypes.STRING,
         allowNull: true,
-        defaultValue:"Nil"
+        defaultValue: "Nil"
     },
     specialRequirements: {
         type: DataTypes.TEXT,

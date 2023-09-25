@@ -6,7 +6,7 @@ const { Op } = require('sequelize')
 const sequelize = require('sequelize');
 const sendEmail = require('../emailSennder/sendEmail');
 
-const createSeminar = async (req, res) => {
+const createSeminar = async(req, res) => {
     try {
         // Extract data from the request body
         const {
@@ -22,7 +22,8 @@ const createSeminar = async (req, res) => {
             noOfAttendees,
             equipmentsRequired,
             specialRequirements,
-            hallRequired
+            hallRequired,
+            category
         } = req.body;
 
         // Find the user by name
@@ -59,6 +60,7 @@ const createSeminar = async (req, res) => {
             speakerPhoneNumber,
             organizingDepartment,
             topic,
+            category,
             startDateTime: parsedStartDateTime.local().format(dateFormat),
             endDateTime: parsedEndDateTime.local().format(dateFormat),
             noOfAttendees,
@@ -74,7 +76,7 @@ const createSeminar = async (req, res) => {
         res.status(200).send(error.message);
     }
 }
-const UpdateSeminar = async (req, res) => {
+const UpdateSeminar = async(req, res) => {
     try {
         const { isapproved, id, remarks } = req.body;
         const whereClause = {};
@@ -103,8 +105,7 @@ const UpdateSeminar = async (req, res) => {
                     sendEmail: user.email
                 }
                 sendEmail(emailData)
-            }
-            else {
+            } else {
                 const form = await Seminar.findOne({ where: { id } })
                 const user = await User.findOne({ where: { id: form.UserId } })
                 const emailData = {
@@ -127,9 +128,9 @@ const UpdateSeminar = async (req, res) => {
 }
 
 
-const GetSeminar = async (req, res) => {
+const GetSeminar = async(req, res) => {
     try {
-        const { name, date,isapproved } = req.query;
+        const { name, date, isapproved } = req.query;
         const whereclause = {}
         if (name) {
 
@@ -140,9 +141,9 @@ const GetSeminar = async (req, res) => {
             }
             whereclause["UserId"] = user.id;
         }
-        if(isapproved){
-            whereclause["isapproved"]={
-                    [Op.not]:false
+        if (isapproved) {
+            whereclause["isapproved"] = {
+                [Op.not]: false
             }
         }
         if (date) {
@@ -156,11 +157,12 @@ const GetSeminar = async (req, res) => {
         console.log(whereclause)
 
         const result = await Seminar.findAll({
-            where: whereclause, order: [
-                [sequelize.literal('createdAt'), 'DESC']
-            ]
-        })
-        // console.log("result", result)
+                where: whereclause,
+                order: [
+                    [sequelize.literal('createdAt'), 'DESC']
+                ]
+            })
+            // console.log("result", result)
         res.send(JSON.stringify({ "data": (result || []) }))
 
     } catch (error) {
@@ -169,7 +171,7 @@ const GetSeminar = async (req, res) => {
 }
 
 
-const DeleteSeminar = async (req, res) => {
+const DeleteSeminar = async(req, res) => {
     try {
 
 
@@ -191,7 +193,7 @@ const DeleteSeminar = async (req, res) => {
 
 
 
-const CheckAvailability = async (req, res) => {
+const CheckAvailability = async(req, res) => {
     try {
         const { startDateTime, endDateTime } = req.query;
 
@@ -211,22 +213,20 @@ const CheckAvailability = async (req, res) => {
             res.send(JSON.stringify({ message: "Invalid time slot. The start date/time should be before the end date/time." }));
             return;
         }
-        console.log(parsedEndDateTime.format(dateFormat),parsedStartDateTime.format(dateFormat))
-        // Check if there's any seminar hall that overlaps with the provided date and time
+        console.log(parsedEndDateTime.format(dateFormat), parsedStartDateTime.format(dateFormat))
+            // Check if there's any seminar hall that overlaps with the provided date and time
         const overlappingSeminarHalls = await Seminar.findAll({
             where: {
-                [Op.or]: [
-                    {
-                        startDateTime: {
-                            [Op.lte]: parsedEndDateTime.format(dateFormat),
-                        },
-                        endDateTime: {
-                            [Op.gte]: parsedStartDateTime.format(dateFormat),
-                        },
+                [Op.or]: [{
+                    startDateTime: {
+                        [Op.lte]: parsedEndDateTime.format(dateFormat),
                     },
-                ],
-                isapproved:{
-                    [Op.not]:false 
+                    endDateTime: {
+                        [Op.gte]: parsedStartDateTime.format(dateFormat),
+                    },
+                }, ],
+                isapproved: {
+                    [Op.not]: false
                 }
             },
             attributes: ["hallRequired", "coordinatorName", "organizingDepartment", "startDateTime", "endDateTime", "coordinatorPhoneNumber"],
@@ -253,6 +253,7 @@ const CheckAvailability = async (req, res) => {
 module.exports = {
     createSeminar: createSeminar,
     UpdateSeminar: UpdateSeminar,
-    GetSeminar: GetSeminar, DeleteSeminar,
+    GetSeminar: GetSeminar,
+    DeleteSeminar,
     CheckAvailability: CheckAvailability
 }
