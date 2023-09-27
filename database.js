@@ -8,8 +8,8 @@ un = process.env.DB_USERNAME;
 pwd = process.env.DB_PASSWORD;
 
 
-const sequelize = new Sequlize("sql12647453", un, pwd, {
-    host: 'sql12.freemysqlhosting.net',
+const sequelize = new Sequlize("sql12649382", un, pwd, {
+    host: 'sql12.freesqldatabase.com',
     dialect: "mysql",
     logging: false,
     timezone: '+05:30',
@@ -17,5 +17,5 @@ const sequelize = new Sequlize("sql12647453", un, pwd, {
         useUTC: false //for reading from database
     },
 
-})
+}) 
 module.exports = sequelize

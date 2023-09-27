@@ -130,7 +130,8 @@ const UpdateSeminar = async(req, res) => {
 
 const GetSeminar = async(req, res) => {
     try {
-        const { name, date, isapproved } = req.query;
+        const { name, date, isapproved, category } = req.query;
+        console.log("Ippathaan", name, date, isapproved, category);
         const whereclause = {}
         if (name) {
 
@@ -144,6 +145,11 @@ const GetSeminar = async(req, res) => {
         if (isapproved) {
             whereclause["isapproved"] = {
                 [Op.not]: false
+            }
+        }
+        if (category) {
+            whereclause["category"] = {
+                [Op.eq]: category
             }
         }
         if (date) {
@@ -162,7 +168,7 @@ const GetSeminar = async(req, res) => {
                     [sequelize.literal('createdAt'), 'DESC']
                 ]
             })
-            // console.log("result", result)
+            console.log("result", result)
         res.send(JSON.stringify({ "data": (result || []) }))
 
     } catch (error) {
@@ -229,7 +235,7 @@ const CheckAvailability = async(req, res) => {
                     [Op.not]: false
                 }
             },
-            attributes: ["hallRequired", "coordinatorName", "organizingDepartment", "startDateTime", "endDateTime", "coordinatorPhoneNumber"],
+            attributes: ["hallRequired", "coordinatorName", "organizingDepartment", "startDateTime", "endDateTime", "coordinatorPhoneNumber", "category"],
         });
         console.log(overlappingSeminarHalls)
         if (overlappingSeminarHalls.length === 0) {

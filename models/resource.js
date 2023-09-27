@@ -19,7 +19,7 @@ const Resource = sequelize.define('Resource', {
     },
     capacity:
     {
-        type: DataTypes.NUMBER,
+        type: DataTypes.STRING,
         allowNull: true,
     },
 
