@@ -203,6 +203,8 @@ const CheckAvailability = async(req, res) => {
     try {
         const { startDateTime, endDateTime } = req.query;
 
+        console.log("#############", startDateTime, endDateTime);
+
         // Validate input parameters
         if (!startDateTime || !endDateTime) {
             res.status(200).send({ message: 'Invalid input. Please provide startDate, endDate, startTime, and endTime in the query parameters.' });
