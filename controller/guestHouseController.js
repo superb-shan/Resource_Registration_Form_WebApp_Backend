@@ -5,7 +5,7 @@ const { Op } = require('sequelize');
 const sequelize = require('sequelize');
 const sendEmail = require('../emailSennder/sendEmail');
 
-const createGuestHouse = async (req, res) => {
+const createGuestHouse = async(req, res) => {
     try {
         const {
             userName,
@@ -71,7 +71,7 @@ const createGuestHouse = async (req, res) => {
     }
 };
 
-const updateGuestHouse = async (req, res) => {
+const updateGuestHouse = async(req, res) => {
     try {
         const { isapproved, id, remarks } = req.body;
         const whereClause = { id };
@@ -111,9 +111,9 @@ const updateGuestHouse = async (req, res) => {
     }
 };
 
-const getGuestHouses = async (req, res) => {
+const getGuestHouses = async(req, res) => {
     try {
-        const { name, date,isapproved } = req.query;
+        const { name, date, isapproved, roomRequired } = req.query;
         const whereClause = {};
 
         if (name) {
@@ -133,16 +133,24 @@ const getGuestHouses = async (req, res) => {
                 [Op.gte]: moment(date).format("YYYY-MM-DD HH:mm:ss"),
             };
         }
-        if(isapproved){
-            whereClause["isapproved"]={
-                    [Op.not]:false
+        if (roomRequired) {
+            whereClause.roomRequired = {
+                [Op.eq]: roomRequired
+            }
+        }
+        if (isapproved) {
+            whereClause["isapproved"] = {
+                [Op.not]: false
             }
         }
         const guestHouses = await GuestHouse.findAll({
             where: whereClause,
 
-            order: [["createdAt", "DESC"]],
+            order: [
+                ["createdAt", "DESC"]
+            ],
         });
+
 
         res.status(200).json({ data: guestHouses });
     } catch (error) {
@@ -150,7 +158,7 @@ const getGuestHouses = async (req, res) => {
     }
 };
 
-const deleteGuestHouse = async (req, res) => {
+const deleteGuestHouse = async(req, res) => {
     try {
         const { id } = req.query;
 
@@ -171,7 +179,7 @@ const deleteGuestHouse = async (req, res) => {
     }
 };
 
-const checkAvailability = async (req, res) => {
+const checkAvailability = async(req, res) => {
     try {
         console.log(req.query);
         const { startDateTime, endDateTime } = req.query;
@@ -189,7 +197,8 @@ const checkAvailability = async (req, res) => {
                 },
             },
             attributes: ["roomRequired", "coordinatorName",
-                "coordinatorPhoneNumber", "startDateTime", "endDateTime"]
+                "coordinatorPhoneNumber", "startDateTime", "endDateTime"
+            ]
         });
 
         if (overlappingGuestHouses.length === 0) {

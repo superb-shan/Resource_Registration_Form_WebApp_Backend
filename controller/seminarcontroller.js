@@ -130,7 +130,7 @@ const UpdateSeminar = async(req, res) => {
 
 const GetSeminar = async(req, res) => {
     try {
-        const { name, date, isapproved, category } = req.query;
+        const { name, date, isapproved, category, hallRequired } = req.query;
         console.log("Ippathaan", name, date, isapproved, category);
         const whereclause = {}
         if (name) {
@@ -160,15 +160,20 @@ const GetSeminar = async(req, res) => {
                 [Op.lte]: moment(date.toString()).endOf('day').format("YYYY-MM-DD HH:mm:ss"),
             }
         }
+        if (hallRequired) {
+            whereclause.hallRequired = {
+                [Op.eq]: hallRequired
+            }
+        }
         console.log(whereclause)
 
         const result = await Seminar.findAll({
-                where: whereclause,
-                order: [
-                    [sequelize.literal('createdAt'), 'DESC']
-                ]
-            })
-            console.log("result", result)
+            where: whereclause,
+            order: [
+                [sequelize.literal('createdAt'), 'DESC']
+            ]
+        })
+        console.log("result", result)
         res.send(JSON.stringify({ "data": (result || []) }))
 
     } catch (error) {
