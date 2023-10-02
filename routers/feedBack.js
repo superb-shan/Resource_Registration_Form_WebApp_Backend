@@ -6,7 +6,7 @@ const FeedBack = require('../models/feedback');
 router.post('/', async(req, res) => {
     try {
         const { userName, department, contactNumber, feedBack } = req.body;
-        const feedback = await FeedBack.create({ userName, department, contactNumber, feedBack, type });
+        const feedback = await FeedBack.create({ userName, department, contactNumber, feedBack });
         res.status(201).json(feedback);
     } catch (error) {
         console.error(error);
