@@ -10,7 +10,7 @@ const seminarRoutes = require('./routers/Seminar')
 const guesthouseroutes = require('./routers/GuestHouse');
 const itemRoutes = require('./routers/Item');
 const resourceRoutes = require('./routers/resource')
-
+const analyticsRoutes = require('./routers/analytics')
 
 const fs = require("fs");
 
@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('', (req, res) => {
-  res.send("trail");
+    res.send("ResourceRegistration");
 });
 
 // Use your routes
@@ -35,9 +35,9 @@ app.use('/seminar', seminarRoutes);
 app.use('/guesthouse', guesthouseroutes)
 app.use('/Items', itemRoutes)
 app.use('/resource', resourceRoutes)
-
-app.listen(8000, async () => {
-  console.log("Server running at http://localhost:8000");
-  await sequelize.authenticate();
-  console.log("Database synced");
+app.use('/analytics', analyticsRoutes)
+app.listen(8000, async() => {
+    console.log("Server running at http://localhost:8000");
+    await sequelize.authenticate();
+    console.log("Database synced");
 });
