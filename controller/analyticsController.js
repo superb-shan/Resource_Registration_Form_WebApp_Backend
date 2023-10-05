@@ -81,7 +81,7 @@ const analytics = async(req, res) => {
 
         let temp = await GuestHouse.findAll({
             attributes: [
-                [sequelize.fn('MONTH', sequelize.col('startDateTime')), 'name'],
+                [sequelize.fn('MONTH', sequelize.col('startDateTime')), 'month'],
                 [sequelize.fn("COUNT", sequelize.col("*")), "value"]
             ],
             group: [sequelize.fn('MONTH', sequelize.col('startDateTime'))],
@@ -92,7 +92,7 @@ const analytics = async(req, res) => {
         ]
         temp = await Transport.findAll({
             attributes: [
-                [sequelize.fn('MONTH', sequelize.col('travelDateTime')), 'name'],
+                [sequelize.fn('MONTH', sequelize.col('travelDateTime')), 'month'],
                 [sequelize.fn("COUNT", sequelize.col("*")), "value"]
             ],
             group: [sequelize.fn('MONTH', sequelize.col('travelDateTime'))],
@@ -103,7 +103,7 @@ const analytics = async(req, res) => {
         ]
         temp = await Item.findAll({
             attributes: [
-                [sequelize.fn('MONTH', sequelize.col('requisitionDateTime')), 'name'],
+                [sequelize.fn('MONTH', sequelize.col('requisitionDateTime')), 'month'],
                 [sequelize.fn("COUNT", sequelize.col("*")), "value"]
             ],
             group: [sequelize.fn('MONTH', sequelize.col('requisitionDateTime'))],
@@ -114,7 +114,7 @@ const analytics = async(req, res) => {
         ]
         temp = await Seminar.findAll({
             attributes: [
-                [sequelize.fn('MONTH', sequelize.col('startDateTime')), 'name'],
+                [sequelize.fn('MONTH', sequelize.col('startDateTime')), 'month'],
                 [sequelize.fn("COUNT", sequelize.col("*")), "value"]
             ],
             group: [sequelize.fn('MONTH', sequelize.col('startDateTime'))],
