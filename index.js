@@ -11,14 +11,14 @@ const guesthouseroutes = require('./routers/GuestHouse');
 const itemRoutes = require('./routers/Item');
 const resourceRoutes = require('./routers/resource')
 const analyticsRoutes = require('./routers/analytics')
-
+const feedbackRoutes = require('./routers/feedBack')
 const fs = require("fs");
-
+const feedback = require('./models/feedback')
 
 
 //end of print
 
-
+//feedback.create({ userName: "ragu", department: "CSE", Rating: 1, feedBack: "vgjufjf" });
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -35,6 +35,7 @@ app.use('/seminar', seminarRoutes);
 app.use('/guesthouse', guesthouseroutes)
 app.use('/Items', itemRoutes)
 app.use('/resource', resourceRoutes)
+app.use('/feedback', feedbackRoutes)
 app.use('/analytics', analyticsRoutes)
 app.listen(8000, async() => {
     console.log("Server running at http://localhost:8000");

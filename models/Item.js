@@ -116,4 +116,4 @@ User.hasMany(Item, {
 // Sync the model with the database
 
 module.exports = Item;
-// sequelize.sync({alter:true})
+//sequelize.sync({ alter: true })

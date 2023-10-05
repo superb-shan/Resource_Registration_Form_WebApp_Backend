@@ -31,11 +31,10 @@ const GuestHouse = sequelize.define("GuestHouse", {
     },
     guestName: {
         type: DataTypes.STRING,
-        allowNull: false,
     },
     guestPhoneNumber: {
         type: DataTypes.STRING,
-        allowNull: false,
+
         validate: {
             isNumeric: true,
             len: [10, 10]
@@ -79,7 +78,9 @@ const GuestHouse = sequelize.define("GuestHouse", {
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
-            notIn: [[0]]
+            notIn: [
+                [0]
+            ]
         },
     },
     roomRequired: {
@@ -99,8 +100,8 @@ const GuestHouse = sequelize.define("GuestHouse", {
         type: DataTypes.TEXT,
         allowNull: true
 
-    }
-    , type: {
+    },
+    type: {
         type: DataTypes.STRING,
         defaultValue: 'GuestHouse'
     }

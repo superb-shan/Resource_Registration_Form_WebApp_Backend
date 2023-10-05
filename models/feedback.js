@@ -20,12 +20,9 @@ const feedBack = sequelize.define("feedBack", {
         type: DataTypes.STRING,
 
     },
-    contactNumber: {
+    Rating: {
         type: DataTypes.STRING,
-        validate: {
-            isNumeric: true,
-            len: [10, 10]
-        },
+
     },
     feedBack: {
         type: DataTypes.TEXT,
@@ -46,3 +43,4 @@ User.hasMany(feedBack, {
     onDelete: 'RESTRICT', // Prevent user deletion if associated feedBack exist
 })
 module.exports = feedBack;
+//sequelize.sync({ alter: true })

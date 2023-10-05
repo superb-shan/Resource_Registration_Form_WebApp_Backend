@@ -30,12 +30,10 @@ const Seminar = sequelize.define("SeminarHall", {
         defaultValue: "Auditorium/ Training Halls",
     },
     speakerName: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: DataTypes.STRING
     },
     speakerPhoneNumber: {
         type: DataTypes.STRING,
-        allowNull: false,
         validate: {
             isNumeric: true,
             len: [10, 10],

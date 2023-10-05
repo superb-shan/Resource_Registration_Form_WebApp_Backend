@@ -131,7 +131,7 @@ const UpdateSeminar = async(req, res) => {
 const GetSeminar = async(req, res) => {
     try {
         const { name, date, isapproved, category, hallRequired } = req.query;
-        console.log("Ippathaan", name, date, isapproved, category);
+        //console.log("Ippathaan", name, date, isapproved, category);
         const whereclause = {}
         if (name) {
 
