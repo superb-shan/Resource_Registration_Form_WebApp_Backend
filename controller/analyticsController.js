@@ -17,22 +17,26 @@ const analytics = async(req, res) => {
             //most least booking seminar
         data.mostleastBooking = {}
         let result1 = await Seminar.findAll({
-            group: "category",
-            attributes: ["category", [sequelize.fn('COUNT', sequelize.col("id")), "count"],
+            group: "hallRequired",
+            attributes: [
+                ["hallRequired", "name"],
+                [sequelize.fn('COUNT', sequelize.col("id")), "value"],
 
             ],
             order: [
-                ["count", "DESC"]
+                ["value", "DESC"]
             ],
             limit: 1
         })
         let result2 = await Seminar.findAll({
-            group: "category",
-            attributes: ["category", [sequelize.fn('COUNT', sequelize.col("id")), "count"],
+            group: "hallRequired",
+            attributes: [
+                ["hallRequired", "name"],
+                [sequelize.fn('COUNT', sequelize.col("id")), "value"],
 
             ],
             order: [
-                ["count", "ASC"]
+                ["value", "ASC"]
             ],
             limit: 1
         })
@@ -43,21 +47,25 @@ const analytics = async(req, res) => {
             //most least booking guesthouse
         result1 = await GuestHouse.findAll({
             group: "roomRequired",
-            attributes: ["roomRequired", [sequelize.fn('COUNT', sequelize.col("id")), "count"],
+            attributes: [
+                ["roomRequired", "name"],
+                [sequelize.fn('COUNT', sequelize.col("id")), "value"],
 
             ],
             order: [
-                ["count", "DESC"]
+                ["value", "DESC"]
             ],
             limit: 1
         })
         result2 = await GuestHouse.findAll({
             group: "roomRequired",
-            attributes: ["roomRequired", [sequelize.fn('COUNT', sequelize.col("id")), "count"],
+            attributes: [
+                ["roomRequired", "name"],
+                [sequelize.fn('COUNT', sequelize.col("id")), "value"],
 
             ],
             order: [
-                ["count", "ASC"]
+                ["value", "ASC"]
             ],
             limit: 1
         })
@@ -73,8 +81,8 @@ const analytics = async(req, res) => {
 
         let temp = await GuestHouse.findAll({
             attributes: [
-                [sequelize.fn('MONTH', sequelize.col('startDateTime')), 'month'],
-                [sequelize.fn("COUNT", sequelize.col("*")), "count"]
+                [sequelize.fn('MONTH', sequelize.col('startDateTime')), 'name'],
+                [sequelize.fn("COUNT", sequelize.col("*")), "value"]
             ],
             group: [sequelize.fn('MONTH', sequelize.col('startDateTime'))],
 
@@ -84,8 +92,8 @@ const analytics = async(req, res) => {
         ]
         temp = await Transport.findAll({
             attributes: [
-                [sequelize.fn('MONTH', sequelize.col('travelDateTime')), 'month'],
-                [sequelize.fn("COUNT", sequelize.col("*")), "count"]
+                [sequelize.fn('MONTH', sequelize.col('travelDateTime')), 'name'],
+                [sequelize.fn("COUNT", sequelize.col("*")), "value"]
             ],
             group: [sequelize.fn('MONTH', sequelize.col('travelDateTime'))],
 
@@ -95,8 +103,8 @@ const analytics = async(req, res) => {
         ]
         temp = await Item.findAll({
             attributes: [
-                [sequelize.fn('MONTH', sequelize.col('requisitionDateTime')), 'month'],
-                [sequelize.fn("COUNT", sequelize.col("*")), "count"]
+                [sequelize.fn('MONTH', sequelize.col('requisitionDateTime')), 'name'],
+                [sequelize.fn("COUNT", sequelize.col("*")), "value"]
             ],
             group: [sequelize.fn('MONTH', sequelize.col('requisitionDateTime'))],
 
@@ -106,8 +114,8 @@ const analytics = async(req, res) => {
         ]
         temp = await Seminar.findAll({
             attributes: [
-                [sequelize.fn('MONTH', sequelize.col('startDateTime')), 'month'],
-                [sequelize.fn("COUNT", sequelize.col("*")), "count"]
+                [sequelize.fn('MONTH', sequelize.col('startDateTime')), 'name'],
+                [sequelize.fn("COUNT", sequelize.col("*")), "value"]
             ],
             group: [sequelize.fn('MONTH', sequelize.col('startDateTime'))],
 
@@ -121,7 +129,8 @@ const analytics = async(req, res) => {
         temp = await GuestHouse.findAll({
             group: 'roomRequired',
             attributes: [
-                'roomRequired', [sequelize.fn('COUNT', sequelize.col('*')), 'count'],
+                ['roomRequired', "name"],
+                [sequelize.fn('COUNT', sequelize.col('*')), 'value'],
             ],
             where: {
                 startDateTime: {
@@ -130,7 +139,7 @@ const analytics = async(req, res) => {
                 },
             },
             order: [
-                ['count', 'ASC']
+                ['value', 'ASC']
             ],
         });
         data.guesthouse = [
@@ -140,7 +149,8 @@ const analytics = async(req, res) => {
         temp = await Seminar.findAll({
             group: 'hallRequired',
             attributes: [
-                "category", 'hallRequired', [sequelize.fn('COUNT', sequelize.col('*')), 'count'],
+                "category", ['hallRequired', "name"],
+                [sequelize.fn('COUNT', sequelize.col('*')), 'value'],
             ],
             where: {
                 startDateTime: {
@@ -149,7 +159,7 @@ const analytics = async(req, res) => {
                 },
             },
             order: [
-                ['count', 'ASC']
+                ['value', 'ASC']
             ],
         });
         data.seminar = [
@@ -158,7 +168,10 @@ const analytics = async(req, res) => {
             //Monthwise all booking
         data.department = {}
         temp = await GuestHouse.findAll({
-            attributes: ["organizingDepartment", [sequelize.fn("COUNT", sequelize.col("*")), "count"]],
+            attributes: [
+                ["organizingDepartment", "name"],
+                [sequelize.fn("COUNT", sequelize.col("*")), "value"]
+            ],
             where: {
                 startDateTime: {
                     [Op.gte]: moment().startOf('month').format('YYYY-MM-DD HH:mm:ss'),
@@ -172,7 +185,10 @@ const analytics = async(req, res) => {
             ...temp
         ]
         temp = await Transport.findAll({
-            attributes: ["organizingDepartment", [sequelize.fn("COUNT", sequelize.col("*")), "count"]],
+            attributes: [
+                ["organizingDepartment", "name"],
+                [sequelize.fn("COUNT", sequelize.col("*")), "value"]
+            ],
             where: {
                 travelDateTime: {
                     [Op.gte]: moment().startOf('month').format('YYYY-MM-DD HH:mm:ss'),
@@ -186,7 +202,10 @@ const analytics = async(req, res) => {
             ...temp
         ]
         temp = await Item.findAll({
-            attributes: ["department", [sequelize.fn("COUNT", sequelize.col("*")), "count"]],
+            attributes: [
+                ["department", "name"],
+                [sequelize.fn("COUNT", sequelize.col("*")), "value"]
+            ],
             where: {
                 requisitionDateTime: {
                     [Op.gte]: moment().startOf('month').format('YYYY-MM-DD HH:mm:ss'),
@@ -200,7 +219,10 @@ const analytics = async(req, res) => {
             ...temp
         ]
         temp = await Seminar.findAll({
-            attributes: ["organizingDepartment", [sequelize.fn("COUNT", sequelize.col("*")), "count"]],
+            attributes: [
+                ["organizingDepartment", "name"],
+                [sequelize.fn("COUNT", sequelize.col("*")), "count"]
+            ],
             group: "organizingDepartment",
             where: {
                 startDateTime: {
