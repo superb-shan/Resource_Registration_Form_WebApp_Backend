@@ -1,4 +1,3 @@
-
 const sendEmail = require("../emailSennder/sendEmail");
 const Item = require("../models/Item");
 // Update the path as needed
@@ -7,7 +6,7 @@ const User = require("../models/user"); // Update the path as needed
 const moment = require("moment");
 const sequelize = require("sequelize");
 
-const createItem = async (req, res) => {
+const createItem = async(req, res) => {
     try {
         const {
             userName,
@@ -92,7 +91,7 @@ const createItem = async (req, res) => {
     }
 };
 
-const getItem = async (req, res) => {
+const getItem = async(req, res) => {
     const { UserId, id, name, date, status } = req.query;
 
     try {
@@ -118,7 +117,7 @@ const getItem = async (req, res) => {
             // Replace 'approvalStatus' with your actual field name
             whereClause.approvalStatus = statusVal[status];
         }
-       
+
 
         const result = await Item.findAll({
             where: whereClause,
@@ -138,7 +137,7 @@ const getItem = async (req, res) => {
     }
 };
 
-const updateItem = async (req, res) => {
+const updateItem = async(req, res) => {
     try {
         const { isapproved, id, remarks } = req.body;
         const whereClause = {};
@@ -187,7 +186,7 @@ const updateItem = async (req, res) => {
     }
 };
 
-const deleteItem = async (req, res) => {
+const deleteItem = async(req, res) => {
     try {
         const { id } = req.query;
 

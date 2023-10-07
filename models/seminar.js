@@ -34,10 +34,7 @@ const Seminar = sequelize.define("SeminarHall", {
     },
     speakerPhoneNumber: {
         type: DataTypes.STRING,
-        validate: {
-            isNumeric: true,
-            len: [10, 10],
-        },
+
     },
     organizingDepartment: {
         type: DataTypes.STRING,

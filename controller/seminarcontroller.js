@@ -69,7 +69,16 @@ const createSeminar = async(req, res) => {
             hallRequired,
             "UserId": user.id,
         });
-
+        const emailData = {
+            type: "Seminar",
+            receiverName: seminarHall.coordinatorName,
+            startDate: seminarHall.startDateTime.toString(),
+            endDate: seminarHall.endDateTime.toString(),
+            status: "pending",
+            username: seminarHall.coordinatorName,
+            sendEmail: user.email
+        }
+        sendEmail(emailData)
         res.status(200).send(JSON.stringify({ "message": "true", "data": seminarHall }));
 
     } catch (error) {

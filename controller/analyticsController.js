@@ -85,6 +85,9 @@ const analytics = async(req, res) => {
                 [sequelize.fn("COUNT", sequelize.col("*")), "value"]
             ],
             group: [sequelize.fn('MONTH', sequelize.col('startDateTime'))],
+            order: [
+                ["month", "ASC"]
+            ]
 
         })
         data.AllBooking.GuestHouse = [
@@ -96,6 +99,9 @@ const analytics = async(req, res) => {
                 [sequelize.fn("COUNT", sequelize.col("*")), "value"]
             ],
             group: [sequelize.fn('MONTH', sequelize.col('travelDateTime'))],
+            order: [
+                ["month", "ASC"]
+            ]
 
         })
         data.AllBooking.Transport = [
@@ -107,6 +113,9 @@ const analytics = async(req, res) => {
                 [sequelize.fn("COUNT", sequelize.col("*")), "value"]
             ],
             group: [sequelize.fn('MONTH', sequelize.col('requisitionDateTime'))],
+            order: [
+                ["month", "ASC"]
+            ]
 
         })
         data.AllBooking.Item = [
@@ -118,6 +127,9 @@ const analytics = async(req, res) => {
                 [sequelize.fn("COUNT", sequelize.col("*")), "value"]
             ],
             group: [sequelize.fn('MONTH', sequelize.col('startDateTime'))],
+            order: [
+                ["month", "ASC"]
+            ]
 
         })
         data.AllBooking.Seminar = [

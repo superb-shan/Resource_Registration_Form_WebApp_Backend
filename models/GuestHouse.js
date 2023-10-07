@@ -35,10 +35,7 @@ const GuestHouse = sequelize.define("GuestHouse", {
     guestPhoneNumber: {
         type: DataTypes.STRING,
 
-        validate: {
-            isNumeric: true,
-            len: [10, 10]
-        },
+
     },
     organizingDepartment: {
         type: DataTypes.STRING,

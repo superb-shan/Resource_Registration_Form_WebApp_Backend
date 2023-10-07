@@ -119,10 +119,7 @@ const Transport = sequelize.define("Transport", {
     guestPhoneNumber: {
         type: DataTypes.STRING,
         allowNull: true,
-        validate: {
-            isNumeric: true,
-            len: [10, 10]
-        }
+
     },
     purposeOfTravel: {
         type: DataTypes.STRING,
