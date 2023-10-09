@@ -76,7 +76,7 @@ const updateGuestHouse = async(req, res) => {
         console.log("gggg")
 
         const { isapproved, id, remarks } = req.body;
-
+        whereClause = {}
 
         if (isapproved !== undefined) {
             whereClause.isapproved = isapproved;
@@ -85,13 +85,13 @@ const updateGuestHouse = async(req, res) => {
         if (remarks !== undefined) {
             whereClause.remarks = remarks;
         }
-        console.log(whereClause, "fvffyh")
-
-        const guestHouse = await GuestHouse.update(whereClause, { where: { id } });
-
+        //console.log(whereClause, "fvffyh")
+ await GuestHouse.update(whereClause, { where: { id } });
+       const guestHouse = await GuestHouse.findOne({where:{id:id}})
         // Send email notifications based on approval status
-
-        const user = await User.findOne({ where: { id: form.UserId } })
+        //console.log(guestHouse,"jjjbbj")
+        const user = await User.findOne({ where: { id: guestHouse.UserId } })
+        
         if (guestHouse) {
             const emailData = {
                 receiverName: user.name,
