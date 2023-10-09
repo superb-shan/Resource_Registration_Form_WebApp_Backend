@@ -8,8 +8,8 @@ const smtpConfig = {
     port: 587, // SMTP port for Gmail
     secure: false, // Set to true if your provider requires SSL/TLS
     auth: {
-        user: 'ragunanthan8888@gmail.com',
-        pass: 'yjqkoklvulnnokfm',
+        user: 'secebookings@gmail.com',
+        pass: 'iiakiqrxmupegela',
     },
 };
 const transporter = nodemailer.createTransport(smtpConfig);
@@ -26,7 +26,7 @@ async function sendEmail(emailData) {
         const renderedEmail = ejs.render(emailTemplate, { emailData });
 
         const mailOptions = {
-            from: 'ragunanthan8888@gmail.com',
+            from: 'secebookings@gmail.com',
             to: emailData.sendEmail,
             subject: `Request ${emailData.status}`,
             html: renderedEmail,
