@@ -73,8 +73,10 @@ const createGuestHouse = async(req, res) => {
 
 const updateGuestHouse = async(req, res) => {
     try {
+        console.log("gggg")
+
         const { isapproved, id, remarks } = req.body;
-        const whereClause = { id };
+
 
         if (isapproved !== undefined) {
             whereClause.isapproved = isapproved;
@@ -83,15 +85,16 @@ const updateGuestHouse = async(req, res) => {
         if (remarks !== undefined) {
             whereClause.remarks = remarks;
         }
+        console.log(whereClause, "fvffyh")
 
-        await GuestHouse.update(whereClause, { where: { id } });
+        const guestHouse = await GuestHouse.update(whereClause, { where: { id } });
 
         // Send email notifications based on approval status
-        const guestHouse = await GuestHouse.findByPk(id, { include: User });
 
+        const user = await User.findOne({ where: { id: form.UserId } })
         if (guestHouse) {
             const emailData = {
-                receiverName: guestHouse.User.name,
+                receiverName: user.name,
                 ArrivialDateTime: guestHouse.startDateTime,
                 DepartureDateTime: guestHouse.endDateTime,
                 FoodRequirements: guestHouse.foodRequired,
@@ -99,10 +102,11 @@ const updateGuestHouse = async(req, res) => {
                 status: isapproved === true ? "Accepted" : "Rejected",
                 username: guestHouse.userName,
                 Remark: remarks || "",
-                sendEmail: guestHouse.User.email,
+                sendEmail: user.email,
             };
 
             sendEmail(emailData);
+            console.log("email sent")
         }
 
         res.status(200).json({ message: "GuestHouse updated successfully" });

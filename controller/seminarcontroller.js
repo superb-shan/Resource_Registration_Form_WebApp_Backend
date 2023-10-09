@@ -98,11 +98,11 @@ const UpdateSeminar = async(req, res) => {
         }
 
         // Correct the syntax for the update method
-        const form = await Seminar.update(whereClause, { where: { id } });
+        var form = await Seminar.update(whereClause, { where: { id } });
 
         if (isapproved) {
-            if (isapproved === 'true') {
-                const form = await Seminar.findOne({ where: { id } })
+            if (isapproved == 'true') {
+                var form = await Seminar.findOne({ where: { id } })
                 const user = await User.findOne({ where: { id: form.UserId } })
                 const emailData = {
                     type: "Seminar",
@@ -114,6 +114,7 @@ const UpdateSeminar = async(req, res) => {
                     sendEmail: user.email
                 }
                 sendEmail(emailData)
+                console.log("Mail Send")
             } else {
                 const form = await Seminar.findOne({ where: { id } })
                 const user = await User.findOne({ where: { id: form.UserId } })
@@ -128,6 +129,8 @@ const UpdateSeminar = async(req, res) => {
                     sendEmail: user.email
                 }
                 sendEmail(emailData)
+                console.log("Mail Send")
+
             }
         }
         res.send(JSON.stringify({ "message": "success" }));
@@ -177,12 +180,12 @@ const GetSeminar = async(req, res) => {
         console.log(whereclause)
 
         const result = await Seminar.findAll({
-            where: whereclause,
-            order: [
-                [sequelize.literal('createdAt'), 'DESC']
-            ]
-        })
-        console.log("result", result)
+                where: whereclause,
+                order: [
+                    [sequelize.literal('createdAt'), 'DESC']
+                ]
+            })
+            //console.log("result", result)
         res.send(JSON.stringify({ "data": (result || []) }))
 
     } catch (error) {

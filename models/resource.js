@@ -17,8 +17,11 @@ const Resource = sequelize.define('Resource', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    capacity:
-    {
+    category: {
+        type: DataTypes.STRING,
+
+    },
+    capacity: {
         type: DataTypes.STRING,
         allowNull: true,
     },
