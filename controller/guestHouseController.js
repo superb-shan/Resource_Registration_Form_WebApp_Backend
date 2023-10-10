@@ -24,7 +24,8 @@ const createGuestHouse = async(req, res) => {
             roomRequired,
             specialRequirements
         } = req.body;
-
+        const parsedStartDateTime = moment.utc(startDateTime, dateFormat);
+        const parsedEndDateTime = moment.utc(endDateTime, dateFormat);
         const user = await User.findOne({ where: { name: userName } });
     console.log(startDateTime,endDateTime)
         if (!user) {
@@ -43,8 +44,8 @@ const createGuestHouse = async(req, res) => {
             foodRequired,
             menuRequired,
             paymentDoneBy,
-            startDateTime: moment(startDateTime,"YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss"),
-            endDateTime: moment(endDateTime,"YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss"),
+            startDateTime:parsedStartDateTime,
+            endDateTime: parsedEndDateTime,
             noOfGuests,
             roomRequired,
             specialRequirements, // Assuming you want to set isapproved to false by default
