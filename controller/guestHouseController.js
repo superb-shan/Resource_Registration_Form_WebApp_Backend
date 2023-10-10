@@ -24,6 +24,7 @@ const createGuestHouse = async(req, res) => {
             roomRequired,
             specialRequirements
         } = req.body;
+        const dateFormat = "YYYY-MM-DD HH:mm:ss";
         const parsedStartDateTime = moment.utc(startDateTime, dateFormat);
         const parsedEndDateTime = moment.utc(endDateTime, dateFormat);
         const user = await User.findOne({ where: { name: userName } });
