@@ -9,6 +9,7 @@ const transportRoutes = require('./routers/Transport');
 const seminarRoutes = require('./routers/Seminar')
 const guesthouseroutes = require('./routers/GuestHouse');
 const itemRoutes = require('./routers/Item');
+const foodRoutes = require('./routers/Food');
 const resourceRoutes = require('./routers/resource')
 const analyticsRoutes = require('./routers/analytics')
 const feedbackRoutes = require('./routers/feedBack')
@@ -37,6 +38,7 @@ app.use('/Items', itemRoutes)
 app.use('/resource', resourceRoutes)
 app.use('/feedback', feedbackRoutes)
 app.use('/analytics', analyticsRoutes)
+app.use('/Food',foodRoutes)
 app.listen(8000, async() => {
     console.log("Server running at http://localhost:8000");
     await sequelize.authenticate();
