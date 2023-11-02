@@ -12,8 +12,8 @@ pwdd = process.env.DB_PASSWORDD;
 
 
 const sequelize = new Sequlize("resource", unn, pwdd, {
-   // host: 'mysql8002.site4now.net',
-    host:'localhost',
+    // host: 'mysql8002.site4now.net',
+    host: 'localhost',
     dialect: "mysql",
     logging: false,
     timezone: '+05:30',
@@ -21,5 +21,5 @@ const sequelize = new Sequlize("resource", unn, pwdd, {
         useUTC: false //for reading from database
     },
 
-}) 
+})
 module.exports = sequelize
