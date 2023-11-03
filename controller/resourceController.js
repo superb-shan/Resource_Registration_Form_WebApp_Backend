@@ -2,7 +2,38 @@ const { Sequelize, where } = require("sequelize");
 const { QueryTypes } = require('sequelize');
 const Resource = require("../models/resource");
 const sequelize = require("../database");
-
+const allGuestHouse = [
+    'Amenities - Suite 01 (Bed 01)',
+    'Amenities - Suite 01 (Bed 02)',
+    'Amenities - Suite 02 (Bed 01)',
+    'Amenities - Suite 02 (Bed 02)',
+    'Amenities - Suite 03 (Bed 01)',
+    'Amenities - Suite 03 (Bed 02)',
+    'Main Block - SF Suite (Bed 01)',
+    'Main Block - SF Suite (Bed 02)',
+    'Main Block - TF Suite (Bed 01)',
+    'Main Block - TF Suite (Bed 02)',
+    'D Block Men\'s Hostel - Room No. 214 (Bed 01)',
+    'D Block Men\'s Hostel - Room No. 214 (Bed 02)',
+    'D Block Men\'s Hostel - Room No. 215 (Bed 01)',
+    'D Block Men\'s Hostel - Room No. 215 (Bed 02)',
+    'D Block Men\'s Hostel - Room No. 205 (Bed 01)',
+    'D Block Men\'s Hostel - Room No. 205 (Bed 02)',
+    'D Block Men\'s Hostel - Room No. 208 (Bed 01)',
+    'D Block Men\'s Hostel - Room No. 208 (Bed 02)',
+    'D Block Men\'s Hostel - Room No. 208 (Bed 03)',
+    'D Block Men\'s Hostel - Room No. 208 (Bed 04)',
+    'C Block Men\'s Hostel - Room No. 209 (Bed 01)',
+    'C Block Men\'s Hostel - Room No. 209 (Bed 02)',
+    'C Block Men\'s Hostel - Room No. 209 (Bed 03)',
+    'C Block Men\'s Hostel - Room No. 209 (Bed 04)',
+    'Bath not attached - Room No. 209 (Bed 01)',
+    'Bath not attached - Room No. 209 (Bed 02)',
+    'Bath not attached - Room No. 209 (Bed 03)',
+    'Bath not attached - Room No. 209 (Bed 04)',
+    'Bath not attached - Room No. 107 (Bed 01)',
+    'Bath not attached - Room No. 107 (Bed 02)'
+]
 const resourceData = [
     {
         name: '1st floor Auditorium',
@@ -110,6 +141,22 @@ const createResourceData = async (req, res) => {
         console.error('Error creating resource data:', error);
     }
 };
+const createGuestHouse = async (req, res) => {
+    try {
+        for (const resource of allGuestHouse) {
+            await Resource.create({
+                name: resource,
+                type: "guestHouse",
+                category: "guestHouse",
+            });
+        }
+        console.log('Resource data created successfully');
+        res.send({ message: 'success' })
+    } catch (error) {
+        res.send({ message: 'error' })
+        console.error('Error creating resource data:', error);
+    }
+};
 
 
 
@@ -205,6 +252,22 @@ const getDepartments = async (req, res) => {
         res.send({ message: error.message })
     }
 }
+const getGuesthouse = async (req, res) => {
+    try {
+        const result = await Resource.findAll({
+            attributes: ["name"],
+            where: {
+                category: "guestHouse",
+            },
+            raw: true,
+            order: ["name"]
+
+        })
+        res.send({ data: result })
+    } catch (error) {
+        res.send({ message: error.message })
+    }
+}
 
 
 const getResource = async (req, res) => {
@@ -223,5 +286,5 @@ const getResource = async (req, res) => {
 }
 
 module.exports = {
-    deleteResource, createResource, getResource, createResourceData, getSeminar, getDepartments
+    deleteResource, createResource, getResource, createResourceData, getSeminar, getDepartments, getGuesthouse, createGuestHouse
 }
