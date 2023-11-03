@@ -162,6 +162,7 @@ const getSeminar = async (req, res) => {
             where: {
                 category: "seminar"
             },
+            order: ["type"],
             raw: true
         });
 
@@ -176,6 +177,7 @@ const getSeminar = async (req, res) => {
                 where: {
                     type: type.type
                 },
+                order: ["name"],
                 raw: true
             });
             result[type.type] = halls.map((ele) => ({ ...ele, maxCapacity: Number(ele.maxCapacity) }))
