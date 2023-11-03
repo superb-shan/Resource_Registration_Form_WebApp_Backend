@@ -34,94 +34,138 @@ const allGuestHouse = [
     'Bath not attached - Room No. 107 (Bed 01)',
     'Bath not attached - Room No. 107 (Bed 02)'
 ]
-const resourceData = [
-    {
-        name: '1st floor Auditorium',
-        type: 'Auditorium/Training Halls',
-        capacity: 400,
-    },
-    {
-        name: '2nd floor Auditorium',
-        type: 'Auditorium/Training Halls',
-        capacity: 400,
-    },
-    {
-        name: 'IT Auditorium',
-        type: 'Auditorium/Training Halls',
-        capacity: 120,
-    },
-    {
-        name: 'Code Studio',
-        type: 'Auditorium/Training Halls',
-        capacity: 166,
-    },
-    {
-        name: '3rd Floor Drawing Hall',
-        type: 'Auditorium/Training Halls',
-        capacity: 350,
-    },
-    {
-        name: 'Makerspace',
-        type: 'Special Halls',
-        capacity: 100,
-    },
-    {
-        name: 'Ignite',
-        type: 'Special Halls',
-        capacity: 100,
-    },
-    {
-        name: 'Iot laboratory',
-        type: 'Special Halls',
-        capacity: 100,
-    },
-    {
-        name: 'GF-07',
-        type: 'Special Halls',
-        capacity: 40,
-    },
-    {
-        name: 'Cyber Security & Hypernet',
-        type: 'Special Halls',
-        capacity: 75,
-    },
-    {
-        name: 'AI Robo Space',
-        type: 'Special Halls',
-        capacity: 75,
-    },
-    {
-        name: 'Bytes laboratory',
-        type: 'Academic Labs',
-        capacity: 64,
-    },
-    {
-        name: 'IP laboratory',
-        type: 'Academic Labs',
-        capacity: 67,
-    },
-    {
-        name: 'Fullstack laboratory',
-        type: 'Academic Labs',
-        capacity: 70,
-    },
-    // Add data for other categories as well
-    // 'Project laboratory', 'CAD laboratory', 'Simulation laboratory', etc.
-    {
-        name: 'Ignite Board Room',
-        type: 'Board Rooms',
-        capacity: 10,
-    },
-    {
-        name: 'IQAC Board Room',
-        type: 'Board Rooms',
-        capacity: 10,
-    },
-    {
-        name: 'Office Board Room',
-        type: 'Board Rooms',
-        capacity: 10,
-    },
+const resourceData = [{
+    name: 'Project laboratory',
+    type: 'Academic Labs',
+    capacity: 72,
+},
+{
+    name: 'CAD laboratory',
+    type: 'Academic Labs',
+    capacity: 72,
+},
+{
+    name: 'Simulation laboratory',
+    type: 'Academic Labs',
+    capacity: 70,
+},
+{
+    name: 'VLSI laboratory',
+    type: 'Academic Labs',
+    capacity: 44,
+},
+{
+    name: 'ML laboratory',
+    type: 'Academic Labs',
+    capacity: 70,
+},
+{
+    name: 'DS laboratory',
+    type: 'Academic Labs',
+    capacity: 70,
+},
+{
+    name: 'AI laboratory',
+    type: 'Academic Labs',
+    capacity: 67,
+},
+{
+    name: 'Business Analytics laboratory',
+    type: 'Academic Labs',
+    capacity: 74,
+},
+{
+    name: 'PLC Automation laboratory',
+    type: 'Academic Labs',
+    capacity: 44,
+},
+{
+    name: '1st floor Auditorium',
+    type: 'Auditorium/Training Halls',
+    capacity: 400,
+},
+{
+    name: '2nd floor Auditorium',
+    type: 'Auditorium/Training Halls',
+    capacity: 400,
+},
+{
+    name: 'IT Auditorium',
+    type: 'Auditorium/Training Halls',
+    capacity: 120,
+},
+{
+    name: 'Code Studio',
+    type: 'Auditorium/Training Halls',
+    capacity: 166,
+},
+{
+    name: '3rd Floor Drawing Hall',
+    type: 'Auditorium/Training Halls',
+    capacity: 350,
+},
+{
+    name: 'Makerspace',
+    type: 'Special Halls',
+    capacity: 100,
+},
+{
+    name: 'Ignite',
+    type: 'Special Halls',
+    capacity: 100,
+},
+{
+    name: 'Iot laboratory',
+    type: 'Special Halls',
+    capacity: 100,
+},
+{
+    name: 'GF-07',
+    type: 'Special Halls',
+    capacity: 40,
+},
+{
+    name: 'Cyber Security & Hypernet',
+    type: 'Special Halls',
+    capacity: 75,
+},
+{
+    name: 'AI Robo Space',
+    type: 'Special Halls',
+    capacity: 75,
+},
+{
+    name: 'Bytes laboratory',
+    type: 'Academic Labs',
+    capacity: 64,
+},
+{
+    name: 'IP laboratory',
+    type: 'Academic Labs',
+    capacity: 67,
+},
+{
+    name: 'Fullstack laboratory',
+    type: 'Academic Labs',
+    capacity: 70,
+},
+// Add data for other categories as well
+// 'Project laboratory', 'CAD laboratory', 'Simulation laboratory', etc.
+{
+    name: 'Ignite Board Room',
+    type: 'Board Rooms',
+    capacity: 10,
+},
+{
+    name: 'IQAC Board Room',
+    type: 'Board Rooms',
+    capacity: 10,
+},
+{
+    name: 'Office Board Room',
+    type: 'Board Rooms',
+    capacity: 10,
+},
 ];
 
 const createResourceData = async (req, res) => {
@@ -240,7 +284,7 @@ const getSeminar = async (req, res) => {
 const getDepartments = async (req, res) => {
     try {
         const result = await Resource.findAll({
-        attributes:["name"],
+            attributes: ["name"],
             where: {
                 category: "department",
             },
