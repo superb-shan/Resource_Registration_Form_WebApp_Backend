@@ -24,8 +24,15 @@ const Resource = sequelize.define('Resource', {
     capacity: {
         type: DataTypes.STRING,
         allowNull: true,
+
     },
 
+}, {
+    getterMethods: {
+        NumberCapacity() {
+            return Number(this.capacity);
+        }
+    }
 });
 
 // Sync the model with the database

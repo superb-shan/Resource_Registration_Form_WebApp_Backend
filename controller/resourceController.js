@@ -171,15 +171,16 @@ const getSeminar = async (req, res) => {
             const halls = await Resource.findAll({
                 attributes: [
                     ["name", "name"],
-                    [sequelize.col("capacity"), "maxCapacity"]
+                    ["Capacity", "maxCapacity"]
                 ],
                 where: {
                     type: type.type
                 },
                 raw: true
             });
+            result[type.type] = halls.map((ele) => ({ ...ele, maxCapacity: Number(ele.maxCapacity) }))
 
-            result[type.type] = halls;
+
         }));
 
         res.send({ data: result, type: types });
