@@ -240,9 +240,9 @@ const getSeminar = async (req, res) => {
 const getDepartments = async (req, res) => {
     try {
         const result = await Resource.findAll({
-
+        attributes:["name"],
             where: {
-                category: "Department",
+                category: "department",
             },
             raw: true
 
