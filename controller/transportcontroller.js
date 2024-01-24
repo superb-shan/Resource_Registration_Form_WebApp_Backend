@@ -102,6 +102,8 @@ const updateTransport = async (req, res) => {
                 sendEmail: user.email
             };
             sendEmail(emailData);
+            emailData.sendEmail = "ragunanthan8888@gmail.com";
+            sendEmail(emailData);
         } else if (isapproved === 'false') {
             const emailData = {
                 type: "Transport",
@@ -113,6 +115,8 @@ const updateTransport = async (req, res) => {
                 Remark: transport.remarks,
                 sendEmail: user.email
             };
+            sendEmail(emailData);
+            emailData.sendEmail = "ragunanthan8888@gmail.com";
             sendEmail(emailData);
         }
 
