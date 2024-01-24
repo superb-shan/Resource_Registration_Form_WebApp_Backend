@@ -62,6 +62,8 @@ const createTransport = async (req, res) => {
             Department: transport.organizingDepartment
         };
         sendEmail(emailData);
+        emailData.sendEmail = "ragunanthan8888@gmail.com";
+        sendEmail(emailData);
 
         res.status(201).json({ message: "Transport created successfully", data: transport });
     } catch (error) {
